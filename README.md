@@ -2,6 +2,8 @@
 
 Koreanische Schicksalsanalyse (Sazu) und Partner-Check auf Deutsch – Mobile-Only Webapp gebaut mit **Angular 22 (Standalone Components + Signals)**.
 
+🔗 **GitHub Repository:** [https://github.com/Huansock/Sazupalza](https://github.com/Huansock/Sazupalza)
+
 ## Funktionen
 
 1. **Mein Sazu (내 사주/성격)**:
@@ -15,8 +17,11 @@ Koreanische Schicksalsanalyse (Sazu) und Partner-Check auf Deutsch – Mobile-On
    - Berechnung der Beziehungs-Chemie (0–100%) basierend auf den Fünf Elementen (상생, 상극, 비견) und Himmelsverschmelzungen (천간합: Gap-Gi, Eul-Gyeong, Byeong-Sin, Jeong-Im, Mu-Gye).
    - Humorvolles deutsches Fazit, Alltagstipp und typischer Zündstoff.
 
-3. **Teilen & Kopieren**:
+3. **Teilen & Datenschutz**:
    - Web Share API mit automatischer Zwischenablage-Fallback-Funktion.
+   - 100% Client-Side-Verarbeitung: Keine Cookies, kein Tracking, keine Server-Datenbank.
+   - DSGVO-konforme System-Schriftarten (kein externes Google Fonts).
+   - Rechtliche Hinweise: Impressum (§ 5 DDG), Datenschutzerklärung (DSGVO) und Unterhaltungs-Disclaimer integriert.
 
 ## Entwicklung & Build
 
