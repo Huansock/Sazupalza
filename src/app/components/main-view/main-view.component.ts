@@ -117,6 +117,21 @@ export class MainViewComponent {
     this.partnerForm.update((f) => ({ ...f, context: ctx }));
   }
 
+  switchTab(tab: 'sazu' | 'partner'): void {
+    this.sazuService.activeTab.set(tab);
+    this.scrollToTop();
+  }
+
+  resetSazu(): void {
+    this.sazuService.resetSazu();
+    this.scrollToTop();
+  }
+
+  resetPartner(): void {
+    this.sazuService.resetPartner();
+    this.scrollToTop();
+  }
+
   submitSazu(): void {
     const input = this.sazuForm();
     if (!input.name.trim()) {
@@ -130,6 +145,7 @@ export class MainViewComponent {
 
     this.sazuFormError.set(null);
     this.sazuService.calculateSazu(input);
+    this.scrollToTop('sazu-result');
   }
 
   submitPartner(): void {
@@ -145,13 +161,68 @@ export class MainViewComponent {
 
     this.partnerFormError.set(null);
     this.sazuService.calculateCompatibility(input);
+    this.scrollToTop('partner-result');
+  }
+
+  /**
+   * Smoothly scrolls to the top of results or page, ensuring virtual keyboards are dismissed
+   * and Angular template rendering is finished.
+   */
+  scrollToTop(elementId?: string): void {
+    if (typeof document !== 'undefined' && document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+
+    // Small delay ensures Angular DOM render cycle is complete
+    setTimeout(() => {
+      if (elementId && typeof document !== 'undefined') {
+        const target = document.getElementById(elementId);
+        if (target) {
+          try {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            return;
+          } catch {
+            target.scrollIntoView(true);
+            return;
+          }
+        }
+      }
+
+      try {
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+      } catch {
+        window.scrollTo(0, 0);
+      }
+
+      if (typeof document !== 'undefined') {
+        try {
+          document.documentElement?.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+          document.body?.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+        } catch {
+          document.documentElement.scrollTop = 0;
+          document.body.scrollTop = 0;
+        }
+
+        const topElement =
+          document.querySelector('.result-container') ||
+          document.querySelector('.nav-tabs') ||
+          document.querySelector('.main-container');
+        if (topElement && 'scrollIntoView' in topElement) {
+          try {
+            topElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          } catch {
+            topElement.scrollIntoView(true);
+          }
+        }
+      }
+    }, 60);
   }
 
   shareSazu(): void {
     const res = this.sazuService.userSazuResult();
     if (!res) return;
     const title = `${res.input.name}s Sazu: ${res.dayMaster.name} – ${res.dayMaster.title}`;
-    const text = `🔮 Ich bin im koreanischen Sazu "${res.dayMaster.name}" (${res.dayMaster.elementEmoji} ${res.dayMaster.element})!\n✨ Deutsches Schutzgut: ${res.dayMaster.luckyItem}\n🇩🇪 Archetyp: ${res.dayMaster.germanArchetype}\n\n„${res.dayMaster.quote}“`;
+    const text = `🔮 Mein koreanisches Sazu: "${res.dayMaster.name}" (${res.dayMaster.elementEmoji} ${res.dayMaster.element})!\n✨ K-Aura: ${res.auraStar.name} (${res.auraStar.emoji} ${res.auraStar.title})\n🚩 Toxic Trait: ${res.dayMaster.toxicTrait}\n🦄 Delulu-Score: ${res.dayMaster.deluluScore}%\n\n„${res.dayMaster.whatsAppSignature}“\n\nMach den Test für dich: https://sazu.usogi.org`;
     this.sazuService.shareResult(title, text);
   }
 
@@ -159,7 +230,7 @@ export class MainViewComponent {
     const res = this.sazuService.partnerResult();
     if (!res) return;
     const title = `Partner-Check: ${res.person1.name} & ${res.person2.name} (${res.score}%)`;
-    const text = `💘 Unser Sazu Partner-Check: ${res.score}% Chemie!\n🌟 Status: ${res.badge}\n💬 Fazit: ${res.verdict}\n💚 Green Flag: ${res.greenFlag}\n🚩 Red Flag: ${res.redFlag}`;
+    const text = `💘 Sazu Partner-Check: ${res.person1.name} & ${res.person2.name} -> ${res.score}% Chemie!\n🔥 Flirt & Bett: ${res.flirtScore}%\n🏡 WG-Tauglichkeit: ${res.stabilityScore}%\n🚩 Toxizitäts-Level: ${res.toxicScore}%\n\n💬 Fazit: ${res.memeVerdict}\n\nMach den Check: https://sazu.usogi.org`;
     this.sazuService.shareResult(title, text);
   }
 
@@ -277,47 +348,63 @@ export class MainViewComponent {
       ctx.fillText('CHEMIE-SCORE', 540, 840);
 
       // Badge & Verdict
-      ctx.font = 'bold 40px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.font = 'bold 38px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
       ctx.fillStyle = '#ffffff';
-      ctx.fillText(res.badge, 540, 960);
+      ctx.fillText(res.badge, 540, 950);
 
-      ctx.font = 'italic 30px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.font = 'italic 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
       ctx.fillStyle = '#e2e8f0';
-      this.drawWrappedText(ctx, `„${res.verdict}“`, 540, 1020, 880, 44, 'center');
+      this.drawWrappedText(ctx, `„${res.verdict}“`, 540, 1005, 880, 40, 'center');
+
+      // 4.5 Spicy Pills
+      ctx.textAlign = 'center';
+      ctx.font = 'bold 26px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillStyle = '#fca5a5';
+      ctx.fillText(
+        `🔥 Flirt: ${res.flirtScore}%   🏡 WG: ${res.stabilityScore}%   🚩 Toxic: ${res.toxicScore}%`,
+        540,
+        1100,
+      );
 
       // 5. Green Flag & Red Flag Box
       // Green Flag
       ctx.fillStyle = 'rgba(16, 185, 129, 0.15)';
       ctx.beginPath();
-      ctx.roundRect(80, 1150, 920, 200, 24);
+      ctx.roundRect(80, 1145, 920, 185, 24);
       ctx.fill();
       ctx.strokeStyle = '#10b981';
       ctx.lineWidth = 3;
       ctx.stroke();
 
       ctx.textAlign = 'left';
-      ctx.font = 'bold 32px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.font = 'bold 30px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
       ctx.fillStyle = '#34d399';
-      ctx.fillText('💚 GREEN FLAG:', 120, 1205);
-      ctx.font = '500 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillText('💚 GREEN FLAG:', 120, 1195);
+      ctx.font = '500 26px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
       ctx.fillStyle = '#f1f5f9';
-      this.drawWrappedText(ctx, res.greenFlag, 120, 1255, 840, 42, 'left');
+      this.drawWrappedText(ctx, res.greenFlag, 120, 1240, 840, 38, 'left');
 
       // Red Flag
       ctx.fillStyle = 'rgba(244, 63, 94, 0.15)';
       ctx.beginPath();
-      ctx.roundRect(80, 1390, 920, 200, 24);
+      ctx.roundRect(80, 1355, 920, 185, 24);
       ctx.fill();
       ctx.strokeStyle = '#f43f5e';
       ctx.lineWidth = 3;
       ctx.stroke();
 
-      ctx.font = 'bold 32px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.font = 'bold 30px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
       ctx.fillStyle = '#fb7185';
-      ctx.fillText('🚩 RED FLAG TRIGGER:', 120, 1445);
-      ctx.font = '500 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillText('🚩 RED FLAG TRIGGER:', 120, 1405);
+      ctx.font = '500 26px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
       ctx.fillStyle = '#f1f5f9';
-      this.drawWrappedText(ctx, res.redFlag, 120, 1495, 840, 42, 'left');
+      this.drawWrappedText(ctx, res.redFlag, 120, 1450, 840, 38, 'left');
+
+      // Meme Verdict Callout
+      ctx.textAlign = 'center';
+      ctx.font = 'bold italic 26px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillStyle = '#fda4af';
+      this.drawWrappedText(ctx, res.memeVerdict, 540, 1595, 880, 36, 'center');
 
       // 6. Watermark Footer
       ctx.textAlign = 'center';

@@ -1,9 +1,33 @@
 export type DayMasterId =
-  'GAP' | 'EUL' | 'BYEONG' | 'JEONG' | 'MU' | 'GI' | 'GYEONG' | 'SIN' | 'IM' | 'GYE';
+  | 'GAP'
+  | 'EUL'
+  | 'BYEONG'
+  | 'JEONG'
+  | 'MU'
+  | 'GI'
+  | 'GYEONG'
+  | 'SIN'
+  | 'IM'
+  | 'GYE';
 
 export type FiveElement = 'Holz' | 'Feuer' | 'Erde' | 'Metall' | 'Wasser';
 export type YinYang = 'Yang' | 'Yin';
 export type DatingContext = 'crush' | 'relationship' | 'bestie' | 'ex';
+
+export type AuraId = 'DOHWA' | 'YEOKMA' | 'HWAGAE';
+
+export interface SajuAuraStar {
+  id: AuraId;
+  name: string;
+  korean: string;
+  hanja: string;
+  emoji: string;
+  title: string;
+  headline: string;
+  tagline: string;
+  description: string;
+  datingCallout: string;
+}
 
 export interface DayMaster {
   id: DayMasterId;
@@ -26,6 +50,9 @@ export interface DayMaster {
   careerHint: string;
   loveHint: string;
   quote: string;
+  toxicTrait: string;
+  deluluScore: number; // 0-100%
+  whatsAppSignature: string;
   color: string;
   bgGradient: string;
 }
@@ -40,6 +67,7 @@ export interface UserSazuInput {
 export interface UserSazuResult {
   input: UserSazuInput;
   dayMaster: DayMaster;
+  auraStar: SajuAuraStar;
   birthDateFormatted: string;
   calculatedAt: Date;
 }
@@ -70,5 +98,9 @@ export interface CompatibilityResult {
   conflictTrigger: string;
   greenFlag: string;
   redFlag: string;
+  flirtScore: number;
+  stabilityScore: number;
+  toxicScore: number;
+  memeVerdict: string;
   context?: DatingContext;
 }

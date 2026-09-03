@@ -5,7 +5,7 @@
       type="button"
       class="tab-btn"
       [class.active]="sazuService.activeTab() === 'sazu'"
-      (click)="sazuService.activeTab.set('sazu')"
+      (click)="switchTab('sazu')"
     >
       <span class="tab-icon">🔮</span>
       <span class="tab-label">Mein Sazu</span>
@@ -15,7 +15,7 @@
       type="button"
       class="tab-btn"
       [class.active]="sazuService.activeTab() === 'partner'"
-      (click)="sazuService.activeTab.set('partner')"
+      (click)="switchTab('partner')"
     >
       <span class="tab-icon">💘</span>
       <span class="tab-label">Partner-Check</span>
@@ -163,7 +163,7 @@
       } @else {
         <!-- RESULT CARD: MEIN SAZU -->
         @let res = sazuService.userSazuResult()!;
-        <div class="result-container fade-in">
+        <div id="sazu-result" class="result-container fade-in">
           <!-- Main Archetype Card -->
           <div class="sazu-hero-card" [style.background]="res.dayMaster.bgGradient">
             <div class="hero-top-bar">
@@ -199,6 +199,76 @@
             <div class="badge-content">
               <span class="badge-label">Deutscher Wesens-Archetyp:</span>
               <h4 class="archetype-title">{{ res.dayMaster.germanArchetype }}</h4>
+            </div>
+          </div>
+
+          <!-- K-Aura Star Card (신살 / Kosmischer X-Faktor) -->
+          <div class="content-card aura-card">
+            <div class="aura-badge-header">
+              <span class="aura-badge-emoji">{{ res.auraStar.emoji }}</span>
+              <div class="aura-badge-titles">
+                <span class="aura-mini-tag">K-Aura Stern (신살)</span>
+                <h3 class="aura-name">
+                  {{ res.auraStar.name }} <span class="aura-kr">({{ res.auraStar.korean }})</span>
+                </h3>
+              </div>
+            </div>
+            <div class="aura-headline-box">
+              <strong class="aura-headline">{{ res.auraStar.headline }}</strong>
+              <p class="aura-tagline">„{{ res.auraStar.tagline }}“</p>
+            </div>
+            <p class="aura-desc">{{ res.auraStar.description }}</p>
+            <div class="aura-callout">
+              <span class="callout-icon">🎯</span>
+              <p class="callout-text">
+                <strong>Real-Life-Check:</strong> {{ res.auraStar.datingCallout }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Reality Check: Toxic Trait, Delulu Meter & WhatsApp Quote -->
+          <div class="content-card reality-check-card">
+            <div class="card-section-title">
+              <span class="sec-icon">💀</span>
+              <h3>Ungeschönter Reality-Check</h3>
+            </div>
+
+            <div class="reality-grid">
+              <!-- Toxic Trait -->
+              <div class="reality-box toxic-box">
+                <div class="reality-header">
+                  <span class="r-icon">🚩</span>
+                  <h4>Größter Toxic Trait</h4>
+                </div>
+                <p class="reality-text">{{ res.dayMaster.toxicTrait }}</p>
+              </div>
+
+              <!-- Delulu Meter -->
+              <div class="reality-box delulu-box">
+                <div class="reality-header">
+                  <span class="r-icon">🦄</span>
+                  <h4>Delulu-Score</h4>
+                  <span class="delulu-score-num">{{ res.dayMaster.deluluScore }}%</span>
+                </div>
+                <div class="delulu-progress-bar">
+                  <div class="delulu-fill" [style.width.%]="res.dayMaster.deluluScore"></div>
+                </div>
+                <p class="delulu-hint">
+                  @if (res.dayMaster.deluluScore >= 75) {
+                    <span>🚨 Akute Realitätsflucht: Plant nach dem 1. Date bereits eure Hochzeit.</span>
+                  } @else if (res.dayMaster.deluluScore >= 40) {
+                    <span>⚠️ Gesunde Prise Hoffnung: Leichtgläubig, aber noch therapierbar.</span>
+                  } @else {
+                    <span>🧊 Eiskalter Realismus: Glaubt erst an Liebe, wenn der Mietvertrag unterschrieben ist.</span>
+                  }
+                </p>
+              </div>
+            </div>
+
+            <!-- WhatsApp Signature -->
+            <div class="chat-signature-box">
+              <span class="chat-tag">Typischer Satz im Gruppenchat:</span>
+              <p class="chat-bubble-text">{{ res.dayMaster.whatsAppSignature }}</p>
             </div>
           </div>
 
@@ -313,7 +383,7 @@
           <!-- Action Buttons -->
           <div class="action-footer">
             <button type="button" class="btn-share" (click)="shareSazu()">
-              <span>📤 Auf WhatsApp & Co. teilen</span>
+              <span>💅 Schick das deiner Freundin, die es leugnen wird</span>
             </button>
             <div class="sub-actions">
               <button
@@ -321,18 +391,18 @@
                 class="btn-secondary"
                 (click)="
                   sazuService.copyToClipboard(
-                    'Ich bin im koreanischen Sazu: ' +
+                    'Mein koreanisches Sazu: ' +
                       res.dayMaster.name +
                       ' (' +
                       res.dayMaster.element +
-                      ')! 🥨 Mein Schutzgut: ' +
-                      res.dayMaster.luckyItem
+                      ')! 🚩 Toxic Trait: ' +
+                      res.dayMaster.toxicTrait
                   )
                 "
               >
                 <span>📋 Kopieren</span>
               </button>
-              <button type="button" class="btn-secondary" (click)="sazuService.resetSazu()">
+              <button type="button" class="btn-secondary" (click)="resetSazu()">
                 <span>🔄 Neu berechnen</span>
               </button>
             </div>
@@ -490,7 +560,7 @@
       } @else {
         <!-- PARTNER RESULT CARD -->
         @let c = sazuService.partnerResult()!;
-        <div class="result-container fade-in">
+        <div id="partner-result" class="result-container fade-in">
           <!-- Duo Matchup Header -->
           <div class="duo-header-card">
             <div class="duo-person left">
@@ -540,6 +610,55 @@
               <div class="badge-pill">{{ c.badge }}</div>
               <h3 class="relation-title">{{ c.relationshipType }}</h3>
               <p class="verdict-text">„{{ c.verdict }}“</p>
+            </div>
+          </div>
+
+          <!-- 3-Pillar Spicy Chemistry Radar (Gen-Z German Target) -->
+          <div class="content-card spicy-radar-card">
+            <div class="card-section-title">
+              <span class="sec-icon">🌶️</span>
+              <h3>Die schonungslose Chemie-Skala</h3>
+            </div>
+
+            <div class="spicy-bars-container">
+              <!-- Bar 1: Flirt & Bett-Chemie -->
+              <div class="spicy-bar-row">
+                <div class="spicy-label-row">
+                  <span class="spicy-name"><span class="icon">🔥</span> Flirt- & Bett-Chemie</span>
+                  <span class="spicy-val flirt-val">{{ c.flirtScore }}%</span>
+                </div>
+                <div class="spicy-track">
+                  <div class="spicy-fill flirt-fill" [style.width.%]="c.flirtScore"></div>
+                </div>
+              </div>
+
+              <!-- Bar 2: WG- & Alltagstauglichkeit -->
+              <div class="spicy-bar-row">
+                <div class="spicy-label-row">
+                  <span class="spicy-name"><span class="icon">🏡</span> WG- & Alltagstauglichkeit</span>
+                  <span class="spicy-val stability-val">{{ c.stabilityScore }}%</span>
+                </div>
+                <div class="spicy-track">
+                  <div class="spicy-fill stability-fill" [style.width.%]="c.stabilityScore"></div>
+                </div>
+              </div>
+
+              <!-- Bar 3: Toxizitäts- & Drama-Level -->
+              <div class="spicy-bar-row">
+                <div class="spicy-label-row">
+                  <span class="spicy-name"><span class="icon">🚩</span> Toxizitäts- & Drama-Level</span>
+                  <span class="spicy-val toxic-val">{{ c.toxicScore }}%</span>
+                </div>
+                <div class="spicy-track">
+                  <div class="spicy-fill toxic-fill" [style.width.%]="c.toxicScore"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Meme Verdict Callout -->
+            <div class="meme-verdict-box">
+              <span class="meme-icon">💬</span>
+              <p class="meme-verdict-text">{{ c.memeVerdict }}</p>
             </div>
           </div>
 
@@ -616,14 +735,18 @@
                       c.person2.name +
                       ' -> ' +
                       c.score +
-                      '% Chemie! 💘 Fazit: ' +
-                      c.verdict
+                      '% Chemie! 🔥 Flirt: ' +
+                      c.flirtScore +
+                      '% 🚩 Toxic: ' +
+                      c.toxicScore +
+                      '% 💬 ' +
+                      c.memeVerdict
                   )
                 "
               >
                 <span>📋 Kopieren</span>
               </button>
-              <button type="button" class="btn-secondary" (click)="sazuService.resetPartner()">
+              <button type="button" class="btn-secondary" (click)="resetPartner()">
                 <span>🔄 Anderes Paar prüfen</span>
               </button>
             </div>
@@ -988,6 +1111,12 @@
               <div class="story-verdict-box">
                 <div class="s-badge">{{ c.badge }}</div>
                 <p class="s-verdict">„{{ c.verdict }}“</p>
+                <div class="story-spicy-pills">
+                  <span class="story-pill">🔥 Flirt: {{ c.flirtScore }}%</span>
+                  <span class="story-pill">🏡 WG: {{ c.stabilityScore }}%</span>
+                  <span class="story-pill">🚩 Toxic: {{ c.toxicScore }}%</span>
+                </div>
+                <p class="s-meme-verdict">{{ c.memeVerdict }}</p>
               </div>
 
               <div class="story-flags">

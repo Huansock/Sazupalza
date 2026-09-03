@@ -34,7 +34,7 @@ describe('SazuService', () => {
     expect(dmToday.element).toBe('Metall');
   });
 
-  it('should calculate User Sazu and update signal state', () => {
+  it('should calculate User Sazu and update signal state including Aura Star', () => {
     const result = service.calculateSazu({
       name: 'Angela',
       birthDate: '1954-07-17',
@@ -42,8 +42,29 @@ describe('SazuService', () => {
     });
 
     expect(result.dayMaster).toBeDefined();
+    expect(result.auraStar).toBeDefined();
+    expect(result.auraStar.name).toBeTruthy();
+    expect(result.dayMaster.toxicTrait).toBeTruthy();
+    expect(typeof result.dayMaster.deluluScore).toBe('number');
     expect(result.birthDateFormatted).toBe('17.07.1954');
     expect(service.userSazuResult()).toBe(result);
+  });
+
+  it('should correctly calculate Saju Aura Star (신살)', () => {
+    // 2024-01-01 is 甲子 (Rat / 자 day) -> DOHWA
+    const aura2024 = service.calculateAuraStar('2024-01-01');
+    expect(aura2024.id).toBe('DOHWA');
+    expect(aura2024.emoji).toBe('🌸');
+
+    // 2024-01-02 is 乙丑 (Ox / 축 day) -> HWAGAE
+    const auraOx = service.calculateAuraStar('2024-01-02');
+    expect(auraOx.id).toBe('HWAGAE');
+    expect(auraOx.emoji).toBe('🎨');
+
+    // 2024-01-03 is 丙寅 (Tiger / 인 day) -> YEOKMA
+    const auraTiger = service.calculateAuraStar('2024-01-03');
+    expect(auraTiger.id).toBe('YEOKMA');
+    expect(auraTiger.emoji).toBe('✈️');
   });
 
   it('should calculate Asian double-hour branch correctly', () => {
@@ -60,7 +81,7 @@ describe('SazuService', () => {
     expect(noTime).toBeNull();
   });
 
-  it('should calculate Gunghap compatibility score and details', () => {
+  it('should calculate Gunghap compatibility score, spicy metrics and meme verdict', () => {
     // Gap + Gi combination test (Cheongan-Hap)
     const result = service.calculateCompatibility({
       person1Name: 'Lukas',
@@ -71,6 +92,10 @@ describe('SazuService', () => {
 
     expect(result.score).toBe(97);
     expect(result.badge).toContain('Traumpaar');
+    expect(result.flirtScore).toBe(88);
+    expect(result.stabilityScore).toBe(98);
+    expect(result.toxicScore).toBe(12);
+    expect(result.memeVerdict).toContain('Freundin');
     expect(result.person1.dayMaster.id).toBe('GAP');
     expect(result.person2.dayMaster.id).toBe('GI');
     expect(service.partnerResult()).toBe(result);

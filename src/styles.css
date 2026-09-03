@@ -29,23 +29,37 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 html,
 body {
   min-height: 100%;
+  width: 100%;
   font-family: var(--font-sans);
   font-size: 16px;
   line-height: 1.6;
-  background: #090d16;
+  background-color: #090d16;
   color: var(--text-main);
   background-image:
     radial-gradient(circle at 50% 0%, rgba(211, 47, 47, 0.15), transparent 40%),
     radial-gradient(circle at 10% 40%, rgba(30, 58, 138, 0.12), transparent 30%),
     radial-gradient(circle at 90% 80%, rgba(180, 83, 9, 0.1), transparent 35%);
-  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
   display: flex;
   justify-content: center;
   align-items: flex-start;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 /* Mobile viewport wrapper constrained to max-width 430px */

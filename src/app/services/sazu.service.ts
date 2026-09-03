@@ -4,10 +4,11 @@ import {
   DayMaster,
   DayMasterId,
   PartnerCheckInput,
+  SajuAuraStar,
   UserSazuInput,
   UserSazuResult,
 } from '../models/sazu.model';
-import { DAY_MASTERS, SPECIAL_COMPATIBILITY, STEM_KEYS } from '../data/sazu-data';
+import { AURA_STARS, DAY_MASTERS, SPECIAL_COMPATIBILITY, STEM_KEYS } from '../data/sazu-data';
 
 @Injectable({
   providedIn: 'root',
@@ -36,6 +37,32 @@ export class SazuService {
     const stemKey = STEM_KEYS[stemIndex];
 
     return DAY_MASTERS[stemKey];
+  }
+
+  /**
+   * Calculates the Saju Aura Star (신살: 도화살, 역마살, 화개살)
+   * based on the astronomical Day Earthly Branch (일지) cycle.
+   */
+  calculateAuraStar(dateStr: string): SajuAuraStar {
+    const [yearStr, monthStr, dayStr] = dateStr.split('-');
+    const year = parseInt(yearStr, 10);
+    const month = parseInt(monthStr, 10);
+    const day = parseInt(dayStr, 10);
+
+    const jdn = this.calculateJulianDayNumber(year, month, day);
+    // Korean Day Branch formula: (JDN + 1) % 12
+    const branchIndex = (((jdn + 1) % 12) + 12) % 12;
+
+    // 0: Rat (자), 3: Rabbit (묘), 6: Horse (오), 9: Rooster (유) -> Dohwa (Peach Blossom / Flirt Magnet)
+    // 2: Tiger (인), 5: Snake (사), 8: Monkey (신), 11: Pig (해) -> Yeokma (Travel / Wanderlust)
+    // 1: Ox (축), 4: Dragon (진), 7: Goat (미), 10: Dog (술) -> Hwagae (Artsy Mystic / Deep Thinker)
+    if (branchIndex === 0 || branchIndex === 3 || branchIndex === 6 || branchIndex === 9) {
+      return AURA_STARS.DOHWA;
+    } else if (branchIndex === 2 || branchIndex === 5 || branchIndex === 8 || branchIndex === 11) {
+      return AURA_STARS.YEOKMA;
+    } else {
+      return AURA_STARS.HWAGAE;
+    }
   }
 
   /**
@@ -132,6 +159,7 @@ export class SazuService {
    */
   calculateSazu(input: UserSazuInput): UserSazuResult {
     const dayMaster = this.getDayMasterFromDate(input.birthDate);
+    const auraStar = this.calculateAuraStar(input.birthDate);
 
     // Format date in German style (DD.MM.YYYY)
     const [y, m, d] = input.birthDate.split('-');
@@ -140,6 +168,7 @@ export class SazuService {
     const result: UserSazuResult = {
       input,
       dayMaster,
+      auraStar,
       birthDateFormatted,
       calculatedAt: new Date(),
     };
@@ -183,6 +212,10 @@ export class SazuService {
       conflictTrigger: compatData.conflictTrigger,
       greenFlag: compatData.greenFlag,
       redFlag: compatData.redFlag,
+      flirtScore: compatData.flirtScore,
+      stabilityScore: compatData.stabilityScore,
+      toxicScore: compatData.toxicScore,
+      memeVerdict: compatData.memeVerdict,
       context: input.context || 'crush',
     };
 
@@ -210,6 +243,11 @@ export class SazuService {
           greenFlag: 'Versteht deinen Sinn für Humor und deine Eigenarten ohne lange Erklärungen.',
           redFlag:
             'Zwei Alphatiere im selben Revier: Beide wollen immer recht haben und hassen Kompromisse.',
+          flirtScore: 76,
+          stabilityScore: 72,
+          toxicScore: 52,
+          memeVerdict:
+            '„Zwei identische Dickschädel: Ihr wisst genau, wie der andere tickt – und provoziert ihn trotzdem.“',
         };
       } else {
         return {
@@ -226,6 +264,11 @@ export class SazuService {
             'Einer fängt die Schwächen des anderen intuitiv ab – unzerbrechlicher Teamgeist.',
           redFlag:
             'Heimlicher Konkurrenzkampf darüber, wer von beiden im Freundeskreis besser ankommt.',
+          flirtScore: 82,
+          stabilityScore: 78,
+          toxicScore: 46,
+          memeVerdict:
+            '„Yin und Yang im selben Element: Harmonisches Team mit gelegentlichen dramatischen Zickenkriegen.“',
         };
       }
     }
@@ -260,6 +303,11 @@ export class SazuService {
           'Wenn einer immer nur plant und der andere immer nur die Rechnungen zahlen soll.',
         greenFlag: 'Beflügelt deine Träume und schenkt dir neue emotionale Kraft und Inspiration.',
         redFlag: 'Emotionale Schieflage: Einer investiert spürbar mehr Energie als der andere.',
+        flirtScore: 86,
+        stabilityScore: 92,
+        toxicScore: 22,
+        memeVerdict:
+          '„Gesunde Beziehung ohne Psychospielchen – fast schon unheimlich harmonisch.“',
       };
     }
 
@@ -268,7 +316,7 @@ export class SazuService {
         score: 64,
         badge: 'Spannungsbogen ⚡',
         relationshipType: 'Herausfordernde Dynamik (Sang-Geuk / 상극)',
-        verdict: 'Spannungsgeladen wie ein Krimi am Sonntagabend. Reibung erzeugt Hitze!',
+        verdict: 'Spannungsgeladen und wild. Reibung erzeugt Hitze!',
         description: `Zwischen ${dm1.element} und ${dm2.element} besteht natürliche Reibung. Das ist nicht zwingend schlecht: Wer Reibung aushält, wächst daran enorm!`,
         dailyLifeTip:
           'Nehmt Meinungsverschiedenheiten sportlich und nicht als persönlichen Angriff auf die Ehre.',
@@ -277,6 +325,11 @@ export class SazuService {
         greenFlag:
           'Extrem hohe körperliche und mentale Anziehung – bei euch wird es niemals langweilig.',
         redFlag: 'Konflikt-Kollision: Lautstarker Vorwurf prallt auf stures, wochenlanges Mauern.',
+        flirtScore: 93,
+        stabilityScore: 36,
+        toxicScore: 88,
+        memeVerdict:
+          '„Reibung erzeugt Hitze: Streitpotenzial extrem hoch, aber die sexuelle Chemie knallt durch die Decke.“',
       };
     }
 
@@ -284,7 +337,7 @@ export class SazuService {
       score: 75,
       badge: 'Solide Partnerschaft 🤝',
       relationshipType: 'Pragmatische Harmonie',
-      verdict: 'Harmonisch, verlässlich und unaufgeregt wie ein deutsches Qualitätsfahrrad.',
+      verdict: 'Harmonisch, verlässlich und unaufgeregt wie ein gutes Gespräch bei Hafer-Cappuccino.',
       description: `Ihr ergänzt euch durch unterschiedliche Talente und Lebensentwürfe. Keine explosive Hollywood-Romanze, sondern echtes Leben.`,
       dailyLifeTip:
         'Schafft gemeinsame Hobbys, um der Beziehungsroutine etwas Pfeffer zu verleihen.',
@@ -292,6 +345,11 @@ export class SazuService {
       greenFlag:
         'Verlässlicher Ruhepol im hektischen Alltag ohne unnötige Dramen oder Psychospielchen.',
       redFlag: 'Gefahr von Routine und Bequemlichkeit, wenn niemand neue Date-Ideen einbringt.',
+      flirtScore: 75,
+      stabilityScore: 82,
+      toxicScore: 28,
+      memeVerdict:
+        '„Entspannte Partnerschaft ohne große Dramen – Balsam für überreizte Großstadt-Seelen.“',
     };
   }
 

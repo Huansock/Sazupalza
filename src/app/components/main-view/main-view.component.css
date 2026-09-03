@@ -1671,3 +1671,379 @@
   text-align: center;
   line-height: 1.4;
 }
+
+/* ============================================================= */
+/* 20s GERMAN GEN-Z TARGET UPGRADE STYLES                        */
+/* ============================================================= */
+
+/* --- 1. K-Aura Star Card (신살) --- */
+.aura-card {
+  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);
+  color: #ffffff;
+  border-radius: 20px;
+  padding: 22px 20px;
+  box-shadow: 0 8px 24px rgba(67, 56, 202, 0.25);
+  border: 1px solid rgba(199, 210, 254, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.aura-card::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle, rgba(244, 63, 94, 0.35) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.aura-badge-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.aura-badge-emoji {
+  font-size: 38px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  width: 58px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.aura-badge-titles {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.aura-mini-tag {
+  font-size: 12px;
+  font-weight: 800;
+  color: #fb7185;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.aura-name {
+  font-size: 20px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+}
+
+.aura-kr {
+  font-size: 14px;
+  font-weight: 600;
+  color: #c7d2fe;
+}
+
+.aura-headline-box {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  border-left: 3px solid #f43f5e;
+}
+
+.aura-headline {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.aura-tagline {
+  font-size: 13px;
+  font-style: italic;
+  color: #fca5a5;
+  margin: 0;
+}
+
+.aura-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #e0e7ff;
+  margin-bottom: 14px;
+}
+
+.aura-callout {
+  display: flex;
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 12px;
+  padding: 12px 14px;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+}
+
+.callout-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.callout-text {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #f1f5f9;
+  margin: 0;
+}
+
+/* --- 2. Reality Check Card (Toxic Trait & Delulu Meter) --- */
+.reality-check-card {
+  background: #ffffff;
+}
+
+.reality-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+@media (min-width: 480px) {
+  .reality-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.reality-box {
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.toxic-box {
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+}
+
+.delulu-box {
+  background: #fdf4ff;
+  border: 1px solid #f5d0fe;
+}
+
+.reality-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.reality-header h4 {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.toxic-box .reality-header h4 {
+  color: #be123c;
+}
+
+.delulu-box .reality-header h4 {
+  color: #86198f;
+}
+
+.reality-text {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #475569;
+  margin: 0;
+}
+
+.delulu-score-num {
+  margin-left: auto;
+  font-size: 18px;
+  font-weight: 900;
+  color: #c026d3;
+}
+
+.delulu-progress-bar {
+  width: 100%;
+  height: 10px;
+  background: #e9d5ff;
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 4px 0;
+}
+
+.delulu-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ec4899, #a855f7);
+  border-radius: 999px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.delulu-hint {
+  font-size: 12px;
+  line-height: 1.4;
+  color: #701a75;
+  margin: 0;
+  font-weight: 500;
+}
+
+.chat-signature-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+
+.chat-tag {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.chat-bubble-text {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 16px 16px 16px 4px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-style: italic;
+  color: #0f172a;
+  line-height: 1.45;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  margin: 0;
+}
+
+/* --- 3. Spicy Chemistry Radar Card (Gunghap) --- */
+.spicy-radar-card {
+  background: #ffffff;
+}
+
+.spicy-bars-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.spicy-bar-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.spicy-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.spicy-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.spicy-val {
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.flirt-val {
+  color: #e11d48;
+}
+
+.stability-val {
+  color: #059669;
+}
+
+.toxic-val {
+  color: #dc2626;
+}
+
+.spicy-track {
+  width: 100%;
+  height: 12px;
+  background: #f1f5f9;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+}
+
+.spicy-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.flirt-fill {
+  background: linear-gradient(90deg, #f43f5e, #fb7185);
+}
+
+.stability-fill {
+  background: linear-gradient(90deg, #10b981, #34d399);
+}
+
+.toxic-fill {
+  background: linear-gradient(90deg, #f97316, #ef4444);
+}
+
+.meme-verdict-box {
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.meme-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.meme-verdict-text {
+  font-size: 14px;
+  font-weight: 700;
+  color: #9a3412;
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* Story pills */
+.story-spicy-pills {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.story-pill {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.s-meme-verdict {
+  font-size: 11px;
+  font-weight: 700;
+  color: #fda4af;
+  margin-top: 6px;
+  line-height: 1.35;
+}
+
