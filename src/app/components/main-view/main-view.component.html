@@ -1,0 +1,876 @@
+<div class="main-container">
+  <!-- Top Segmented Navigation Tabs -->
+  <nav class="nav-tabs" aria-label="Hauptnavigation">
+    <button
+      type="button"
+      class="tab-btn"
+      [class.active]="sazuService.activeTab() === 'sazu'"
+      (click)="sazuService.activeTab.set('sazu')"
+    >
+      <span class="tab-icon">🔮</span>
+      <span class="tab-label">Mein Sazu</span>
+      <span class="tab-sub">내 사주</span>
+    </button>
+    <button
+      type="button"
+      class="tab-btn"
+      [class.active]="sazuService.activeTab() === 'partner'"
+      (click)="sazuService.activeTab.set('partner')"
+    >
+      <span class="tab-icon">💘</span>
+      <span class="tab-label">Partner-Check</span>
+      <span class="tab-sub">궁합</span>
+    </button>
+  </nav>
+
+  <!-- Asian Culture Explain Button -->
+  <div class="culture-pill-wrapper">
+    <button type="button" class="culture-info-pill" (click)="showCultureModal.set(true)">
+      <span class="info-dot">💡</span>
+      <span>Was ist koreanisches Sazu? (Kurz erklärt)</span>
+    </button>
+  </div>
+
+  <!-- ============================================================= -->
+  <!-- TAB 1: MEIN SAZU                                              -->
+  <!-- ============================================================= -->
+  @if (sazuService.activeTab() === 'sazu') {
+    <section class="tab-content fade-in">
+      @if (!sazuService.userSazuResult()) {
+        <!-- INPUT FORM -->
+        <div class="form-card">
+          <div class="form-header">
+            <h2 class="form-title">Entdecke deinen Tagesmeister</h2>
+            <p class="form-desc">
+              Im koreanischen Sazu bestimmt der <strong>Tagesmeister (일간)</strong> deinen wahren
+              Wesenskern – nicht der Monat wie im westlichen Horoskop!
+            </p>
+          </div>
+
+          <!-- Quick presets for rapid testing -->
+          <div class="preset-box">
+            <span class="preset-label">Schnelltest:</span>
+            <div class="preset-pills">
+              <button type="button" class="preset-btn" (click)="loadSazuPreset('leader')">
+                👑 Maximilian
+              </button>
+              <button type="button" class="preset-btn" (click)="loadSazuPreset('creative')">
+                🎨 Sophie
+              </button>
+              <button type="button" class="preset-btn" (click)="loadSazuPreset('strategist')">
+                🧠 Alexander
+              </button>
+            </div>
+          </div>
+
+          <form (ngSubmit)="submitSazu()" class="sazu-input-form">
+            <!-- Name -->
+            <div class="form-group">
+              <label for="userName" class="field-label">
+                <span class="label-icon">👤</span> Dein Name oder Spitzname
+              </label>
+              <input
+                id="userName"
+                type="text"
+                class="text-input"
+                placeholder="z.B. Jonas"
+                [(ngModel)]="sazuForm().name"
+                name="name"
+                maxlength="30"
+                required
+              />
+            </div>
+
+            <!-- Birth Date -->
+            <div class="form-group">
+              <label for="birthDate" class="field-label">
+                <span class="label-icon">📅</span> Geburtsdatum (Sonnenkalender)
+              </label>
+              <input
+                id="birthDate"
+                type="date"
+                class="text-input date-input"
+                [(ngModel)]="sazuForm().birthDate"
+                name="birthDate"
+                min="1920-01-01"
+                max="2030-12-31"
+                required
+              />
+              <span class="field-hint">Ganz normales Geburtsdatum aus dem Personalausweis</span>
+            </div>
+
+            <!-- Birth Time (Optional) -->
+            <div class="form-group">
+              <label for="birthTime" class="field-label">
+                <span class="label-icon">⏰</span> Geburtszeit
+                <span class="badge-optional">Optional</span>
+              </label>
+              <input
+                id="birthTime"
+                type="time"
+                class="text-input"
+                [(ngModel)]="sazuForm().birthTime"
+                name="birthTime"
+              />
+              <span class="field-hint"
+                >Ermittelt deine asiatische Stunde (chinesische Doppelstunde)</span
+              >
+            </div>
+
+            <!-- Gender -->
+            <div class="form-group">
+              <label class="field-label"> <span class="label-icon">⚧️</span> Geschlecht </label>
+              <div class="gender-segmented">
+                <button
+                  type="button"
+                  class="gender-pill"
+                  [class.selected]="sazuForm().gender === 'w'"
+                  (click)="sazuForm().gender = 'w'"
+                >
+                  Weiblich
+                </button>
+                <button
+                  type="button"
+                  class="gender-pill"
+                  [class.selected]="sazuForm().gender === 'm'"
+                  (click)="sazuForm().gender = 'm'"
+                >
+                  Männlich
+                </button>
+                <button
+                  type="button"
+                  class="gender-pill"
+                  [class.selected]="sazuForm().gender === 'd'"
+                  (click)="sazuForm().gender = 'd'"
+                >
+                  Divers
+                </button>
+              </div>
+            </div>
+
+            <!-- Error message if any -->
+            @if (sazuFormError()) {
+              <div class="error-banner animate-shake">
+                <span>⚠️ {{ sazuFormError() }}</span>
+              </div>
+            }
+
+            <button type="submit" class="submit-btn primary-cta">
+              <span>🔮 Mein K-Schicksal enthüllen</span>
+            </button>
+          </form>
+        </div>
+      } @else {
+        <!-- RESULT CARD: MEIN SAZU -->
+        @let res = sazuService.userSazuResult()!;
+        <div class="result-container fade-in">
+          <!-- Main Archetype Card -->
+          <div class="sazu-hero-card" [style.background]="res.dayMaster.bgGradient">
+            <div class="hero-top-bar">
+              <span class="user-greeting"
+                >Sazu-Analyse für <strong>{{ res.input.name }}</strong></span
+              >
+              <span class="birth-badge">📅 {{ res.birthDateFormatted }}</span>
+            </div>
+
+            <div class="hero-character-box">
+              <div class="hanja-circle">
+                <span class="hanja-symbol">{{ res.dayMaster.hanja }}</span>
+                <span class="korean-sub">{{ res.dayMaster.korean }}</span>
+              </div>
+              <div class="hero-titles">
+                <div class="element-tag">
+                  <span class="emoji">{{ res.dayMaster.elementEmoji }}</span>
+                  <span>{{ res.dayMaster.polarity }}-{{ res.dayMaster.element }}</span>
+                </div>
+                <h3 class="daymaster-name">{{ res.dayMaster.name }}</h3>
+                <p class="symbol-subtitle">{{ res.dayMaster.symbol }}</p>
+              </div>
+            </div>
+
+            <div class="hero-tagline-box">
+              <span class="hero-tagline">„{{ res.dayMaster.tagline }}“</span>
+            </div>
+          </div>
+
+          <!-- German Archetype Banner -->
+          <div class="german-badge-card">
+            <div class="badge-icon">🇩🇪</div>
+            <div class="badge-content">
+              <span class="badge-label">Deutscher Wesens-Archetyp:</span>
+              <h4 class="archetype-title">{{ res.dayMaster.germanArchetype }}</h4>
+            </div>
+          </div>
+
+          <!-- Personality Story -->
+          <div class="content-card">
+            <div class="card-section-title">
+              <span class="sec-icon">📖</span>
+              <h3>Persönlichkeitsanalyse</h3>
+            </div>
+            <div class="story-paragraphs">
+              @for (p of res.dayMaster.description; track $index) {
+                <p class="story-p">{{ p }}</p>
+              }
+            </div>
+
+            <!-- Quote Box -->
+            <div class="quote-card">
+              <span class="quote-mark">“</span>
+              <p class="quote-text">{{ res.dayMaster.quote }}</p>
+              <span class="quote-author">— Dein Sazu Lebensmotto</span>
+            </div>
+          </div>
+
+          <!-- Strengths & Weaknesses -->
+          <div class="content-card">
+            <div class="card-section-title">
+              <span class="sec-icon">⚖️</span>
+              <h3>Stärken & Stolpersteine</h3>
+            </div>
+            <div class="traits-grid">
+              <div class="traits-column strengths">
+                <h4 class="column-header"><span class="trait-icon">✅</span> Superkräfte</h4>
+                <ul class="trait-list">
+                  @for (st of res.dayMaster.strengths; track $index) {
+                    <li>{{ st }}</li>
+                  }
+                </ul>
+              </div>
+              <div class="traits-column weaknesses">
+                <h4 class="column-header"><span class="trait-icon">⚠️</span> Typische Schwächen</h4>
+                <ul class="trait-list">
+                  @for (wk of res.dayMaster.weaknesses; track $index) {
+                    <li>{{ wk }}</li>
+                  }
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- German Talisman & Soulfood -->
+          <div class="content-card lucky-box">
+            <div class="card-section-title">
+              <span class="sec-icon">🥨</span>
+              <h3>Deutsches K-Schutzgut & Seelenfutter</h3>
+            </div>
+            <div class="lucky-grid">
+              <div class="lucky-item-card">
+                <span class="lucky-icon">🛡️</span>
+                <div class="lucky-info">
+                  <span class="lucky-type">Dein deutsches Schutz-Objekt</span>
+                  <strong class="lucky-val">{{ res.dayMaster.luckyItem }}</strong>
+                </div>
+              </div>
+              <div class="lucky-item-card">
+                <span class="lucky-icon">🍲</span>
+                <div class="lucky-info">
+                  <span class="lucky-type">Seelisches Kraftfutter</span>
+                  <strong class="lucky-val">{{ res.dayMaster.luckyFood }}</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Work & Love in German Life -->
+          <div class="content-card">
+            <div class="card-section-title">
+              <span class="sec-icon">💼</span>
+              <h3>Alltag, Büro & Liebe</h3>
+            </div>
+            <div class="advice-block">
+              <div class="advice-row">
+                <span class="row-icon">🏢</span>
+                <div>
+                  <strong class="row-label">Büro-Dynamik & Karriere:</strong>
+                  <p class="row-text">{{ res.dayMaster.careerHint }}</p>
+                </div>
+              </div>
+              <div class="advice-row">
+                <span class="row-icon">❤️</span>
+                <div>
+                  <strong class="row-label">Liebesleben & Beziehung:</strong>
+                  <p class="row-text">{{ res.dayMaster.loveHint }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hour Branch (if provided) -->
+          @if (getHourInfo(); as hour) {
+            <div class="content-card hour-card">
+              <div class="card-section-title">
+                <span class="sec-icon">⏰</span>
+                <h3>Asiatische Geburtsstunde</h3>
+              </div>
+              <div class="hour-content">
+                <strong class="hour-title">{{ hour.name }}</strong>
+                <p class="hour-desc">{{ hour.trait }}</p>
+              </div>
+            </div>
+          }
+
+          <!-- Action Buttons -->
+          <div class="action-footer">
+            <button type="button" class="btn-share" (click)="shareSazu()">
+              <span>📤 Auf WhatsApp & Co. teilen</span>
+            </button>
+            <div class="sub-actions">
+              <button
+                type="button"
+                class="btn-secondary"
+                (click)="
+                  sazuService.copyToClipboard(
+                    'Ich bin im koreanischen Sazu: ' +
+                      res.dayMaster.name +
+                      ' (' +
+                      res.dayMaster.element +
+                      ')! 🥨 Mein Schutzgut: ' +
+                      res.dayMaster.luckyItem
+                  )
+                "
+              >
+                <span>📋 Kopieren</span>
+              </button>
+              <button type="button" class="btn-secondary" (click)="sazuService.resetSazu()">
+                <span>🔄 Neu berechnen</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </section>
+  }
+
+  <!-- ============================================================= -->
+  <!-- TAB 2: PARTNER-CHECK (GUNGHAP)                                -->
+  <!-- ============================================================= -->
+  @if (sazuService.activeTab() === 'partner') {
+    <section class="tab-content fade-in">
+      @if (!sazuService.partnerResult()) {
+        <!-- PARTNER INPUT FORM -->
+        <div class="form-card">
+          <div class="form-header">
+            <h2 class="form-title">Koreanischer Liebes- & Chemie-Check</h2>
+            <p class="form-desc">
+              Im Sazu basiert <strong>Gunghap (궁합)</strong> auf der elementaren Wechselwirkung der
+              beiden Tagesmeister: Schmelzt ihr zusammen oder fliegen die Fetzen?
+            </p>
+          </div>
+
+          <!-- Quick Partner Presets -->
+          <div class="preset-box">
+            <span class="preset-label">Test-Paare:</span>
+            <div class="preset-pills">
+              <button type="button" class="preset-btn" (click)="loadPartnerPreset('dream')">
+                🌟 Traumpaar (97%)
+              </button>
+              <button type="button" class="preset-btn" (click)="loadPartnerPreset('clash')">
+                ⚡ Reibung (52%)
+              </button>
+              <button type="button" class="preset-btn" (click)="loadPartnerPreset('symbiosis')">
+                🌱 Symbiose (91%)
+              </button>
+            </div>
+          </div>
+
+          <form (ngSubmit)="submitPartner()" class="partner-input-form">
+            <!-- Person 1 -->
+            <div class="person-box person-one">
+              <div class="person-tag"><span class="icon">👤</span> Person 1</div>
+              <div class="form-group">
+                <input
+                  type="text"
+                  class="text-input"
+                  placeholder="Name von Person 1 (z.B. Lukas)"
+                  [(ngModel)]="partnerForm().person1Name"
+                  name="p1Name"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label class="field-label-compact">Geburtsdatum:</label>
+                <input
+                  type="date"
+                  class="text-input date-input"
+                  [(ngModel)]="partnerForm().person1BirthDate"
+                  name="p1Birth"
+                  min="1920-01-01"
+                  max="2030-12-31"
+                  required
+                />
+              </div>
+            </div>
+
+            <!-- Match icon -->
+            <div class="match-divider">
+              <span class="heart-pulse">💘</span>
+              <span class="divider-label">trifft auf</span>
+            </div>
+
+            <!-- Person 2 -->
+            <div class="person-box person-two">
+              <div class="person-tag"><span class="icon">👤</span> Person 2</div>
+              <div class="form-group">
+                <input
+                  type="text"
+                  class="text-input"
+                  placeholder="Name von Person 2 (z.B. Emma)"
+                  [(ngModel)]="partnerForm().person2Name"
+                  name="p2Name"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label class="field-label-compact">Geburtsdatum:</label>
+                <input
+                  type="date"
+                  class="text-input date-input"
+                  [(ngModel)]="partnerForm().person2BirthDate"
+                  name="p2Birth"
+                  min="1920-01-01"
+                  max="2030-12-31"
+                  required
+                />
+              </div>
+            </div>
+
+            @if (partnerFormError()) {
+              <div class="error-banner animate-shake">
+                <span>⚠️ {{ partnerFormError() }}</span>
+              </div>
+            }
+
+            <button type="submit" class="submit-btn partner-cta">
+              <span>💘 Liebes-Chemie prüfen (Gunghap)</span>
+            </button>
+          </form>
+        </div>
+      } @else {
+        <!-- PARTNER RESULT CARD -->
+        @let c = sazuService.partnerResult()!;
+        <div class="result-container fade-in">
+          <!-- Duo Matchup Header -->
+          <div class="duo-header-card">
+            <div class="duo-person left">
+              <div class="duo-avatar" [style.background]="c.person1.dayMaster.bgGradient">
+                <span class="duo-hanja">{{ c.person1.dayMaster.hanja }}</span>
+              </div>
+              <strong class="duo-name">{{ c.person1.name }}</strong>
+              <span class="duo-dm">{{ c.person1.dayMaster.name }}</span>
+              <span class="duo-element"
+                >{{ c.person1.dayMaster.elementEmoji }} {{ c.person1.dayMaster.element }}</span
+              >
+            </div>
+
+            <div class="duo-connector">
+              <div class="heart-badge-circle">
+                <span class="conn-icon">💞</span>
+              </div>
+            </div>
+
+            <div class="duo-person right">
+              <div class="duo-avatar" [style.background]="c.person2.dayMaster.bgGradient">
+                <span class="duo-hanja">{{ c.person2.dayMaster.hanja }}</span>
+              </div>
+              <strong class="duo-name">{{ c.person2.name }}</strong>
+              <span class="duo-dm">{{ c.person2.dayMaster.name }}</span>
+              <span class="duo-element"
+                >{{ c.person2.dayMaster.elementEmoji }} {{ c.person2.dayMaster.element }}</span
+              >
+            </div>
+          </div>
+
+          <!-- Big Chemistry Score Circle -->
+          <div class="score-card">
+            <div class="score-circle-wrapper">
+              <div
+                class="score-gauge"
+                [class.score-high]="c.score >= 85"
+                [class.score-mid]="c.score >= 65 && c.score < 85"
+                [class.score-low]="c.score < 65"
+              >
+                <span class="score-number">{{ c.score }}<small>%</small></span>
+                <span class="score-label">Chemie-Score</span>
+              </div>
+            </div>
+
+            <div class="score-details">
+              <div class="badge-pill">{{ c.badge }}</div>
+              <h3 class="relation-title">{{ c.relationshipType }}</h3>
+              <p class="verdict-text">„{{ c.verdict }}“</p>
+            </div>
+          </div>
+
+          <!-- Deep Dive Compatibility Explanation -->
+          <div class="content-card">
+            <div class="card-section-title">
+              <span class="sec-icon">🔮</span>
+              <h3>Elementare Beziehungs-Dynamik</h3>
+            </div>
+            <p class="compat-desc">{{ c.description }}</p>
+          </div>
+
+          <!-- Everyday Life Advice & Conflict Trigger -->
+          <div class="content-card">
+            <div class="tip-box">
+              <div class="tip-header">
+                <span class="tip-icon">💡</span>
+                <h4>Tipp für den deutschen Alltag</h4>
+              </div>
+              <p class="tip-text">{{ c.dailyLifeTip }}</p>
+            </div>
+
+            <div class="warning-box">
+              <div class="warning-header">
+                <span class="warn-icon">⚠️</span>
+                <h4>Typischer Zündstoff & Streitpunkt</h4>
+              </div>
+              <p class="warning-text">{{ c.conflictTrigger }}</p>
+            </div>
+          </div>
+
+          <!-- Partner Action Buttons -->
+          <div class="action-footer">
+            <button type="button" class="btn-share partner-share" (click)="sharePartner()">
+              <span>📤 Liebeshoroskop teilen</span>
+            </button>
+            <div class="sub-actions">
+              <button
+                type="button"
+                class="btn-secondary"
+                (click)="
+                  sazuService.copyToClipboard(
+                    'Partner-Check: ' +
+                      c.person1.name +
+                      ' & ' +
+                      c.person2.name +
+                      ' -> ' +
+                      c.score +
+                      '% Chemie! 💘 Fazit: ' +
+                      c.verdict
+                  )
+                "
+              >
+                <span>📋 Kopieren</span>
+              </button>
+              <button type="button" class="btn-secondary" (click)="sazuService.resetPartner()">
+                <span>🔄 Anderes Paar prüfen</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </section>
+  }
+
+  <!-- Footer Disclaimer & Legal Links -->
+  <footer class="app-footer">
+    <div class="cookie-free-pill">
+      <span class="pill-icon">🍪</span>
+      <span>100% Cookie-frei & Tracking-frei</span>
+    </div>
+    <p class="footer-note">
+      🏮 Mit Liebe & feinem deutschen Humor adaptiert aus der 3.000-jährigen koreanischen
+      Sazu-Tradition (사주명리학).
+    </p>
+
+    <!-- Legal Links (Impressum & Datenschutz Pflicht in DE) -->
+    <div class="legal-nav">
+      <button type="button" class="legal-btn" (click)="openLegal('impressum')">Impressum</button>
+      <span class="legal-sep">•</span>
+      <button type="button" class="legal-btn" (click)="openLegal('datenschutz')">
+        Datenschutz
+      </button>
+      <span class="legal-sep">•</span>
+      <a
+        href="https://github.com/WooseokYang/sazu-palza"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="legal-link-gh"
+      >
+        <span>GitHub</span> ↗
+      </a>
+    </div>
+
+    <p class="footer-disclaimer">
+      ⚖️ <strong>Hinweis:</strong> Dieses Angebot dient ausschließlich Unterhaltungszwecken. Keine
+      Lebens-, Rechts- oder Partnerschaftsberatung.
+    </p>
+    <p class="footer-sub">
+      Hosted on Cloudflare Pages • Clientseitig berechnet • Keine personenbezogene Datenspeicherung
+    </p>
+  </footer>
+
+  <!-- Modal: Korean Culture Explained -->
+  @if (showCultureModal()) {
+    <div class="modal-backdrop fade-in" (click)="showCultureModal.set(false)">
+      <div class="modal-sheet animate-slide-up" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <div class="modal-tag">🇰🇷 Asiatische Philosophie</div>
+          <h3 class="modal-title">Was ist Sazu (사주팔자)?</h3>
+          <button type="button" class="modal-close-btn" (click)="showCultureModal.set(false)">
+            ✕
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>
+            <strong>Sazu (사주)</strong> bedeutet wörtlich <em>„Vier Säulen“</em> (Jahr, Monat, Tag
+            und Stunde deiner Geburt) und <strong>Palza (팔자)</strong> steht für die
+            <em>„Acht Schriftzeichen“</em>.
+          </p>
+          <div class="modal-highlight-box">
+            <h4>🌟 Der entscheidende Unterschied zum westlichen Horoskop:</h4>
+            <p>
+              Während im Westen dein <strong>Geburtsmonat</strong> (Sternzeichen wie Widder, Waage
+              etc.) im Zentrum steht, ist im koreanischen Sazu der
+              <strong>Tagesmeister (일간 / Ilgan)</strong> der absolute Herrscher deiner Seele.
+            </p>
+          </div>
+          <p>
+            Es gibt genau <strong>10 Tagesmeister</strong>, zusammengesetzt aus den 5 Elementen
+            (Holz 🌲, Feuer 🔥, Erde ⛰️, Metall ⚔️, Wasser 🌊) und Yin & Yang ☯️.
+          </p>
+          <p>
+            <strong>Gunghap (궁합)</strong> wiederum ist die Kunst, die Anziehung, Reibung und
+            Harmonie zwischen den Elementen zweier Menschen zu entschlüsseln.
+          </p>
+        </div>
+        <button type="button" class="modal-action-btn" (click)="showCultureModal.set(false)">
+          Verstanden, los geht's! ✨
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- Modal: Impressum & Datenschutz -->
+  @if (activeLegalModal(); as legalType) {
+    <div class="modal-backdrop fade-in" (click)="closeLegal()">
+      <div class="modal-sheet legal-sheet animate-slide-up" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <div class="modal-tag">Rechtliche Hinweise (DE / DSGVO)</div>
+          <div class="legal-toggle-bar">
+            <button
+              type="button"
+              class="legal-tab-btn"
+              [class.active]="legalType === 'impressum'"
+              (click)="openLegal('impressum')"
+            >
+              Impressum
+            </button>
+            <button
+              type="button"
+              class="legal-tab-btn"
+              [class.active]="legalType === 'datenschutz'"
+              (click)="openLegal('datenschutz')"
+            >
+              Datenschutz
+            </button>
+          </div>
+          <button type="button" class="modal-close-btn" (click)="closeLegal()">✕</button>
+        </div>
+
+        <div class="modal-body legal-content-body">
+          <!-- IMPRESSUM -->
+          @if (legalType === 'impressum') {
+            <div class="legal-text-wrapper">
+              <h3 class="legal-h3">Impressum</h3>
+
+              <div class="legal-block">
+                <h4>Angaben gemäß § 5 DDG (Digitale-Dienste-Gesetz):</h4>
+                <p class="legal-address">
+                  <strong>Wooseok Yang</strong><br />
+                  Hoferstraße 54A<br />
+                  04317 Leipzig<br />
+                  Deutschland
+                </p>
+              </div>
+
+              <div class="legal-block">
+                <h4>Kontakt:</h4>
+                <p>
+                  E-Mail:
+                  <a href="mailto:wooseok.yang@proton.me" class="inline-link"
+                    >wooseok.yang&#64;proton.me</a
+                  ><br />
+                  Telefon: <a href="tel:+4915753354868" class="inline-link">01575 3354868</a>
+                </p>
+              </div>
+
+              <div class="legal-block">
+                <h4>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV:</h4>
+                <p class="legal-address">
+                  <strong>Wooseok Yang</strong><br />
+                  Hoferstraße 54A<br />
+                  04317 Leipzig<br />
+                  Deutschland
+                </p>
+              </div>
+
+              <div class="legal-block highlight-disclaimer">
+                <h4>Haftungsausschluss für Unterhaltungsangebote (Disclaimer):</h4>
+                <p>
+                  Die auf dieser Webseite bereitgestellten Inhalte zur koreanischen Sazu-Astrologie
+                  (Tagesmeister) und Gunghap-Partneranalyse dienen ausschließlich der allgemeinen
+                  Unterhaltung, dem kulturellen Austausch und humorvollen Zwecken.
+                </p>
+                <p>
+                  Sie stellen zu keinem Zeitpunkt eine Lebensberatung, psychologische Beratung,
+                  Partnerschaftsmediation oder medizinische bzw. finanzielle Auskunft dar. Wichtige
+                  Entscheidungen im echten Leben (z. B. Heirat, Trennungen, Kündigungen oder
+                  Investitionen) sollten niemals ausschließlich auf der Grundlage dieser
+                  astrologischen Spaß-Ergebnisse getroffen werden.
+                </p>
+              </div>
+
+              <div class="legal-block">
+                <h4>Urheberrecht & Open Source:</h4>
+                <p>
+                  Diese Anwendung ist als Open-Source-Software lizenziert. Der gesamte Quellcode ist
+                  öffentlich auf GitHub einsehbar.
+                </p>
+              </div>
+            </div>
+          }
+
+          <!-- DATENSCHUTZ -->
+          @if (legalType === 'datenschutz') {
+            <div class="legal-text-wrapper">
+              <h3 class="legal-h3">Datenschutzerklärung</h3>
+
+              <div class="legal-block">
+                <h4>1. Datenschutz auf einen Blick</h4>
+                <p>
+                  Der Schutz Ihrer persönlichen Daten ist uns ein wichtiges Anliegen. Nachfolgend
+                  informieren wir Sie darüber, welche Daten verarbeitet werden – und vor allem,
+                  welche Daten wir <em>nicht</em> erheben.
+                </p>
+              </div>
+
+              <div class="legal-block">
+                <h4>2. Verantwortliche Stelle (Art. 4 Nr. 7 DSGVO):</h4>
+                <p class="legal-address">
+                  <strong>Wooseok Yang</strong><br />
+                  Hoferstraße 54A<br />
+                  04317 Leipzig<br />
+                  Deutschland<br />
+                  E-Mail:
+                  <a href="mailto:wooseok.yang@proton.me" class="inline-link"
+                    >wooseok.yang&#64;proton.me</a
+                  ><br />
+                  Telefon: 01575 3354868
+                </p>
+              </div>
+
+              <div class="legal-block secure-box">
+                <h4>3. 100% Lokale Datenverarbeitung (Client-Side Only)</h4>
+                <p>
+                  Alle von Ihnen eingegebenen Daten (Vorname/Spitzname, Geburtsdatum, Uhrzeit,
+                  Geschlecht) werden
+                  <strong>ausschließlich lokal im Webbrowser auf Ihrem Endgerät</strong>
+                  verarbeitet.
+                </p>
+                <p>
+                  Es erfolgt
+                  <strong
+                    >zu keinem Zeitpunkt eine Übertragung, Speicherung oder serverseitige
+                    Verarbeitung</strong
+                  >
+                  Ihrer Eingaben. Sobald Sie die Seite neu laden oder den Browser schließen, sind
+                  die temporär im Speicher gehaltenen Daten vollständig gelöscht.
+                </p>
+              </div>
+
+              <div class="legal-block open-source-highlight">
+                <h4>4. 100% Open-Source-Transparenz (GitHub)</h4>
+                <p>
+                  Dieses Projekt ist vollständig Open Source. Der komplette Programmcode ist für
+                  jedermann öffentlich einsehbar. Wer sich selbst davon überzeugen möchte, dass
+                  keinerlei persönliche Daten an Server oder Dritte gesendet werden, kann jede Zeile
+                  Code direkt im GitHub-Repository überprüfen:
+                </p>
+                <p class="gh-link-row">
+                  <a
+                    href="https://github.com/WooseokYang/sazu-palza"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="gh-cta-btn"
+                  >
+                    <span>📁 Quellcode auf GitHub prüfen</span> ↗
+                  </a>
+                </p>
+              </div>
+
+              <div class="legal-block">
+                <h4>5. Keine Cookies & kein Tracking</h4>
+                <p>
+                  Diese Webseite setzt <strong>keine Tracking-Cookies</strong>, keine Analyse-Tools
+                  (wie Google Analytics) und keine Werbe-Pixel ein. Es werden auch keine externen
+                  Webfonts (wie Google Fonts) dynamisch nachgeladen, sondern ausschließlich lokale
+                  System-Schriftarten verwendet. Daher ist kein Cookie-Banner erforderlich.
+                </p>
+              </div>
+
+              <div class="legal-block">
+                <h4>6. Hosting über Cloudflare Pages & Server-Log-Dateien</h4>
+                <p>
+                  Diese Website wird über <strong>Cloudflare Pages</strong> gehostet
+                  (Dienstanbieter: Cloudflare, Inc., 101 Townsend St, San Francisco, CA 94107, USA).
+                </p>
+                <p>
+                  Beim Aufruf der Website erfasst Cloudflare technisch unvermeidbare
+                  Server-Log-Dateien (z. B. IP-Adresse des anfragenden Geräts, Datum und Uhrzeit der
+                  Anfrage, aufgerufene URL, HTTP-Statuscode, Browsertyp und Betriebssystem). Dies
+                  ist technisch erforderlich, um die Website über das weltweite Content Delivery
+                  Network (CDN) sicher und performant auszuliefern sowie DDoS-Angriffe und
+                  Sicherheitsbedrohungen abzuwehren.
+                </p>
+                <p>
+                  Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einer
+                  sicheren, stabilen und schnellen Bereitstellung unseres Online-Angebots).
+                  Cloudflare ist unter dem <em>EU-US Data Privacy Framework</em> zertifiziert und
+                  nutzt EU-Standardvertragsklauseln (SCC).
+                </p>
+              </div>
+
+              <div class="legal-block">
+                <h4>7. Ihre Rechte als betroffene Person</h4>
+                <p>Nach der DSGVO stehen Ihnen folgende Rechte zu:</p>
+                <ul class="legal-ul">
+                  <li>Recht auf Auskunft (Art. 15 DSGVO)</li>
+                  <li>Recht auf Berichtigung (Art. 16 DSGVO)</li>
+                  <li>Recht auf Löschung (Art. 17 DSGVO)</li>
+                  <li>Recht auf Einschränkung der Verarbeitung (Art. 18 DSGVO)</li>
+                  <li>Recht auf Datenübertragbarkeit (Art. 20 DSGVO)</li>
+                  <li>Widerspruchsrecht (Art. 21 DSGVO)</li>
+                </ul>
+                <p class="legal-note">
+                  <em>Praktischer Hinweis:</em> Da der Betreiber selbst keinerlei personenbezogene
+                  Daten aus den Sazu-Berechnungen speichert oder sammelt, existieren beim Betreiber
+                  keine Daten, die eingesehen oder gelöscht werden könnten.
+                </p>
+              </div>
+
+              <div class="legal-block highlight-disclaimer">
+                <h4>8. Unterhaltungs-Haftungsausschluss</h4>
+                <p>
+                  Alle astrologischen Berechnungen dienen ausschließlich Unterhaltungszwecken und
+                  stellen keine verbindliche Lebens- oder Partnerschaftsberatung dar.
+                </p>
+              </div>
+            </div>
+          }
+        </div>
+
+        <button type="button" class="modal-action-btn" (click)="closeLegal()">Schließen</button>
+      </div>
+    </div>
+  }
+
+  <!-- Toast Notification Popover -->
+  @if (sazuService.toastMessage()) {
+    <div class="toast-bubble animate-toast">
+      <span>{{ sazuService.toastMessage() }}</span>
+    </div>
+  }
+</div>
