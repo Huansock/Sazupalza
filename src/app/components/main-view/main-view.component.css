@@ -1364,3 +1364,310 @@
     transform: translateX(6px);
   }
 }
+
+/* ========================================================= */
+/* DATING CONTEXT SELECTOR                                   */
+/* ========================================================= */
+.context-segmented {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  background: #f1f5f9;
+  padding: 6px;
+  border-radius: 14px;
+}
+
+.context-pill {
+  padding: 10px 12px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #475569;
+  border-radius: 10px;
+  text-align: center;
+  transition: all 0.2s ease;
+  background: transparent;
+}
+
+.context-pill.selected {
+  background: #ffffff;
+  color: #be123c;
+  box-shadow: 0 2px 8px rgba(190, 18, 60, 0.15);
+}
+
+/* ========================================================= */
+/* GREEN FLAG & RED FLAG CARDS                               */
+/* ========================================================= */
+.flags-card {
+  border: 1.5px solid #fecdd3;
+  background: #ffffff;
+}
+
+.flags-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.flag-box {
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+
+.green-flag-box {
+  background: #f0fdf4;
+  border: 1.5px solid #86efac;
+}
+
+.red-flag-box {
+  background: #fff1f2;
+  border: 1.5px solid #fda4af;
+}
+
+.flag-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.flag-emoji {
+  font-size: 20px;
+}
+
+.green-flag-box h4 {
+  font-size: 16px;
+  font-weight: 800;
+  color: #166534;
+}
+
+.red-flag-box h4 {
+  font-size: 16px;
+  font-weight: 800;
+  color: #9f1239;
+}
+
+.flag-desc {
+  font-size: 16px;
+  color: #1e293b;
+  line-height: 1.5;
+}
+
+/* ========================================================= */
+/* INSTAGRAM STORY CTA & MODAL                               */
+/* ========================================================= */
+.story-cta-btn {
+  background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+  box-shadow: 0 6px 20px rgba(253, 29, 29, 0.3);
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.story-cta-btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.story-sheet {
+  max-height: 94vh;
+}
+
+.story-preview-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0 16px;
+}
+
+/* 9:16 Aspect Ratio Card */
+.story-card-916 {
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 9 / 16;
+  background: linear-gradient(145deg, #0f172a 0%, #1e1b4b 50%, #020617 100%);
+  border-radius: 20px;
+  padding: 18px 16px;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.story-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.story-kr-badge {
+  font-size: 11px;
+  font-weight: 800;
+  color: #f43f5e;
+  letter-spacing: 1px;
+}
+
+.story-headline {
+  font-size: 13px;
+  font-weight: 700;
+  color: #cbd5e1;
+  letter-spacing: 0.5px;
+}
+
+.story-duo-names {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 10px 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.s-person {
+  display: flex;
+  flex-direction: column;
+}
+
+.s-name {
+  font-size: 16px;
+  color: #ffffff;
+}
+
+.s-dm {
+  font-size: 12px;
+  color: #fca5a5;
+  font-weight: 700;
+}
+
+.s-heart {
+  font-size: 20px;
+}
+
+.story-score-ring {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 3.5px solid #10b981;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(16, 185, 129, 0.15);
+}
+
+.s-score {
+  font-size: 26px;
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.s-label {
+  font-size: 10px;
+  font-weight: 800;
+  color: #6ee7b7;
+  letter-spacing: 0.5px;
+}
+
+.s-badge {
+  font-size: 14px;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 2px;
+}
+
+.s-verdict {
+  font-size: 12px;
+  font-style: italic;
+  color: #cbd5e1;
+  line-height: 1.35;
+}
+
+.story-flags {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+.s-flag {
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 11px;
+  line-height: 1.3;
+}
+
+.s-flag.green {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid #10b981;
+  color: #f1f5f9;
+}
+
+.s-flag.red {
+  background: rgba(244, 63, 94, 0.15);
+  border: 1px solid #f43f5e;
+  color: #f1f5f9;
+}
+
+.s-flag-tag {
+  font-weight: 800;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.s-flag.green .s-flag-tag {
+  color: #34d399;
+}
+
+.s-flag.red .s-flag-tag {
+  color: #fb7185;
+}
+
+.story-watermark {
+  font-size: 12px;
+  font-weight: 700;
+  color: #f43f5e;
+  opacity: 0.9;
+}
+
+.story-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.download-story-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+  color: #ffffff;
+  padding: 16px;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(253, 29, 29, 0.35);
+  transition: all 0.2s ease;
+}
+
+.download-story-btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.download-story-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.story-hint {
+  font-size: 13px;
+  color: #64748b;
+  text-align: center;
+  line-height: 1.4;
+}

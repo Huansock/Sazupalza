@@ -181,6 +181,9 @@ export class SazuService {
       description: compatData.description,
       dailyLifeTip: compatData.dailyLifeTip,
       conflictTrigger: compatData.conflictTrigger,
+      greenFlag: compatData.greenFlag,
+      redFlag: compatData.redFlag,
+      context: input.context || 'crush',
     };
 
     this.partnerResult.set(result);
@@ -204,6 +207,9 @@ export class SazuService {
             'Teilt euch Aufgabenbereiche strikt auf – zwei Chefs in einem Team führen unweigerlich zum Gewerkschaftsstreik.',
           conflictTrigger:
             'Wer von beiden das letzte Wort beim Restaurant- oder Urlaubsentscheid behält.',
+          greenFlag: 'Versteht deinen Sinn für Humor und deine Eigenarten ohne lange Erklärungen.',
+          redFlag:
+            'Zwei Alphatiere im selben Revier: Beide wollen immer recht haben und hassen Kompromisse.',
         };
       } else {
         return {
@@ -216,6 +222,10 @@ export class SazuService {
           dailyLifeTip:
             'Nutzt eure unterschiedlichen Blickwinkel: Einer stürmt vor, der andere sichert den Rücken.',
           conflictTrigger: 'Ungleiche Verteilung der Redezeit bei gemeinsamen Abendessen.',
+          greenFlag:
+            'Einer fängt die Schwächen des anderen intuitiv ab – unzerbrechlicher Teamgeist.',
+          redFlag:
+            'Heimlicher Konkurrenzkampf darüber, wer von beiden im Freundeskreis besser ankommt.',
         };
       }
     }
@@ -248,6 +258,8 @@ export class SazuService {
           'Achtet darauf, dass das Geben und Nehmen im Gleichgewicht bleibt und niemand emotional überlastet wird.',
         conflictTrigger:
           'Wenn einer immer nur plant und der andere immer nur die Rechnungen zahlen soll.',
+        greenFlag: 'Beflügelt deine Träume und schenkt dir neue emotionale Kraft und Inspiration.',
+        redFlag: 'Emotionale Schieflage: Einer investiert spürbar mehr Energie als der andere.',
       };
     }
 
@@ -262,6 +274,9 @@ export class SazuService {
           'Nehmt Meinungsverschiedenheiten sportlich und nicht als persönlichen Angriff auf die Ehre.',
         conflictTrigger:
           'Spontane Planänderungen am Samstagvormittag ohne vorherigen schriftlichen Antrag.',
+        greenFlag:
+          'Extrem hohe körperliche und mentale Anziehung – bei euch wird es niemals langweilig.',
+        redFlag: 'Konflikt-Kollision: Lautstarker Vorwurf prallt auf stures, wochenlanges Mauern.',
       };
     }
 
@@ -274,6 +289,9 @@ export class SazuService {
       dailyLifeTip:
         'Schafft gemeinsame Hobbys, um der Beziehungsroutine etwas Pfeffer zu verleihen.',
       conflictTrigger: 'Der ewige Streit darüber, wer den Müllbeutel in die Tonne bringt.',
+      greenFlag:
+        'Verlässlicher Ruhepol im hektischen Alltag ohne unnötige Dramen oder Psychospielchen.',
+      redFlag: 'Gefahr von Routine und Bequemlichkeit, wenn niemand neue Date-Ideen einbringt.',
     };
   }
 

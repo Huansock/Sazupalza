@@ -435,6 +435,47 @@
               </div>
             </div>
 
+            <!-- Dating Context Segmented -->
+            <div class="form-group">
+              <label class="field-label">
+                <span class="label-icon">🎯</span> Welche Verbindung checkst du?
+              </label>
+              <div class="context-segmented">
+                <button
+                  type="button"
+                  class="context-pill"
+                  [class.selected]="partnerForm().context === 'crush'"
+                  (click)="setPartnerContext('crush')"
+                >
+                  💘 Crush / 썸
+                </button>
+                <button
+                  type="button"
+                  class="context-pill"
+                  [class.selected]="partnerForm().context === 'relationship'"
+                  (click)="setPartnerContext('relationship')"
+                >
+                  💍 Beziehung
+                </button>
+                <button
+                  type="button"
+                  class="context-pill"
+                  [class.selected]="partnerForm().context === 'bestie'"
+                  (click)="setPartnerContext('bestie')"
+                >
+                  ☕ Bestie / WG
+                </button>
+                <button
+                  type="button"
+                  class="context-pill"
+                  [class.selected]="partnerForm().context === 'ex'"
+                  (click)="setPartnerContext('ex')"
+                >
+                  🚩 Mein Ex
+                </button>
+              </div>
+            </div>
+
             @if (partnerFormError()) {
               <div class="error-banner animate-shake">
                 <span>⚠️ {{ partnerFormError() }}</span>
@@ -502,6 +543,30 @@
             </div>
           </div>
 
+          <!-- Green Flag & Red Flag Radar Card (20s German Target) -->
+          <div class="content-card flags-card">
+            <div class="card-section-title">
+              <span class="sec-icon">🚦</span>
+              <h3>Dating-Radar: Green Flag vs. Red Flag</h3>
+            </div>
+            <div class="flags-grid">
+              <div class="flag-box green-flag-box">
+                <div class="flag-title">
+                  <span class="flag-emoji">💚</span>
+                  <h4>Green Flag (Warum es matcht)</h4>
+                </div>
+                <p class="flag-desc">{{ c.greenFlag }}</p>
+              </div>
+              <div class="flag-box red-flag-box">
+                <div class="flag-title">
+                  <span class="flag-emoji">🚩</span>
+                  <h4>Red Flag Trigger (Zündstoff)</h4>
+                </div>
+                <p class="flag-desc">{{ c.redFlag }}</p>
+              </div>
+            </div>
+          </div>
+
           <!-- Deep Dive Compatibility Explanation -->
           <div class="content-card">
             <div class="card-section-title">
@@ -532,8 +597,12 @@
 
           <!-- Partner Action Buttons -->
           <div class="action-footer">
+            <!-- Killer Feature: Instagram Story Share -->
+            <button type="button" class="btn-share story-cta-btn" (click)="openStoryModal()">
+              <span>📸 Als Instagram Story Bild teilen</span>
+            </button>
             <button type="button" class="btn-share partner-share" (click)="sharePartner()">
-              <span>📤 Liebeshoroskop teilen</span>
+              <span>📤 Liebeshoroskop als Text teilen</span>
             </button>
             <div class="sub-actions">
               <button
@@ -877,6 +946,86 @@
         </div>
 
         <button type="button" class="modal-action-btn" (click)="closeLegal()">Schließen</button>
+      </div>
+    </div>
+  }
+
+  <!-- Modal: Instagram Story Card Preview & Download -->
+  @if (showStoryModal()) {
+    <div class="modal-backdrop fade-in" (click)="closeStoryModal()">
+      <div class="modal-sheet story-sheet animate-slide-up" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <div class="modal-tag">📸 Instagram Story Card</div>
+          <button type="button" class="modal-close-btn" (click)="closeStoryModal()">✕</button>
+        </div>
+
+        @if (sazuService.partnerResult(); as c) {
+          <div class="story-preview-wrapper">
+            <!-- 9:16 Aspect Ratio Aesthetic Preview Card -->
+            <div class="story-card-916">
+              <div class="story-top">
+                <span class="story-kr-badge">KOREANISCHES SAZU (사주)</span>
+                <h4 class="story-headline">✨ DATING- & CRUSH-RADAR ✨</h4>
+              </div>
+
+              <div class="story-duo-names">
+                <div class="s-person">
+                  <strong class="s-name">{{ c.person1.name }}</strong>
+                  <span class="s-dm">{{ c.person1.dayMaster.name }}</span>
+                </div>
+                <span class="s-heart">💘</span>
+                <div class="s-person">
+                  <strong class="s-name">{{ c.person2.name }}</strong>
+                  <span class="s-dm">{{ c.person2.dayMaster.name }}</span>
+                </div>
+              </div>
+
+              <div class="story-score-ring">
+                <span class="s-score">{{ c.score }}%</span>
+                <span class="s-label">CHEMIE</span>
+              </div>
+
+              <div class="story-verdict-box">
+                <div class="s-badge">{{ c.badge }}</div>
+                <p class="s-verdict">„{{ c.verdict }}“</p>
+              </div>
+
+              <div class="story-flags">
+                <div class="s-flag green">
+                  <span class="s-flag-tag">💚 Green Flag:</span>
+                  <p>{{ c.greenFlag }}</p>
+                </div>
+                <div class="s-flag red">
+                  <span class="s-flag-tag">🚩 Red Flag:</span>
+                  <p>{{ c.redFlag }}</p>
+                </div>
+              </div>
+
+              <div class="story-watermark">
+                <span>sazu.usogi.org 🔮</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="story-actions">
+            <button
+              type="button"
+              class="download-story-btn"
+              [disabled]="isGeneratingStory()"
+              (click)="downloadStoryCard()"
+            >
+              @if (isGeneratingStory()) {
+                <span>⏳ Generiere HD-Story-Bild...</span>
+              } @else {
+                <span>💾 Bild speichern & in Story posten 📸</span>
+              }
+            </button>
+            <p class="story-hint">
+              💡 Tipp: Tippe auf den Button oder mache einfach einen Screenshot für deine
+              Insta-Story!
+            </p>
+          </div>
+        }
       </div>
     </div>
   }

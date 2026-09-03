@@ -3,6 +3,7 @@ export type DayMasterId =
 
 export type FiveElement = 'Holz' | 'Feuer' | 'Erde' | 'Metall' | 'Wasser';
 export type YinYang = 'Yang' | 'Yin';
+export type DatingContext = 'crush' | 'relationship' | 'bestie' | 'ex';
 
 export interface DayMaster {
   id: DayMasterId;
@@ -48,6 +49,7 @@ export interface PartnerCheckInput {
   person1BirthDate: string;
   person2Name: string;
   person2BirthDate: string;
+  context?: DatingContext;
 }
 
 export interface CompatibilityResult {
@@ -66,4 +68,7 @@ export interface CompatibilityResult {
   description: string;
   dailyLifeTip: string;
   conflictTrigger: string;
+  greenFlag: string;
+  redFlag: string;
+  context?: DatingContext;
 }

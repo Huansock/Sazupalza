@@ -407,6 +407,8 @@ export interface CompatibilityMatrixItem {
   description: string;
   dailyLifeTip: string;
   conflictTrigger: string;
+  greenFlag: string;
+  redFlag: string;
 }
 
 // Key format: `${Stem1}_${Stem2}` (normalized or checked both ways)
@@ -422,6 +424,9 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
     dailyLifeTip:
       'Gi sollte Gap hin und wieder sanft einbremsen, Gap muss Gis Fürsorge ausdrücklich loben.',
     conflictTrigger: 'Wenn Gap vergisst, die Tupperdose abzuwaschen, die Gi liebevoll gepackt hat.',
+    greenFlag:
+      'Merkt sich ohne Notizen, welche Hafermilch du trinkst und kauft sie ungefragt nach.',
+    redFlag: 'Wird extrem defensiv, wenn man seine feste Abendroutine um 10 Minuten verschiebt.',
   },
   EUL_GYEONG: {
     score: 96,
@@ -433,6 +438,9 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
     dailyLifeTip:
       'Gyeong sollte Kritik dosieren; Eul darf Gyeongs direkte Art nicht als Liebesentzug deuten.',
     conflictTrigger: 'Gyeong kritisiert den Putzplan vor Zeugen; Eul schmollt drei Tage lautlos.',
+    greenFlag:
+      'Baut eine uneinnehmbare Schutzmauer gegen toxische Bekannte auf und stärkt dir bedingungslos den Rücken.',
+    redFlag: 'Kritisiert deine Entscheidungen mit der Kälte und Härte eines Steuerprüfers.',
   },
   BYEONG_SIN: {
     score: 98,
@@ -444,6 +452,10 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
     dailyLifeTip:
       'Lasst euch gegenseitig die Bühne, statt um das hellste Rampenlicht zu konkurrieren.',
     conflictTrigger: 'Wer darf entscheiden, welche Möbel für das Wohnzimmer gekauft werden.',
+    greenFlag:
+      'Macht dich auf jeder Party zum Star und feiert jeden deiner kleinen Erfolge wie einen Oscar.',
+    redFlag:
+      'Passive Aggressivität auf WhatsApp („Passt schon.“), wenn du nicht binnen 5 Minuten antwortest.',
   },
   JEONG_IM: {
     score: 97,
@@ -455,6 +467,10 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
     dailyLifeTip:
       'Verliert euch nicht in Grübeleien – geht gemeinsam raus in die Natur und esst ein Eis.',
     conflictTrigger: 'Wenn Im plötzlich tagelang abtaucht und Jeong das Kopfkino anwirft.',
+    greenFlag:
+      'Deep Talk in der WG-Küche um 3 Uhr morgens mit echten, verletzlichen Seeleneinblicken.',
+    redFlag:
+      'Ghosting-Reflex: Taucht plötzlich für 48 Stunden ab, sobald Gefühle zu intensiv werden.',
   },
   MU_GYE: {
     score: 96,
@@ -467,6 +483,9 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
       'Mu sollte Gefühle öfter in Worte fassen; Gye darf Mus Schweigen nicht als Desinteresse werten.',
     conflictTrigger:
       'Wenn Mu stur auf dem Sofa hocken bleibt, während Gye über Gott und die Welt reden will.',
+    greenFlag: 'Der stoische Fels in der Brandung, wenn bei dir die ganze Welt im Chaos versinkt.',
+    redFlag:
+      'Verweigert sonntags jede Spontaneität und braucht 3 Tage Vorwarnung für ein Café-Treffen.',
   },
 
   // --- CHEONGAN CHUNG (Himmlische Reibung / Clash) ---
@@ -481,6 +500,10 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
       'Führt bei Diskussionen eine feste Redezeit-Uhr ein, sonst endet jede Planung vor dem Schiedsgericht.',
     conflictTrigger:
       'Wer recht hat bei der Frage, welcher Weg laut Google Maps um 30 Sekunden schneller gewesen wäre.',
+    greenFlag:
+      'Unglaubliches Power-Couple bei Großprojekten – ihr kriegt gemeinsam jede Krise gelöst.',
+    redFlag:
+      'Macht aus der Frage, wer den Müll falsch sortiert hat, eine grundlegende Grundsatzdebatte.',
   },
   EUL_SIN: {
     score: 44,
@@ -493,6 +516,9 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
       'Sin muss den inneren Kritiker ausschalten; Eul sollte Grenzen sofort und unmissverständlich benennen.',
     conflictTrigger:
       'Ein scheinbar harmloser Kommentar über die Frisur oder die Kleidung des anderen.',
+    greenFlag:
+      'Modisch und ästhetisch das mit Abstand bestangezogene Duo im gesamten Freundeskreis.',
+    redFlag: 'Zynischer Witz trifft wunden Punkt – danach tagelange eisige Funkstille.',
   },
   BYEONG_IM: {
     score: 52,
@@ -505,6 +531,9 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
       'Macht getrennte Urlaube oder vereinbart Tage, an denen einer das uneingeschränkte Kommando hat.',
     conflictTrigger:
       'Byeong lädt spontan 10 Freunde ein, während Im seine Ruhe am Schreibtisch genießen wollte.',
+    greenFlag: 'Jedes Date fühlt sich an wie ein wilder Spontan-Trip nach Paris – null Routine.',
+    redFlag:
+      'Einer will Konflikte sofort lautstark klären, der andere blockt ab und geht einfach aus dem Raum.',
   },
   JEONG_GYE: {
     score: 42,
@@ -516,6 +545,10 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
     dailyLifeTip:
       'Schreibt euch Briefe, wenn das Reden zu geladen ist. Klare Fakten helfen gegen Gefühlschaos.',
     conflictTrigger: 'Stundenlanges Anschweigen bei der Frage: „Was hast du denn?“ – „Nichts.“',
+    greenFlag:
+      'Beide spüren kleinste Stimmungsveränderungen des anderen im Raum sofort telepathisch.',
+    redFlag:
+      'Chronisches Overthinking: Stundenlange Panik wegen eines fehlenden Emojis in der Guten-Morgen-Nachricht.',
   },
 
   // --- SANGSAENG (Nährende Element-Partnerschaften) ---
@@ -529,6 +562,8 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
     dailyLifeTip:
       'Achtet darauf, euch nicht gegenseitig in Projekte zu verrennen, bis die Puste ausgeht.',
     conflictTrigger: 'Wenn beide gleichzeitig die Führung für das Wochenendprogramm beanspruchen.',
+    greenFlag: 'Mitreißende Energie – zusammen seid ihr die Stimmungskanonen auf jeder WG-Party.',
+    redFlag: 'Wer hat das Sagen? Beide wollen vorne am Steuer sitzen und hassen Beifahrer-Rollen.',
   },
   EUL_JEONG: {
     score: 92,
@@ -540,6 +575,8 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
       'Eine unglaublich feinfühlige, fast poetische Verbindung. Eul bringt charmante Ideen ein, Jeong vertieft sie mit Leidenschaft und Substanz. Ihr versteht euch oft ohne Worte.',
     dailyLifeTip: 'Ladet Freunde ein, um nicht in eurer kuscheligen Zweier-Kapsel zu versauern.',
     conflictTrigger: 'Wenn beide zu sensibel auf Nuancen reagieren und Probleme totschweigen.',
+    greenFlag: 'Kuscheldecke, heißer Tee und bedingungslose Geborgenheit an verregneten Sonntagen.',
+    redFlag: 'Beide schlucken Ärger wochenlang runter, bis plötzlich die aufgestaute Bombe platzt.',
   },
   BYEONG_MU: {
     score: 89,
@@ -552,6 +589,9 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
       'Byeong darf Mu nicht hetzen; Mu muss Byeongs Spontanität mit einem Lächeln honorieren.',
     conflictTrigger:
       'Byeong will sofort losfahren, Mu schnürt noch in Ruhe 20 Minuten die Wanderschuhe.',
+    greenFlag: 'Bodenständige Sicherheit fängt deine verrückten Spontan-Ideen immer liebevoll auf.',
+    redFlag:
+      'Er will jetzt sofort los ins Café, sie sucht noch in aller Seelenruhe 20 Minuten die Sonnenbrille.',
   },
   JEONG_GI: {
     score: 90,
@@ -563,6 +603,9 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
     dailyLifeTip:
       'Gönnt euch Ausflüge aus der Komfortzone – bucht mal spontan ein Wellness-Wochenende.',
     conflictTrigger: 'Streit um die Haushaltskasse oder wer mehr zur Hausarbeit beigetragen hat.',
+    greenFlag:
+      'Pures Hygge-Gefühl: Bei euch riecht es immer nach Geborgenheit, Liebe und Zimtschnecken.',
+    redFlag: 'Stille Abrechnung darüber, wer mehr mentale Last und Haushaltsarbeit übernommen hat.',
   },
   MU_GYEONG: {
     score: 88,
@@ -574,6 +617,9 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
     dailyLifeTip: 'Vergesst über all den Zielen und Sparplänen nicht das Kuscheln und den Humor.',
     conflictTrigger:
       'Wenn beide stur auf ihren Prinzipien beharren und niemand den ersten Schritt macht.',
+    greenFlag: 'Absprachen stehen bombenfest – kein Zaudern, kein Ghosting, 100% Verlässlichkeit.',
+    redFlag:
+      'Romantik und Komplimente geraten unter die Räder – fühlt sich manchmal an wie eine GmbH.',
   },
   GI_SIN: {
     score: 93,
@@ -586,6 +632,10 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
       'Sin sollte Gis ehrliche Mühe mit Zärtlichkeit belohnen, statt Kritik am Besteck zu üben.',
     conflictTrigger:
       'Sin bemängelt die Qualität der Tischdeko, die Gi liebevoll stundenlang arrangiert hat.',
+    greenFlag:
+      'Verwöhnt dich bedingungslos mit Liebe, während der andere Stil, Glanz und Ästhetik schenkt.',
+    redFlag:
+      'Mäckelt an kleinen Haushaltsdingen herum, die der andere stundenlang vorbereitet hat.',
   },
   GYEONG_IM: {
     score: 89,
@@ -598,6 +648,8 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
       'Bringt mehr emotionale Weichheit ins Spiel – ihr seid Partner, nicht Geschäftspartner.',
     conflictTrigger:
       'Wer das letzte Wort beim großen Zukunftsplan für die nächsten fünf Jahre hat.',
+    greenFlag: 'Scharfsinnige Wortgefechte und grandiose Pläne auf absolut gleicher Augenhöhe.',
+    redFlag: 'Beide verabscheuen Schwäche – emotionale Tränen werden krampfhaft weggedrückt.',
   },
   SIN_GYE: {
     score: 91,
@@ -608,6 +660,9 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
       'Zwei Feingeister unter sich. Sins ästhetischer Anspruch harmoniert herrlich mit Gyes geheimnisvoller Sanftheit. Ihr versteht Blicke, die anderen verborgen bleiben.',
     dailyLifeTip: 'Meidet giftige äußere Einflüsse und schafft euch eine stilvolle Wohlfühloase.',
     conflictTrigger: 'Wenn beide sich in verletztem Stolz zurückziehen und keiner nachfragt.',
+    greenFlag:
+      'Feinsinniges Verständnis für Ästhetik, Kunst und Blicke, die sonst niemand versteht.',
+    redFlag: 'Hyper-Sensibilität: Ein falscher Unterton bei der Begrüßung versaut den ganzen Tag.',
   },
   IM_GAP: {
     score: 93,
@@ -620,6 +675,9 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
       'Gap sollte Im nicht besitzen wollen; Im muss zu vereinbarten Treffpunkten pünktlich sein.',
     conflictTrigger:
       'Gaps Pünktlichkeitswahn kollidiert mit Ims „Ich lasse mich treiben“-Mentalität.',
+    greenFlag:
+      'Großzügige Freiheit und gegenseitige Motivation, persönliche Träume mutig umzusetzen.',
+    redFlag: 'Pünktlichkeits-Fimmel kollidiert frontal mit der „Ich lass mich treiben“-Attitüde.',
   },
   GYE_EUL: {
     score: 94,
@@ -632,5 +690,9 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
       'Achtet darauf, dass die Welt draußen euch nicht überrollt – setzt Grenzen nach außen.',
     conflictTrigger:
       'Wenn alltägliche Probleme (wie Steuererklärungen) vor lauter Harmoniebedürfnis ignoriert werden.',
+    greenFlag:
+      'Sanfte Geborgenheit ohne Drama – fühlt sich an wie ein friedlicher, warmer Frühlingstag.',
+    redFlag:
+      'Reale bürokratische Pflichten (z.B. Steuererklärung) werden aus Harmoniesucht monatelang verdrängt.',
   },
 };
