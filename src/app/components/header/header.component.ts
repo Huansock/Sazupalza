@@ -27,7 +27,7 @@ import { Component } from '@angular/core';
       .app-header {
         background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
         color: #ffffff;
-        padding: 24px 20px 18px;
+        padding: 26px 20px 20px;
         text-align: center;
         position: relative;
         border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -36,33 +36,33 @@ import { Component } from '@angular/core';
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 6px;
+        gap: 8px;
       }
       .brand-tag {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
+        gap: 8px;
         background: rgba(255, 255, 255, 0.1);
         border: 1px solid rgba(255, 255, 255, 0.15);
         border-radius: 999px;
-        padding: 3px 10px;
+        padding: 5px 14px;
       }
       .kr-text {
         font-family: var(--font-kr, serif);
         font-weight: 700;
-        font-size: 13px;
+        font-size: 16px;
         color: #f87171;
         letter-spacing: 1px;
       }
       .pill {
-        font-size: 11px;
+        font-size: 14px;
         font-weight: 600;
         color: #cbd5e1;
         text-transform: uppercase;
         letter-spacing: 0.5px;
       }
       .logo-title {
-        font-size: 26px;
+        font-size: 30px;
         font-weight: 800;
         letter-spacing: 1.5px;
         margin: 4px 0 0;
@@ -71,23 +71,22 @@ import { Component } from '@angular/core';
         -webkit-text-fill-color: transparent;
       }
       .tagline {
-        font-size: 12px;
+        font-size: 16px;
         color: #94a3b8;
         font-weight: 500;
         margin: 0;
         line-height: 1.4;
       }
       .header-decor {
-        display: flex;
-        justify-content: center;
-        gap: 12px;
-        margin-top: 14px;
-        font-size: 14px;
-        opacity: 0.85;
-        background: rgba(0, 0, 0, 0.2);
-        padding: 6px 14px;
-        border-radius: 999px;
         display: inline-flex;
+        justify-content: center;
+        gap: 14px;
+        margin-top: 16px;
+        font-size: 18px;
+        opacity: 0.9;
+        background: rgba(0, 0, 0, 0.25);
+        padding: 8px 18px;
+        border-radius: 999px;
       }
     `,
   ],
