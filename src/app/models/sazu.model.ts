@@ -53,6 +53,10 @@ export interface DayMaster {
   toxicTrait: string;
   deluluScore: number; // 0-100%
   whatsAppSignature: string;
+  titleByGender?: Record<'w' | 'm' | 'd', string>;
+  archetypeByGender?: Record<'w' | 'm' | 'd', string>;
+  toxicTraitByGender?: Record<'w' | 'm' | 'd', string>;
+  whatsAppSignatureByGender?: Record<'w' | 'm' | 'd', string>;
   color: string;
   bgGradient: string;
 }

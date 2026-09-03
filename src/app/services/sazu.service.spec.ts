@@ -100,4 +100,45 @@ describe('SazuService', () => {
     expect(result.person2.dayMaster.id).toBe('GI');
     expect(service.partnerResult()).toBe(result);
   });
+
+  it('should resolve gender-specific title, archetype, toxicTrait and whatsAppSignature', () => {
+    // Test date: 2024-01-01 (GAP day)
+    const femaleRes = service.calculateSazu({
+      name: 'Sophie',
+      birthDate: '2024-01-01',
+      gender: 'w',
+    });
+
+    const maleRes = service.calculateSazu({
+      name: 'Maximilian',
+      birthDate: '2024-01-01',
+      gender: 'm',
+    });
+
+    const diverseRes = service.calculateSazu({
+      name: 'Alex',
+      birthDate: '2024-01-01',
+      gender: 'd',
+    });
+
+    // Female wording checks
+    expect(femaleRes.dayMaster.title).toContain('Alpha-Planerin');
+    expect(femaleRes.dayMaster.whatsAppSignature).toContain('Mädels');
+    expect(femaleRes.dayMaster.germanArchetype).toContain('Mädelsgruppen-Anführerin');
+
+    // Male wording checks
+    expect(maleRes.dayMaster.title).toContain('Alpha-Macher');
+    expect(maleRes.dayMaster.whatsAppSignature).toContain('Jungs');
+    expect(maleRes.dayMaster.germanArchetype).toContain('Gruppen-Kapitän');
+
+    // Diverse wording checks
+    expect(diverseRes.dayMaster.title).toContain('strategische Leitfigur');
+    expect(diverseRes.dayMaster.whatsAppSignature).toContain('geteilten Kalender');
+    expect(diverseRes.dayMaster.germanArchetype).toContain('strategische Zirkel-Kopf');
+
+    // Ensure all 3 signatures are completely different and tailored
+    expect(femaleRes.dayMaster.whatsAppSignature).not.toBe(maleRes.dayMaster.whatsAppSignature);
+    expect(maleRes.dayMaster.whatsAppSignature).not.toBe(diverseRes.dayMaster.whatsAppSignature);
+    expect(femaleRes.dayMaster.title).not.toBe(maleRes.dayMaster.title);
+  });
 });

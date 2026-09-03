@@ -222,7 +222,7 @@ export class MainViewComponent {
     const res = this.sazuService.userSazuResult();
     if (!res) return;
     const title = `${res.input.name}s Sazu: ${res.dayMaster.name} – ${res.dayMaster.title}`;
-    const text = `🔮 Mein koreanisches Sazu: "${res.dayMaster.name}" (${res.dayMaster.elementEmoji} ${res.dayMaster.element})!\n✨ K-Aura: ${res.auraStar.name} (${res.auraStar.emoji} ${res.auraStar.title})\n🚩 Toxic Trait: ${res.dayMaster.toxicTrait}\n🦄 Delulu-Score: ${res.dayMaster.deluluScore}%\n\n„${res.dayMaster.whatsAppSignature}“\n\nMach den Test für dich: https://sazu.usogi.org`;
+    const text = `Mein koreanisches Sazu: "${res.dayMaster.name}" (${res.dayMaster.elementEmoji} ${res.dayMaster.element})!\nK-Aura: ${res.auraStar.name} (${res.auraStar.emoji} ${res.auraStar.title})\nToxic Trait: ${res.dayMaster.toxicTrait}\nDelulu-Score: ${res.dayMaster.deluluScore}%\n\n„${res.dayMaster.whatsAppSignature}“\n\nMach den Test für dich: https://sazu.usogi.org`;
     this.sazuService.shareResult(title, text);
   }
 
@@ -230,7 +230,7 @@ export class MainViewComponent {
     const res = this.sazuService.partnerResult();
     if (!res) return;
     const title = `Partner-Check: ${res.person1.name} & ${res.person2.name} (${res.score}%)`;
-    const text = `💘 Sazu Partner-Check: ${res.person1.name} & ${res.person2.name} -> ${res.score}% Chemie!\n🔥 Flirt & Bett: ${res.flirtScore}%\n🏡 WG-Tauglichkeit: ${res.stabilityScore}%\n🚩 Toxizitäts-Level: ${res.toxicScore}%\n\n💬 Fazit: ${res.memeVerdict}\n\nMach den Check: https://sazu.usogi.org`;
+    const text = `Sazu Partner-Check: ${res.person1.name} & ${res.person2.name} -> ${res.score}% Chemie!\nFlirt: ${res.flirtScore}%\nWG-Tauglichkeit: ${res.stabilityScore}%\nToxizitäts-Level: ${res.toxicScore}%\n\nFazit: ${res.memeVerdict}\n\nMach den Check: https://sazu.usogi.org`;
     this.sazuService.shareResult(title, text);
   }
 
@@ -284,7 +284,7 @@ export class MainViewComponent {
 
       ctx.fillStyle = '#94a3b8';
       ctx.font = '500 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillText('✨ DATING- & CRUSH-RADAR ✨', 540, 215);
+      ctx.fillText('DATING- & CRUSH-RADAR', 540, 215);
 
       // 3. Names and Matchup Box
       ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
@@ -311,9 +311,10 @@ export class MainViewComponent {
         525,
       );
 
-      // Heart Connector
-      ctx.font = '48px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillText('💘', 540, 465);
+      // Match Connector (結)
+      ctx.font = 'bold 44px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillStyle = '#f43f5e';
+      ctx.fillText('結', 540, 465);
 
       // Person 2
       ctx.font = 'bold 50px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
@@ -356,12 +357,12 @@ export class MainViewComponent {
       ctx.fillStyle = '#e2e8f0';
       this.drawWrappedText(ctx, `„${res.verdict}“`, 540, 1005, 880, 40, 'center');
 
-      // 4.5 Spicy Pills
+      // 4.5 Clean Spicy Pills
       ctx.textAlign = 'center';
       ctx.font = 'bold 26px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
       ctx.fillStyle = '#fca5a5';
       ctx.fillText(
-        `🔥 Flirt: ${res.flirtScore}%   🏡 WG: ${res.stabilityScore}%   🚩 Toxic: ${res.toxicScore}%`,
+        `Flirt: ${res.flirtScore}%   •   WG: ${res.stabilityScore}%   •   Toxic: ${res.toxicScore}%`,
         540,
         1100,
       );
@@ -379,7 +380,7 @@ export class MainViewComponent {
       ctx.textAlign = 'left';
       ctx.font = 'bold 30px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
       ctx.fillStyle = '#34d399';
-      ctx.fillText('💚 GREEN FLAG:', 120, 1195);
+      ctx.fillText('GREEN FLAG:', 120, 1195);
       ctx.font = '500 26px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
       ctx.fillStyle = '#f1f5f9';
       this.drawWrappedText(ctx, res.greenFlag, 120, 1240, 840, 38, 'left');
@@ -395,7 +396,7 @@ export class MainViewComponent {
 
       ctx.font = 'bold 30px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
       ctx.fillStyle = '#fb7185';
-      ctx.fillText('🚩 RED FLAG TRIGGER:', 120, 1405);
+      ctx.fillText('RED FLAG TRIGGER:', 120, 1405);
       ctx.font = '500 26px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
       ctx.fillStyle = '#f1f5f9';
       this.drawWrappedText(ctx, res.redFlag, 120, 1450, 840, 38, 'left');
@@ -410,7 +411,7 @@ export class MainViewComponent {
       ctx.textAlign = 'center';
       ctx.font = 'bold 32px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
       ctx.fillStyle = '#f43f5e';
-      ctx.fillText('sazu.usogi.org 🔮', 540, 1740);
+      ctx.fillText('sazu.usogi.org', 540, 1740);
 
       ctx.font = '24px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
       ctx.fillStyle = '#94a3b8';

@@ -1,25 +1,39 @@
 :root {
-  --primary: #d32f2f;
-  --primary-dark: #b71c1c;
-  --primary-light: #ffebee;
+  --primary: #c22b2b;
+  --primary-dark: #991b1b;
+  --primary-light: #fee2e2;
   --surface: #ffffff;
-  --surface-subtle: #f8fafc;
-  --surface-border: #e2e8f0;
-  --text-main: #0f172a;
-  --text-muted: #64748b;
-  --text-subtle: #94a3b8;
+  --surface-subtle: #faf7f2;
+  --surface-border: #e8e2d4;
+  --text-main: #18202c;
+  --text-muted: #5c6878;
+  --text-subtle: #8e9aab;
   --radius-sm: 8px;
   --radius-md: 14px;
   --radius-lg: 20px;
-  --radius-xl: 28px;
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.12);
-  /* 100% DSGVO-konforme System-Schriftarten (kein Google Fonts / keine US-Serveranfrage) */
+  --radius-xl: 26px;
+  --shadow-sm: 0 1px 3px rgba(35, 25, 15, 0.06);
+  --shadow-md: 0 4px 14px rgba(35, 25, 15, 0.07);
+  --shadow-lg: 0 12px 30px rgba(35, 25, 15, 0.1);
+
+  /* Hanok & Traditional Korean Palette (한옥 & 전통 한지 배색) */
+  --hanji-paper: #faf7f2;
+  --hanji-card: #ffffff;
+  --hanok-wood: #3e2e21;
+  --hanok-wood-light: #6d5440;
+  --hanok-roof: #151d2a;
+  --hanok-giwa: #283344;
+  --injang-red: #ba1e1e;
+  --injang-bg: rgba(186, 30, 30, 0.08);
+  --dancheong-teal: #1e594f;
+  --dancheong-clay: #b8623d;
+  --brass-gold: #c29944;
+  --hanok-border: #e8e2d4;
+
+  /* 100% DSGVO-konforme System-Schriftarten */
   --font-sans:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
-    'Apple Color Emoji', 'Segoe UI Emoji';
-  --font-kr: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', serif;
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-kr: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Nanum Myeongjo', 'Malgun Gothic', serif;
 }
 
 * {
@@ -62,12 +76,16 @@ body {
   overflow-x: hidden;
 }
 
-/* Mobile viewport wrapper constrained to max-width 430px */
+/* Mobile viewport wrapper constrained to max-width 430px with Hanok paper tone */
 .mobile-viewport {
   width: 100%;
   max-width: 430px;
   min-height: 100dvh;
-  background-color: #ffffff;
+  background-color: var(--hanji-paper);
+  background-image:
+    linear-gradient(to right, rgba(160, 140, 115, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(160, 140, 115, 0.04) 1px, transparent 1px);
+  background-size: 22px 22px;
   display: flex;
   flex-direction: column;
   position: relative;

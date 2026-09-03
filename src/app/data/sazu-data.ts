@@ -86,6 +86,26 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
     deluluScore: 25,
     whatsAppSignature:
       '„Mädels, ich habe den Tisch reserviert. Wer zu spät kommt, zahlt die erste Runde.“',
+        titleByGender: {
+      w: 'Die unerschütterliche Alpha-Planerin & Mom-Friend',
+      m: 'Der unerschütterliche Alpha-Macher mit Notion-Tracker & Macher-Gen',
+      d: 'Die strategische Leitfigur mit Masterplan & Null-Toleranz für Chaos',
+    },
+    archetypeByGender: {
+      w: 'Die Mädelsgruppen-Anführerin mit Google-Calendar-Sucht & Notion-Plan',
+      m: 'Der Gruppen-Kapitän mit Excel-Tracker, Fahrgemeinschaft & Vorlaufzeit',
+      d: 'Der strategische Zirkel-Kopf mit geteiltem Kalender & klarem Plan',
+    },
+    toxicTraitByGender: {
+      w: 'Macht aus einer simplen Meinungsverschiedenheit eine 45-minütige Grundsatzdebatte über gegenseitigen Respekt.',
+      m: 'Macht aus jeder Kleinigkeit einen Machtkampf und muss im Gespräch zwingend das letzte Wort behalten.',
+      d: 'Reißt ungefragt die Führung an sich und micro-managed alle Beteiligten, bis der Spaß auf der Strecke bleibt.',
+    },
+    whatsAppSignatureByGender: {
+      w: '„Mädels, ich habe den Tisch reserviert. Wer zu spät kommt, zahlt die erste Runde.“',
+      m: '„Jungs, Treffpunkt 18:00 Uhr pünktlich. Ich fahre. Wer um 18:05 Uhr nicht da steht, nimmt die Bahn.“',
+      d: '„Der Wochenend-Plan steht im geteilten Kalender. Bitte bis 14 Uhr abstimmen, damit wir nicht wieder planlos rumstehen.“',
+    },
     color: '#2e7d32',
     bgGradient: 'linear-gradient(135deg, #1b5e20, #4caf50)',
   },
@@ -129,6 +149,26 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
       'Sagt 30 Minuten vor dem Treffen mit einer absurden Ausrede ab, weil ihre soziale Batterie leer ist.',
     deluluScore: 65,
     whatsAppSignature: '„Omg sorry girl, mein Handy war den ganzen Tag auf Nicht-Stören!! 🥺🥺“',
+        titleByGender: {
+      w: 'Die zuckersüße People-Pleaserin mit geheimer Weltherrschafts-Agenda',
+      m: 'Der charmante Diplomat & Harmonie-Junkie mit Absage-Panik',
+      d: 'Der empathische Freigeist mit Social-Battery-Alarm & Ästhetik-Sinn',
+    },
+    archetypeByGender: {
+      w: 'Das süße Indie-Girl mit Pinterest-Traum-Wohnung & Zusage-Panik',
+      m: 'Der sympathische Allrounder mit großem Freundeskreis & Zusage-Dilemma',
+      d: 'Die intuitive Kreativkraft mit Cozy-Ästhetik & Reizüberflutungs-Schutz',
+    },
+    toxicTraitByGender: {
+      w: 'Sagt 30 Minuten vor dem Treffen mit einer absurden Ausrede ab, weil ihre soziale Batterie leer ist.',
+      m: 'Sagt aus Beißhemmung zu allem Ja und taucht dann am Tag des Treffens einfach spontan ab.',
+      d: 'Nimmt jede kleinste Unstimmigkeit persönlich und überanalysiert tagelang veränderte Schwingungen.',
+    },
+    whatsAppSignatureByGender: {
+      w: '„Omg sorry girl, mein Handy war den ganzen Tag auf Nicht-Stören!! 🥺🥺“',
+      m: '„Bro, bin heute komplett platt von der Woche, klinke mich spontan aus. Nächstes Mal zu 100% am Start!“',
+      d: '„Meine soziale Batterie ist heute bei minus 10%. Ich brauche dringend Me-Time, bin ab Montag wieder am Start.“',
+    },
     color: '#388e3c',
     bgGradient: 'linear-gradient(135deg, #2e7d32, #81c784)',
   },
@@ -173,6 +213,26 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
     deluluScore: 85,
     whatsAppSignature:
       '„HÖRT EUCH BITTE DIESE 7-MINÜTIGE SPRACHNACHRICHT AN ICH KANN NICHT MEHR 💀😭“',
+        titleByGender: {
+      w: 'Die unzensierte Rampensau mit Main Character Energy & Zero Filter',
+      m: 'Der lauteste Hype-Guy im Raum mit Sonnenbrille nachts & Red-Bull-Abo',
+      d: 'Die strahlende Supernova mit Main Character Energy & Null Impulskontrolle',
+    },
+    archetypeByGender: {
+      w: 'Die Clubklo-Therapeutin, die jedem Fremden Komplimente macht',
+      m: 'Der Party-Magnet, der nachts um 3 alle zum Weitermachen anstachelt',
+      d: 'Das energetische Zentrum, das jeden Raum sofort in Flammen setzt',
+    },
+    toxicTraitByGender: {
+      w: 'Schreibt nachts um 4 Uhr mit 3 Promille „Ich vermiss dich“ an die größte Red Flag der Stadt.',
+      m: 'Braucht ständig die volle Aufmerksamkeit des Raums und verwandelt jeden Abend in seine persönliche Show.',
+      d: 'Handelt rein aus dem Affekt, brennt in 10 Sekunden lichterloh und hinterlässt emotionales Chaos.',
+    },
+    whatsAppSignatureByGender: {
+      w: '„HÖRT EUCH BITTE DIESE 7-MINÜTIGE SPRACHNACHRICHT AN ICH KANN NICHT MEHR 💀😭“',
+      m: '„MÄNNER, heute eskaliert es komplett. Vorlesung morgen ist gestrichen, Vorglühen ab 21 Uhr bei mir!“',
+      d: '„LEUTE, die Nacht ist viel zu kurz zum Schlafen! Wer kommt mit, ich stehe in 15 Minuten am Späti!“',
+    },
     color: '#e64a19',
     bgGradient: 'linear-gradient(135deg, #d84315, #ff7043)',
   },
@@ -216,6 +276,26 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
       'Analysiert 4 Stunden lang, warum er seinen Satz mit einem Punkt statt einem Smiley beendet hat.',
     deluluScore: 70,
     whatsAppSignature: '„Mädels, setzt euch hin. Ich habe Screenshots, die alles beweisen.“',
+        titleByGender: {
+      w: 'Die emotionale FBI-Agentin mit Deep-Talk-Obsession & Insta-Stalking-Diplom',
+      m: 'Der nachdenkliche Altbau-Philosoph mit Spotify-Blend-Komplex & Deep-Talk-Falle',
+      d: 'Die sensitive Spürnase mit seelischem Röntgenschein & Nachtmensch-Garantie',
+    },
+    archetypeByGender: {
+      w: 'Die True-Crime-Süchtige, die dein Horoskop vor dem ersten Date stalkt',
+      m: 'Der tiefgründige Beobachter mit Indie-Vinyls & psychoanalytischem Röntgenblick',
+      d: 'Das intuitive Seelenradar mit Vintage-Ästhetik & unfehlbarem Gespür',
+    },
+    toxicTraitByGender: {
+      w: 'Analysiert 4 Stunden lang, warum er seinen Satz mit einem Punkt statt einem Smiley beendet hat.',
+      m: 'Zieht sich bei Konflikten beleidigt in sein emotionales Schneckenhaus zurück und erwartet Gedankenlesen.',
+      d: 'Wittert hinter jeder neutralen Bemerkung eine versteckte Kränkung und lässt niemanden an sich ran.',
+    },
+    whatsAppSignatureByGender: {
+      w: '„Mädels, setzt euch hin. Ich habe Screenshots, die alles beweisen.“',
+      m: '„Habe das Gefühl, sie schreibt seit gestern irgendwie distanzierter. Was bedeutet ‚Haha ok‘ mit Punkt am Ende?“',
+      d: '„Die Stimmung im Raum war eben so seltsam geladen. Habt ihr auch gemerkt, wie schnell sie das Thema gewechselt haben?“',
+    },
     color: '#d32f2f',
     bgGradient: 'linear-gradient(135deg, #b71c1c, #ef5350)',
   },
@@ -260,6 +340,26 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
     deluluScore: 15,
     whatsAppSignature:
       '„Können wir das Treffen zu mir verlegen? Ich will meine Jogginghose nicht ausziehen.“',
+        titleByGender: {
+      w: 'Die stoische Sofa-Queen mit gewichteter Decke & Komfortzonen-Abo',
+      m: 'Der unerschütterliche Couch-Patriarch mit 3-Tage-Vorwarnzeit & Serien-Marathon',
+      d: 'Der ruhende Pol mit Cozy-Space-Garantie & Null-Drama-Politik',
+    },
+    archetypeByGender: {
+      w: 'Die gemütliche Homebody-Queen mit gewichteter Decke & Komfort-Serien',
+      m: 'Der gemütliche Fels mit Jogginghosen-Abo, Discord-Call & Lieferdienst-Historie',
+      d: 'Die geerdete Oase mit Offline-Wochenenden & unerschütterlicher Ruhe',
+    },
+    toxicTraitByGender: {
+      w: 'Ghostet den Gruppenchat für 48 Stunden, weil sie auf der Couch einen Serien-Marathon durchzieht.',
+      m: 'Blockiert jede spontane Veränderung stur ab und verlässt sonntags unter keinen Umständen die Wohnung.',
+      d: 'Baut um sich herum eine meterdicke Mauer auf und sitzt Probleme einfach so lange aus, bis andere aufgeben.',
+    },
+    whatsAppSignatureByGender: {
+      w: '„Können wir das Treffen zu mir verlegen? Ich will meine Jogginghose nicht ausziehen.“',
+      m: '„Jungs, bin auf der Couch festgewachsen. Heute maximal Discord und zocken, ich beweg mich keinen Meter mehr.“',
+      d: '„Bin für heute im Offline-Modus. Schlafsack, Tee, Buch. Wir hören uns morgen in aller Ruhe.“',
+    },
     color: '#795548',
     bgGradient: 'linear-gradient(135deg, #4e342e, #8d6e63)',
   },
@@ -304,6 +404,26 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
     deluluScore: 40,
     whatsAppSignature:
       '„Girl, schick mir seinen Live-Standort für das erste Date, nur zur Sicherheit!!“',
+        titleByGender: {
+      w: 'Die „Mama der Mädelsgruppe“ mit Notfall-Snacks & Kontrollzwang aus Liebe',
+      m: 'Der Kumpel-Beschützer mit Powerbank, Taxikosten-Split & First-Aid-Vibes',
+      d: 'Der fürsorgliche Anker der Wahlfamilie mit Tröst-Suppe & Sicherheitsnetz',
+    },
+    archetypeByGender: {
+      w: 'Die fürsorgliche Mädels-Mama mit Notfall-Apotheke in der Canvas-Tote-Bag',
+      m: 'Der loyale Kumpel mit Werkzeugkasten, Umzugshilfe-Garantie & Snack-Vorrat',
+      d: 'Der empathische Fels mit wärmender Suppe, offenem Ohr & Notfall-Kit',
+    },
+    toxicTraitByGender: {
+      w: 'Macht sich mehr Sorgen um das Leben ihrer Freundin als die Freundin selbst und gibt ungefragt Lebensratschläge.',
+      m: 'Gibt ungefragt praktische Ratschläge, statt einfach nur zuzuhören, und mischt sich in Dinge ein, die ihn nichts angehen.',
+      d: 'Schluckt die eigenen Bedürfnisse komplett runter, um allen anderen zu gefallen, und bricht dann erschöpft zusammen.',
+    },
+    whatsAppSignatureByGender: {
+      w: '„Girl, schick mir seinen Live-Standort für das erste Date, nur zur Sicherheit!!“',
+      m: '„Alle gut heimgekommen? Wenn noch wer ein Uber braucht, sagt Bescheid, ich hab noch Guthaben auf der App.“',
+      d: '„Check-in: Sind alle heil angekommen? Bitte kurzes Lebenszeichen im Chat, sonst mach ich mir Gedanken.“',
+    },
     color: '#8d6e63',
     bgGradient: 'linear-gradient(135deg, #5d4037, #a1887f)',
   },
@@ -347,6 +467,26 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
       'Macht aus jeder Bitte um emotionale Zuwendung eine Analyse über mangelnde Selbstdisziplin.',
     deluluScore: 10,
     whatsAppSignature: '„Schluss mit Heulen. Zieh dir was Nettes an, wir gehen jetzt raus.“',
+        titleByGender: {
+      w: 'Die kompromisslose Girlboss mit eingebautem Bullshit-Detektor',
+      m: 'Der kompromisslose Straight-Shooter mit 5-Uhr-Gym-Routine & Klartext-Garantie',
+      d: 'Die messerscharfe Instanz mit No-Filter-Pragmatismus & Null-Toleranz für Ausreden',
+    },
+    archetypeByGender: {
+      w: 'Die toughe Freundin, die deinen Ex zur Schnecke macht, wenn er dir wehtut',
+      m: 'Der loyale Hardliner, der kein Blatt vor den Mund nimmt und jeden Roast gewinnt',
+      d: 'Die unbestechliche Instanz, die toxische Menschen ohne Zögern aus dem Leben schneidet',
+    },
+    toxicTraitByGender: {
+      w: 'Macht aus jeder Bitte um emotionale Zuwendung eine Analyse über mangelnde Selbstdisziplin.',
+      m: 'Ersetzt emotionale Empathie durch ungefilterte Härte und hält Taktlosigkeit für ‚Ehrlichkeit‘.',
+      d: 'Zerschneidet zwischenmenschliche Verbindungen beim ersten Fehler radikal, ohne Raum für zweite Chancen.',
+    },
+    whatsAppSignatureByGender: {
+      w: '„Schluss mit Heulen. Zieh dir was Nettes an, wir gehen jetzt raus.“',
+      m: '„Red nicht so viel drumherum, mach einfach. Entweder durchziehen oder aufhören zu jammern.“',
+      d: '„Cut the drama: Grenzen setzen, abhaken und nach vorne schauen. Alles andere ist reine Zeitverschwendung.“',
+    },
     color: '#546e7a',
     bgGradient: 'linear-gradient(135deg, #37474f, #78909c)',
   },
@@ -391,6 +531,26 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
     deluluScore: 50,
     whatsAppSignature:
       '„Girl, der Typ trägt Sneaker mit weißen Tennissocken zum Anzug... Bitte sag mir, dass du das nicht ernst meinst.“',
+        titleByGender: {
+      w: 'Die Clean-Girl Ästhetin & High-Maintenance Zynikerin mit Skalpell-Zunge',
+      m: 'Der Perfektionist mit Designermöbel-Fimmel & trockenem Zynismus',
+      d: 'Die Ästhetik-Ikone mit Luxus-Standard & kompromissloser Qualitätskontrolle',
+    },
+    archetypeByGender: {
+      w: 'Die Pinterest-Fashionista mit 12-Schritte-Skincare & 10/10 Wardrobe',
+      m: 'Der detailverliebte Ästhet mit maßgeschneidertem Stil & messerscharfem Urteil',
+      d: 'Die kompromisslose Stilikone mit feinstem Gespür für Kunst, Raum & Menschen',
+    },
+    toxicTraitByGender: {
+      w: 'Schreibt Dates sofort ab und blockiert sie, weil sie die falsche Emoji-Kombination benutzt haben.',
+      m: 'Beurteilt Menschen insgeheim nach ihren Schuhen, ihrer Kaffeebestellung und ihrem Schriftbild.',
+      d: 'Hat derart astronomische Standards, dass niemand auf dieser Welt ihnen jemals genügen könnte.',
+    },
+    whatsAppSignatureByGender: {
+      w: '„Girl, der Typ trägt Sneaker mit weißen Tennissocken zum Anzug... Bitte sag mir, dass du das nicht ernst meinst.“',
+      m: '„Die Bar war eine 3/10, der Drink lauwarm und die Playlist von 2014. Da setze ich nie wieder einen Fuß rein.“',
+      d: '„Die Ästhetik dieses Lokals hat meine Seele beleidigt. Wir gehen jetzt woanders hin, wo man Geschmack besitzt.“',
+    },
     color: '#78909c',
     bgGradient: 'linear-gradient(135deg, #455a64, #b0bec5)',
   },
@@ -434,6 +594,26 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
       'Taucht für eine Woche ab und meldet sich dann mit einem Foto vom Strand in Portugal, als wäre nichts gewesen.',
     deluluScore: 60,
     whatsAppSignature: '„Hey sorry, war kurz im Off-Grid-Modus! Was ging die letzten 5 Tage bei dir?“',
+        titleByGender: {
+      w: 'Die unberechenbare Nomaden-Königin mit chronischer Bindungsangst',
+      m: 'Der rastlose Weltenbummler mit Koffer im Flur & chronischem Fluchtreflex',
+      d: 'Die ruhelose Entdeckungsseele mit Fernweh-Garantie & Ozean-Vibes',
+    },
+    archetypeByGender: {
+      w: 'Das Backpacker-Girl mit analoger Leica-Kamera & ständigem Fernweh',
+      m: 'Der Spontan-Reisende mit One-Way-Ticket, Vanlife-Vision & Bindungsallergie',
+      d: 'Der weltoffene Kosmopolit mit Rucksack, großen Ideen & unstillbarer Neugier',
+    },
+    toxicTraitByGender: {
+      w: 'Taucht für eine Woche ab und meldet sich dann mit einem Foto vom Strand in Portugal, als wäre nichts gewesen.',
+      m: 'Bekommt Schweißausbrüche, sobald jemand das Wort ‚nächsten Monat‘ oder ‚feste Beziehung‘ erwähnt.',
+      d: 'Flieht vor jeder emotionalen Verbindlichkeit und verwechselt Rastlosigkeit mit persönlicher Freiheit.',
+    },
+    whatsAppSignatureByGender: {
+      w: '„Hey sorry, war kurz im Off-Grid-Modus! Was ging die letzten 5 Tage bei dir?“',
+      m: '„Bin übers Wochenende kurz weg, spontaner Roadtrip in die Berge. Handy bleibt im Flugmodus, bis Montag!“',
+      d: '„Hab den nächsten Zug ans Meer genommen. Brauche 3 Tage Weite und Wind, bin ab Mittwoch wieder erreichbar.“',
+    },
     color: '#1565c0',
     bgGradient: 'linear-gradient(135deg, #0d47a1, #42a5f5)',
   },
@@ -478,6 +658,26 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
     deluluScore: 95,
     whatsAppSignature:
       '„Mädels... ich glaube, er ist wirklich mein Seelenverwandter. Er hat dieselbe Augenfarbe wie mein Hund!! 🥺✨“',
+        titleByGender: {
+      w: 'Die mystische Delulu-Queen & hochsensible Traumtänzerin',
+      m: 'Der feinfühlige Overthinker mit Indie-Playlist & Situationship-Trauma',
+      d: 'Das intuitive Orakel mit feinsten Antennen & Traumwelt-Passierschein',
+    },
+    archetypeByGender: {
+      w: 'Die mystische Altbau-Freundin mit Tarot-Karten & emotionalem Schleudergang',
+      m: 'Der melancholische Poet mit Spotify-Blend-Obsession & Herzschmerz-Archiv',
+      d: 'Die hochsensible Seelenstimme mit magischem Gespür für zwischenmenschliche Frequenzen',
+    },
+    toxicTraitByGender: {
+      w: 'Verliebt sich Hals über Kopf in Typen, die nur „Haha hey“ schreiben, und ignoriert 17 rote Flaggen gleichzeitig.',
+      m: 'Verrennt sich nach einem einzigen intensiven Blick in romantische Tagträume und leidet wochenlang stumm.',
+      d: 'Schwimmt in emotionalen Illusionen davon und verwechselt eigene Projektionen mit der Realität.',
+    },
+    whatsAppSignatureByGender: {
+      w: '„Mädels... ich glaube, er ist wirklich mein Seelenverwandter. Er hat dieselbe Augenfarbe wie mein Hund!! 🥺✨“',
+      m: '„Bro, sie hat meine Story nach 3 Minuten gesehen und geliked. Glaubst du, sie denkt an mich oder interpretiere ich zu viel?“',
+      d: '„Das Universum hat uns heute genau im richtigen Moment zusammengeführt. Das war kein Zufall, das spüre ich im ganzen Körper.“',
+    },
     color: '#0288d1',
     bgGradient: 'linear-gradient(135deg, #01579b, #29b6f6)',
   },
@@ -517,7 +717,7 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
   // --- CHEONGAN HAP (Himmlische Verschmelzung) ---
   GAP_GI: {
     score: 97,
-    badge: 'Himmlisches Traumpaar 🌟',
+    badge: 'Himmlisches Traumpaar (갑기합)',
     relationshipType: 'Himmlische Verschmelzung (Gap-Gi-Hap / 갑기합)',
     verdict: 'Der mächtige Baum wurzelt im besten Mutterboden. Harmonie pur!',
     description:
@@ -539,7 +739,7 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
 
   EUL_GYEONG: {
     score: 96,
-    badge: 'Stahlharte Romantik ⚔️🌿',
+    badge: 'Stahlharte Romantik (을경합)',
     relationshipType: 'Himmlische Verschmelzung (Eul-Gyeong-Hap / 을경합)',
     verdict: 'Die Schöne und das Schwert: Aus Schroffheit wird pure Hingabe.',
     description:
@@ -561,7 +761,7 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
 
   BYEONG_SIN: {
     score: 98,
-    badge: 'Kosmischer Glanz ✨',
+    badge: 'Kosmischer Glanz (병신합)',
     relationshipType: 'Himmlische Verschmelzung (Byeong-Sin-Hap / 병신합)',
     verdict: 'Die Sonne bringt den Diamanten zum Funkeln. Pure Eleganz & Leidenschaft!',
     description:
@@ -583,7 +783,7 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
 
   JEONG_IM: {
     score: 97,
-    badge: 'Magische Anziehung 🌊🕯️',
+    badge: 'Magische Anziehung (정임합)',
     relationshipType: 'Himmlische Verschmelzung (Jeong-Im-Hap / 정임합)',
     verdict: 'Kaminfeuer spiegelt sich im Ozean. Tiefer als jede Philosophie!',
     description:
@@ -605,7 +805,7 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
 
   MU_GYE: {
     score: 96,
-    badge: 'Lebendige Oase ⛰️🌧️',
+    badge: 'Lebendige Oase (무계합)',
     relationshipType: 'Himmlische Verschmelzung (Mu-Gye-Hap / 무계합)',
     verdict: 'Frühlingsregen küsst den stolzen Berg. Hier blüht das pure Leben auf.',
     description:
@@ -628,7 +828,7 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
   // --- CHEONGAN CHUNG (Himmlische Reibung / Clash) ---
   GAP_GYEONG: {
     score: 45,
-    badge: 'Ego-Kollision 💥',
+    badge: 'Ego-Kollision (갑경충)',
     relationshipType: 'Elementare Kollision (Gap-Gyeong-Chung / 갑경충)',
     verdict: 'Axt trifft auf Mammutbaum. Er wird dich in den Wahnsinn treiben, aber die Chemie brennt!',
     description:
@@ -650,7 +850,7 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
 
   EUL_SIN: {
     score: 42,
-    badge: 'Designer-Rosenkrieg ✂️🥀',
+    badge: 'Designer-Rosenkrieg (을신충)',
     relationshipType: 'Elementare Kollision (Eul-Sin-Chung / 을신충)',
     verdict: 'Die Heckenschere stutzt die Orchidee. Dramatischer als der Bachelor!',
     description:
@@ -672,7 +872,7 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
 
   BYEONG_IM: {
     score: 48,
-    badge: 'Sonne gegen Tsunami 🌊☀️',
+    badge: 'Elementare Konfrontation (병임충)',
     relationshipType: 'Elementare Kollision (Byeong-Im-Chung / 병임충)',
     verdict: 'Mittagssonne gegen Tsunami. Großes Drama, wilde Leidenschaft, aber anstrengend!',
     description:
@@ -694,7 +894,7 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
 
   JEONG_GYE: {
     score: 39,
-    badge: 'Tränen & Overthinking 🌧️🕯️',
+    badge: 'Tränen & Overthinking (정계충)',
     relationshipType: 'Elementare Kollision (Jeong-Gye-Chung / 정계충)',
     verdict: 'Dauerregen auf Kerzenschein. Stundenlanges Overthinking statt Klartext.',
     description:
@@ -717,7 +917,7 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
   // --- SANGSAENG (Nährende Element-Partnerschaften) ---
   GAP_BYEONG: {
     score: 91,
-    badge: 'Lagerfeuer-Euphorie 🔥🌲',
+    badge: 'Lagerfeuer-Allianz',
     relationshipType: 'Elementare Nahrung (Holz nährt Feuer)',
     verdict: 'Gap liefert den stabilen Plan, Byeong entfacht das wärmende Freudenfeuer!',
     description:
@@ -739,7 +939,7 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
 
   EUL_JEONG: {
     score: 92,
-    badge: 'Kaminfeuer-Idylle 🕯️🌿',
+    badge: 'Kaminfeuer-Idylle',
     relationshipType: 'Elementare Nahrung (Holz nährt Feuer)',
     verdict: 'Sanftes Reisig nährt die feine Flamme. Gemütlicher als ein verregneter Sonntag.',
     description:
@@ -761,7 +961,7 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
 
   BYEONG_MU: {
     score: 89,
-    badge: 'Sonnige Berghütte ⛰️☀️',
+    badge: 'Sonnige Symbiose',
     relationshipType: 'Elementare Nahrung (Feuer nährt Erde)',
     verdict: 'Die Sonne erwärmt den kalten Fels. Felsenfeste Geborgenheit!',
     description:
@@ -783,7 +983,7 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
 
   JEONG_GI: {
     score: 90,
-    badge: 'Warmer Mutterboden 🌾🕯️',
+    badge: 'Warmer Mutterboden',
     relationshipType: 'Elementare Nahrung (Feuer nährt Erde)',
     verdict: 'Fruchtbare Wärme für den Garten. Harmonie wie bei Kaffee & Zimtschnecken.',
     description:
@@ -805,7 +1005,7 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
 
   MU_GYEONG: {
     score: 88,
-    badge: 'Erz im Fels ⛰️⚔️',
+    badge: 'Erz im Urgestein',
     relationshipType: 'Elementare Nahrung (Erde bringt Metall hervor)',
     verdict: 'Aus dem Berg wird der edle Stahl gewonnen. Felsenfeste Allianz!',
     description:
@@ -827,7 +1027,7 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
 
   GI_SIN: {
     score: 93,
-    badge: 'Juwel im Samtkissen 💎🌾',
+    badge: 'Juwel im Samtkissen',
     relationshipType: 'Elementare Nahrung (Erde birgt Edelstein)',
     verdict: 'Gi poliert das Juwel Sin mit Liebe. Luxus trifft Geborgenheit!',
     description:
@@ -849,7 +1049,7 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
 
   GYEONG_IM: {
     score: 89,
-    badge: 'Klarer Gebirgsfluss ⚔️🌊',
+    badge: 'Klarer Gebirgsfluss',
     relationshipType: 'Elementare Nahrung (Metall klärt Wasser)',
     verdict: 'Das Schwert formt das Flussbett. Intellektuelles Power-Team!',
     description:
@@ -871,7 +1071,7 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
 
   SIN_GYE: {
     score: 91,
-    badge: 'Tautropfen auf Diamant 💎🌧️',
+    badge: 'Tautropfen auf Diamant',
     relationshipType: 'Elementare Nahrung (Metall kondensiert Wasser)',
     verdict: 'Feinste Ästhetik und tiefe Gefühle. Stilvoller geht es kaum.',
     description:
@@ -893,7 +1093,7 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
 
   IM_GAP: {
     score: 93,
-    badge: 'Wald am Flussufer 🌲🌊',
+    badge: 'Wald am Flussufer',
     relationshipType: 'Elementare Nahrung (Wasser nährt Holz)',
     verdict: 'Der gewaltige Strom lässt die stolze Eiche in den Himmel wachsen!',
     description:
@@ -915,7 +1115,7 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
 
   GYE_EUL: {
     score: 94,
-    badge: 'Morgentau auf der Wiese 🌿🌧️',
+    badge: 'Frühlings-Symbiose',
     relationshipType: 'Elementare Nahrung (Wasser nährt Holz)',
     verdict: 'Sanfter Frühlingsregen lässt die zarten Pflanzen erblühen. Pure Harmonie!',
     description:

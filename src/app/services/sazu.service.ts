@@ -23,9 +23,9 @@ export class SazuService {
 
   /**
    * Calculates the Day Master (천간 / 일간) from a Gregorian birthdate
-   * using Julian Day Number (JDN) astronomical cycle.
+   * using Julian Day Number (JDN) astronomical cycle, resolving gender-specific wording.
    */
-  getDayMasterFromDate(dateStr: string): DayMaster {
+  getDayMasterFromDate(dateStr: string, gender: 'w' | 'm' | 'd' = 'w'): DayMaster {
     const [yearStr, monthStr, dayStr] = dateStr.split('-');
     const year = parseInt(yearStr, 10);
     const month = parseInt(monthStr, 10);
@@ -35,8 +35,20 @@ export class SazuService {
     // Korean Day Stem formula: (JDN + 9) % 10
     const stemIndex = (((jdn + 9) % 10) + 10) % 10;
     const stemKey = STEM_KEYS[stemIndex];
+    const base = DAY_MASTERS[stemKey];
 
-    return DAY_MASTERS[stemKey];
+    const title = base.titleByGender?.[gender] || base.title;
+    const germanArchetype = base.archetypeByGender?.[gender] || base.germanArchetype;
+    const toxicTrait = base.toxicTraitByGender?.[gender] || base.toxicTrait;
+    const whatsAppSignature = base.whatsAppSignatureByGender?.[gender] || base.whatsAppSignature;
+
+    return {
+      ...base,
+      title,
+      germanArchetype,
+      toxicTrait,
+      whatsAppSignature,
+    };
   }
 
   /**
@@ -158,7 +170,7 @@ export class SazuService {
    * Computes user's Sazu Day Master result
    */
   calculateSazu(input: UserSazuInput): UserSazuResult {
-    const dayMaster = this.getDayMasterFromDate(input.birthDate);
+    const dayMaster = this.getDayMasterFromDate(input.birthDate, input.gender || 'w');
     const auraStar = this.calculateAuraStar(input.birthDate);
 
     // Format date in German style (DD.MM.YYYY)
@@ -293,7 +305,7 @@ export class SazuService {
     if (generates[dm1.element] === dm2.element || generates[dm2.element] === dm1.element) {
       return {
         score: 87,
-        badge: 'Fruchtbare Symbiose 🌱✨',
+        badge: 'Fruchtbare Symbiose (상생)',
         relationshipType: 'Nährende Kraft (Sang-Saeng / 상생)',
         verdict: 'Einer beflügelt den anderen wie eine frische Brise das Segel!',
         description: `Das Element ${dm1.element} und ${dm2.element} stehen in einem natürlichen Zyklus des Gebens und Nehmens. Ihr inspiriert einander zu neuen Taten.`,
@@ -314,7 +326,7 @@ export class SazuService {
     if (overcomes[dm1.element] === dm2.element || overcomes[dm2.element] === dm1.element) {
       return {
         score: 64,
-        badge: 'Spannungsbogen ⚡',
+        badge: 'Spannungsbogen (상극)',
         relationshipType: 'Herausfordernde Dynamik (Sang-Geuk / 상극)',
         verdict: 'Spannungsgeladen und wild. Reibung erzeugt Hitze!',
         description: `Zwischen ${dm1.element} und ${dm2.element} besteht natürliche Reibung. Das ist nicht zwingend schlecht: Wer Reibung aushält, wächst daran enorm!`,
@@ -335,7 +347,7 @@ export class SazuService {
 
     return {
       score: 75,
-      badge: 'Solide Partnerschaft 🤝',
+      badge: 'Solide Partnerschaft',
       relationshipType: 'Pragmatische Harmonie',
       verdict: 'Harmonisch, verlässlich und unaufgeregt wie ein gutes Gespräch bei Hafer-Cappuccino.',
       description: `Ihr ergänzt euch durch unterschiedliche Talente und Lebensentwürfe. Keine explosive Hollywood-Romanze, sondern echtes Leben.`,
