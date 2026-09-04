@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MainViewComponent } from './main-view.component';
 import { By } from '@angular/platform-browser';
 import { DateSplitInputComponent } from '../date-split-input/date-split-input.component';
+import { SazuService } from '../../services/sazu.service';
 
 describe('MainViewComponent with DateSplitInput', () => {
   let component: MainViewComponent;
@@ -86,5 +87,64 @@ describe('MainViewComponent with DateSplitInput', () => {
     const result = component['sazuService'].userSazuResult();
     expect(result).toBeTruthy();
     expect(result?.birthDateFormatted).toBe('24.10.1995');
+  });
+});
+
+describe('MainViewComponent - Instagram Story Modal', () => {
+  let component: MainViewComponent;
+  let sazuService: SazuService;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [MainViewComponent],
+      providers: [SazuService],
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(MainViewComponent);
+    component = fixture.componentInstance;
+    sazuService = TestBed.inject(SazuService);
+  });
+
+  it('should initialize with story modal closed', () => {
+    expect((component as any).storyModalType()).toBeNull();
+    expect((component as any).showStoryModal()).toBe(false);
+  });
+
+  it('should open personal story modal when openStoryModal("personal") is called', () => {
+    component.openStoryModal('personal');
+    expect((component as any).storyModalType()).toBe('personal');
+    expect((component as any).showStoryModal()).toBe(true);
+  });
+
+  it('should open partner story modal when openStoryModal("partner") is called', () => {
+    component.openStoryModal('partner');
+    expect((component as any).storyModalType()).toBe('partner');
+    expect((component as any).showStoryModal()).toBe(true);
+  });
+
+  it('should close story modal when closeStoryModal() is called', () => {
+    component.openStoryModal('personal');
+    expect((component as any).showStoryModal()).toBe(true);
+
+    component.closeStoryModal();
+    expect((component as any).storyModalType()).toBeNull();
+    expect((component as any).showStoryModal()).toBe(false);
+  });
+
+  it('should render Instagram story button in personal Saju view when result is present', async () => {
+    sazuService.calculateSazu({
+      name: 'Tester',
+      birthDate: '1995-05-15',
+      gender: 'm',
+    });
+
+    const fixture = TestBed.createComponent(MainViewComponent);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const storyBtn = compiled.querySelector('#sazu-result .story-cta-btn');
+    expect(storyBtn).toBeTruthy();
+    expect(storyBtn?.textContent).toContain('Als Instagram Story teilen');
   });
 });

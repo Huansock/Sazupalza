@@ -1808,6 +1808,127 @@
   color: #fb7185;
 }
 
+.s-flag.quote {
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid #f59e0b;
+  color: #f1f5f9;
+}
+
+.s-flag.quote .s-flag-tag {
+  color: #fbbf24;
+}
+
+/* Personal Story Card Specifics */
+.personal-story-card {
+  gap: 10px;
+}
+
+.story-personal-profile {
+  background: rgba(255, 255, 255, 0.06);
+  padding: 10px 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.personal-seal {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(244, 63, 94, 0.2);
+  border: 2px solid #f43f5e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 900;
+  color: #ffffff;
+  margin-bottom: 2px;
+}
+
+.personal-name {
+  font-size: 16px;
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.personal-element-tag {
+  font-size: 11px;
+  color: #fca5a5;
+  font-weight: 700;
+}
+
+.personal-tagline {
+  font-size: 11px;
+  font-style: italic;
+  color: #cbd5e1;
+  margin-top: 2px;
+  line-height: 1.3;
+}
+
+.personal-archetype-box {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 10px;
+  padding: 8px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.personal-archetype-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 2px 0;
+}
+
+.personal-aura-sub {
+  font-size: 11px;
+  color: #c084fc;
+  font-weight: 600;
+}
+
+.personal-delulu-box {
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: 10px;
+  padding: 6px 10px;
+  text-align: left;
+}
+
+.delulu-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.delulu-label {
+  color: #a5b4fc;
+}
+
+.delulu-val {
+  color: #ffffff;
+  font-weight: 900;
+}
+
+.story-delulu-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.story-delulu-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #ec4899);
+  border-radius: 3px;
+}
+
 .story-watermark {
   font-size: 12px;
   font-weight: 700;
@@ -2226,4 +2347,3 @@
   margin-top: 6px;
   line-height: 1.35;
 }
-

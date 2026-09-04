@@ -377,6 +377,13 @@
 
           <!-- Action Buttons -->
           <div class="action-footer">
+            <button
+              type="button"
+              class="btn-share story-cta-btn"
+              (click)="openStoryModal('personal')"
+            >
+              <span>Als Instagram Story teilen</span>
+            </button>
             <button type="button" class="btn-share" (click)="shareSazu()">
               @if (res.input.gender === 'm') {
                 <span>Schick das deinen Jungs, die dich damit roasten</span>
@@ -714,7 +721,11 @@
 
           <!-- Partner Action Buttons -->
           <div class="action-footer">
-            <button type="button" class="btn-share story-cta-btn" (click)="openStoryModal()">
+            <button
+              type="button"
+              class="btn-share story-cta-btn"
+              (click)="openStoryModal('partner')"
+            >
               <span>Als Instagram Story teilen</span>
             </button>
             <button type="button" class="btn-share partner-share" (click)="sharePartner()">
@@ -1078,77 +1089,161 @@
           <button type="button" class="modal-close-btn" (click)="closeStoryModal()">✕</button>
         </div>
 
-        @if (sazuService.partnerResult(); as c) {
-          <div class="story-preview-wrapper">
-            <!-- 9:16 Aspect Ratio Aesthetic Preview Card -->
-            <div class="story-card-916">
-              <div class="story-top">
-                <span class="story-kr-badge">KOREANISCHES SAZU (사주)</span>
-                <h4 class="story-headline">DATING- & CRUSH-RADAR</h4>
-              </div>
-
-              <div class="story-duo-names">
-                <div class="s-person">
-                  <strong class="s-name">{{ c.person1.name }}</strong>
-                  <span class="s-dm">{{ c.person1.dayMaster.name }}</span>
+        @if (storyModalType() === 'personal') {
+          @if (sazuService.userSazuResult(); as res) {
+            <div class="story-preview-wrapper">
+              <!-- 9:16 Personal Sazu Aesthetic Preview Card -->
+              <div class="story-card-916 personal-story-card">
+                <div class="story-top">
+                  <span class="story-kr-badge">KOREANISCHES SAZU (사주)</span>
+                  <h4 class="story-headline">PERSÖNLICHE CHARAKTER-ANALYSE</h4>
                 </div>
-                <span class="s-heart">結</span>
-                <div class="s-person">
-                  <strong class="s-name">{{ c.person2.name }}</strong>
-                  <span class="s-dm">{{ c.person2.dayMaster.name }}</span>
-                </div>
-              </div>
 
-              <div class="story-score-ring">
-                <span class="s-score">{{ c.score }}%</span>
-                <span class="s-label">CHEMIE</span>
-              </div>
-
-              <div class="story-verdict-box">
-                <div class="s-badge">{{ c.badge }}</div>
-                <p class="s-verdict">„{{ c.verdict }}“</p>
-                <div class="story-spicy-pills">
-                  <span class="story-pill">Flirt: {{ c.flirtScore }}%</span>
-                  <span class="story-pill">WG: {{ c.stabilityScore }}%</span>
-                  <span class="story-pill">Toxic: {{ c.toxicScore }}%</span>
+                <div class="story-personal-profile">
+                  <div class="personal-seal">
+                    <span>{{ res.dayMaster.hanja }}</span>
+                  </div>
+                  <strong class="personal-name">{{ res.input.name }}</strong>
+                  <span class="personal-element-tag">
+                    {{ res.dayMaster.elementEmoji }} {{ res.dayMaster.polarity }}-{{
+                      res.dayMaster.element
+                    }}
+                    • {{ res.dayMaster.name }}
+                  </span>
+                  <p class="personal-tagline">„{{ res.dayMaster.tagline }}“</p>
                 </div>
-                <p class="s-meme-verdict">{{ c.memeVerdict }}</p>
-              </div>
 
-              <div class="story-flags">
-                <div class="s-flag green">
-                  <span class="s-flag-tag">Green Flag:</span>
-                  <p>{{ c.greenFlag }}</p>
+                <div class="personal-archetype-box">
+                  <span class="s-label">ARCHETYP</span>
+                  <div class="personal-archetype-title">{{ res.dayMaster.germanArchetype }}</div>
+                  <span class="personal-aura-sub"
+                    >✨ {{ res.auraStar.name }} ({{ res.auraStar.korean }})</span
+                  >
                 </div>
-                <div class="s-flag red">
-                  <span class="s-flag-tag">Red Flag:</span>
-                  <p>{{ c.redFlag }}</p>
-                </div>
-              </div>
 
-              <div class="story-watermark">
-                <span>sazu.usogi.org</span>
+                <div class="personal-delulu-box">
+                  <div class="delulu-row">
+                    <span class="delulu-label">Delulu-Score</span>
+                    <span class="delulu-val">{{ res.dayMaster.deluluScore }}%</span>
+                  </div>
+                  <div class="story-delulu-bar">
+                    <div
+                      class="story-delulu-fill"
+                      [style.width.%]="res.dayMaster.deluluScore"
+                    ></div>
+                  </div>
+                </div>
+
+                <div class="story-flags">
+                  <div class="s-flag red">
+                    <span class="s-flag-tag">🚩 Toxic Trait:</span>
+                    <p>{{ res.dayMaster.toxicTrait }}</p>
+                  </div>
+                  <div class="s-flag quote">
+                    <span class="s-flag-tag">💬 Status:</span>
+                    <p>„{{ res.dayMaster.whatsAppSignature }}“</p>
+                  </div>
+                </div>
+
+                <div class="story-watermark">
+                  <span>sazu.usogi.org</span>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div class="story-actions">
-            <button
-              type="button"
-              class="download-story-btn"
-              [disabled]="isGeneratingStory()"
-              (click)="downloadStoryCard()"
-            >
-              @if (isGeneratingStory()) {
-                <span>Generiere HD-Story-Bild...</span>
-              } @else {
-                <span>Bild speichern & in Story posten</span>
-              }
-            </button>
-            <p class="story-hint">
-              Tipp: Tippe auf den Button oder mache einfach einen Screenshot für deine Insta-Story!
-            </p>
-          </div>
+            <div class="story-actions">
+              <button
+                type="button"
+                class="download-story-btn"
+                [disabled]="isGeneratingStory()"
+                (click)="downloadStoryCard()"
+              >
+                @if (isGeneratingStory()) {
+                  <span>Generiere HD-Story-Bild...</span>
+                } @else {
+                  <span>Bild speichern & in Story posten</span>
+                }
+              </button>
+              <p class="story-hint">
+                Tipp: Tippe auf den Button oder mache einfach einen Screenshot für deine
+                Insta-Story!
+              </p>
+            </div>
+          }
+        } @else {
+          @if (sazuService.partnerResult(); as c) {
+            <div class="story-preview-wrapper">
+              <!-- 9:16 Aspect Ratio Aesthetic Preview Card -->
+              <div class="story-card-916">
+                <div class="story-top">
+                  <span class="story-kr-badge">KOREANISCHES SAZU (사주)</span>
+                  <h4 class="story-headline">DATING- & CRUSH-RADAR</h4>
+                </div>
+
+                <div class="story-duo-names">
+                  <div class="s-person">
+                    <strong class="s-name">{{ c.person1.name }}</strong>
+                    <span class="s-dm">{{ c.person1.dayMaster.name }}</span>
+                  </div>
+                  <span class="s-heart">結</span>
+                  <div class="s-person">
+                    <strong class="s-name">{{ c.person2.name }}</strong>
+                    <span class="s-dm">{{ c.person2.dayMaster.name }}</span>
+                  </div>
+                </div>
+
+                <div class="story-score-ring">
+                  <span class="s-score">{{ c.score }}%</span>
+                  <span class="s-label">CHEMIE</span>
+                </div>
+
+                <div class="story-verdict-box">
+                  <div class="s-badge">{{ c.badge }}</div>
+                  <p class="s-verdict">„{{ c.verdict }}“</p>
+                  <div class="story-spicy-pills">
+                    <span class="story-pill">Flirt: {{ c.flirtScore }}%</span>
+                    <span class="story-pill">WG: {{ c.stabilityScore }}%</span>
+                    <span class="story-pill">Toxic: {{ c.toxicScore }}%</span>
+                  </div>
+                  <p class="s-meme-verdict">{{ c.memeVerdict }}</p>
+                </div>
+
+                <div class="story-flags">
+                  <div class="s-flag green">
+                    <span class="s-flag-tag">Green Flag:</span>
+                    <p>{{ c.greenFlag }}</p>
+                  </div>
+                  <div class="s-flag red">
+                    <span class="s-flag-tag">Red Flag:</span>
+                    <p>{{ c.redFlag }}</p>
+                  </div>
+                </div>
+
+                <div class="story-watermark">
+                  <span>sazu.usogi.org</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="story-actions">
+              <button
+                type="button"
+                class="download-story-btn"
+                [disabled]="isGeneratingStory()"
+                (click)="downloadStoryCard()"
+              >
+                @if (isGeneratingStory()) {
+                  <span>Generiere HD-Story-Bild...</span>
+                } @else {
+                  <span>Bild speichern & in Story posten</span>
+                }
+              </button>
+              <p class="story-hint">
+                Tipp: Tippe auf den Button oder mache einfach einen Screenshot für deine
+                Insta-Story!
+              </p>
+            </div>
+          }
         }
       </div>
     </div>
