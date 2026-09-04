@@ -2,8 +2,39 @@ import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SazuService } from '../../services/sazu.service';
-import { DatingContext, PartnerCheckInput, UserSazuInput } from '../../models/sazu.model';
+import {
+  CompatibilityResult,
+  DatingContext,
+  PartnerCheckInput,
+  UserSazuInput,
+} from '../../models/sazu.model';
 import { DateSplitInputComponent } from '../date-split-input/date-split-input.component';
+
+type StoryVariant = 'delulu' | 'redflag' | 'celebrity' | 'chemistry' | 'drama';
+
+interface PartnerContextCopy {
+  kicker: string;
+  headline: string;
+  verdict: string;
+  redFlagLabel: string;
+  sharePrompt: string;
+  shareAnswer: string;
+}
+
+type AppModalState =
+  'culture' | 'legal:impressum' | 'legal:datenschutz' | 'story:personal' | 'story:partner' | null;
+
+interface AppHistorySnapshot {
+  tab: 'sazu' | 'partner';
+  showSazuResult: boolean;
+  showPartnerResult: boolean;
+  personalStage: 1 | 2 | 3 | 4;
+  partnerStage: 1 | 2 | 3 | 4;
+  modal: AppModalState;
+  scrollY: number;
+}
+
+const APP_HISTORY_KEY = '__sazuPalzaUi';
 
 @Component({
   selector: 'app-main-view',
@@ -16,6 +47,18 @@ export class MainViewComponent {
   private readonly destroyRef = inject(DestroyRef);
   private revealTimer: ReturnType<typeof setTimeout> | null = null;
   private revealTargetId: string | null = null;
+  private modalTrigger: HTMLElement | null = null;
+  private modalScrollY = 0;
+  private exitGuardAttached = false;
+  private bodyStyleBeforeModal: {
+    position: string;
+    top: string;
+    left: string;
+    right: string;
+    width: string;
+    overflow: string;
+    touchAction: string;
+  } | null = null;
 
   // Form states
   protected readonly sazuForm = signal<UserSazuInput>({
@@ -39,29 +82,86 @@ export class MainViewComponent {
   protected readonly showStoryModal = computed<boolean>(() => this.storyModalType() !== null);
   protected readonly isGeneratingStory = signal<boolean>(false);
   protected readonly revealType = signal<'personal' | 'partner' | null>(null);
+  protected readonly storyVariant = signal<StoryVariant>('delulu');
+  protected readonly personalRevealStage = signal<1 | 2 | 3 | 4>(1);
+  protected readonly partnerRevealStage = signal<1 | 2 | 3 | 4>(1);
+  protected readonly showSazuResult = signal<boolean>(this.sazuService.userSazuResult() !== null);
+  protected readonly showPartnerResult = signal<boolean>(this.sazuService.partnerResult() !== null);
 
   // Form Validation errors
   protected readonly sazuFormError = signal<string | null>(null);
   protected readonly partnerFormError = signal<string | null>(null);
 
   constructor() {
-    this.destroyRef.onDestroy(() => this.clearReveal());
+    if (typeof window !== 'undefined') {
+      window.addEventListener('popstate', this.handlePopState);
+      window.addEventListener('keydown', this.handleGlobalKeydown);
+      this.replaceHistorySnapshot();
+    }
+
+    this.destroyRef.onDestroy(() => {
+      this.clearReveal();
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('popstate', this.handlePopState);
+        window.removeEventListener('keydown', this.handleGlobalKeydown);
+        this.detachExitGuard();
+      }
+      this.unlockPageScroll();
+    });
   }
 
   openLegal(type: 'impressum' | 'datenschutz') {
+    if (this.activeLegalModal() === type) return;
+    this.prepareModalOpen();
     this.activeLegalModal.set(type);
+    this.pushHistorySnapshot();
+    this.activateModalAccessibility();
   }
 
   closeLegal() {
-    this.activeLegalModal.set(null);
+    const legalType = this.activeLegalModal();
+    this.closeModalWithHistory(legalType ? `legal:${legalType}` : null);
+  }
+
+  protected openCultureModal(): void {
+    if (this.showCultureModal()) return;
+    this.prepareModalOpen();
+    this.showCultureModal.set(true);
+    this.pushHistorySnapshot();
+    this.activateModalAccessibility();
+  }
+
+  protected closeCultureModal(): void {
+    this.closeModalWithHistory('culture');
   }
 
   openStoryModal(type: 'personal' | 'partner' = 'partner'): void {
+    this.prepareModalOpen();
+    this.storyVariant.set(type === 'personal' ? 'delulu' : 'chemistry');
     this.storyModalType.set(type);
+    this.pushHistorySnapshot();
+    this.activateModalAccessibility();
   }
 
   closeStoryModal(): void {
-    this.storyModalType.set(null);
+    const type = this.storyModalType();
+    this.closeModalWithHistory(type ? `story:${type}` : null);
+  }
+
+  protected setStoryVariant(variant: StoryVariant): void {
+    this.storyVariant.set(variant);
+  }
+
+  protected advancePersonalReveal(): void {
+    this.saveCurrentHistoryScroll();
+    this.personalRevealStage.update((stage) => (stage < 4 ? ((stage + 1) as 1 | 2 | 3 | 4) : 4));
+    this.pushHistorySnapshot();
+  }
+
+  protected advancePartnerReveal(): void {
+    this.saveCurrentHistoryScroll();
+    this.partnerRevealStage.update((stage) => (stage < 4 ? ((stage + 1) as 1 | 2 | 3 | 4) : 4));
+    this.pushHistorySnapshot();
   }
 
   // Presets for quick fun testing
@@ -128,20 +228,30 @@ export class MainViewComponent {
   }
 
   switchTab(tab: 'sazu' | 'partner'): void {
+    if (this.sazuService.activeTab() === tab) return;
+    this.saveCurrentHistoryScroll();
     this.clearReveal();
+    this.closeAllModals();
     this.sazuService.activeTab.set(tab);
+    this.pushHistorySnapshot(0);
     this.scrollToTop();
   }
 
   resetSazu(): void {
     this.clearReveal();
+    this.personalRevealStage.set(1);
+    this.showSazuResult.set(false);
     this.sazuService.resetSazu();
+    this.replaceHistorySnapshot();
     this.scrollToTop();
   }
 
   resetPartner(): void {
     this.clearReveal();
+    this.partnerRevealStage.set(1);
+    this.showPartnerResult.set(false);
     this.sazuService.resetPartner();
+    this.replaceHistorySnapshot();
     this.scrollToTop();
   }
 
@@ -156,8 +266,13 @@ export class MainViewComponent {
       return;
     }
 
+    this.saveCurrentHistoryScroll();
+    this.enableExitGuard();
     this.sazuFormError.set(null);
+    this.personalRevealStage.set(1);
     this.sazuService.calculateSazu(input);
+    this.showSazuResult.set(true);
+    this.pushHistorySnapshot(0);
     this.triggerReveal('personal', 'sazu-result');
   }
 
@@ -172,9 +287,346 @@ export class MainViewComponent {
       return;
     }
 
+    this.saveCurrentHistoryScroll();
+    this.enableExitGuard();
     this.partnerFormError.set(null);
+    this.partnerRevealStage.set(1);
     this.sazuService.calculateCompatibility(input);
+    this.showPartnerResult.set(true);
+    this.pushHistorySnapshot(0);
     this.triggerReveal('partner', 'partner-result');
+  }
+
+  private readonly handlePopState = (event: PopStateEvent): void => {
+    const snapshot = this.readHistorySnapshot(event.state);
+    if (!snapshot) return;
+    this.restoreHistorySnapshot(snapshot);
+  };
+
+  private readonly handleGlobalKeydown = (event: KeyboardEvent): void => {
+    if (!this.currentModalState()) return;
+
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      this.dismissCurrentModal();
+      return;
+    }
+
+    if (event.key !== 'Tab' || typeof document === 'undefined') return;
+    const sheet = document.querySelector<HTMLElement>('.modal-backdrop .modal-sheet');
+    if (!sheet) return;
+    const focusable = Array.from(
+      sheet.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), summary, [tabindex]:not([tabindex="-1"])',
+      ),
+    ).filter((element) => element.getClientRects().length > 0);
+
+    if (focusable.length === 0) {
+      event.preventDefault();
+      sheet.focus({ preventScroll: true });
+      return;
+    }
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus({ preventScroll: true });
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus({ preventScroll: true });
+    }
+  };
+
+  private readonly handleBeforeUnload = (event: BeforeUnloadEvent): void => {
+    if (!this.hasUnsavedSessionState()) return;
+    event.preventDefault();
+    event.returnValue = '';
+  };
+
+  protected enableExitGuard(): void {
+    if (typeof window === 'undefined' || this.exitGuardAttached) return;
+    window.addEventListener('beforeunload', this.handleBeforeUnload);
+    this.exitGuardAttached = true;
+  }
+
+  private captureHistorySnapshot(): AppHistorySnapshot {
+    let modal: AppModalState = null;
+    const legalType = this.activeLegalModal();
+    const storyType = this.storyModalType();
+    if (this.showCultureModal()) {
+      modal = 'culture';
+    } else if (legalType) {
+      modal = `legal:${legalType}`;
+    } else if (storyType) {
+      modal = `story:${storyType}`;
+    }
+
+    return {
+      tab: this.sazuService.activeTab(),
+      showSazuResult: this.showSazuResult(),
+      showPartnerResult: this.showPartnerResult(),
+      personalStage: this.personalRevealStage(),
+      partnerStage: this.partnerRevealStage(),
+      modal,
+      scrollY: typeof window !== 'undefined' ? window.scrollY : 0,
+    };
+  }
+
+  private readHistorySnapshot(state: unknown): AppHistorySnapshot | null {
+    if (!state || typeof state !== 'object') return null;
+    const snapshot = (state as Record<string, unknown>)[APP_HISTORY_KEY];
+    if (!snapshot || typeof snapshot !== 'object') return null;
+
+    const candidate = snapshot as Partial<AppHistorySnapshot>;
+    if (candidate.tab !== 'sazu' && candidate.tab !== 'partner') return null;
+    return {
+      ...(candidate as AppHistorySnapshot),
+      scrollY: typeof candidate.scrollY === 'number' ? candidate.scrollY : 0,
+    };
+  }
+
+  private saveCurrentHistoryScroll(): void {
+    if (typeof window === 'undefined') return;
+    const snapshot = this.currentHistorySnapshot();
+    if (!snapshot) return;
+    window.history.replaceState(
+      {
+        ...(window.history.state ?? {}),
+        [APP_HISTORY_KEY]: { ...snapshot, scrollY: window.scrollY },
+      },
+      document.title,
+      window.location.href,
+    );
+  }
+
+  private pushHistorySnapshot(scrollY?: number): void {
+    if (typeof window === 'undefined') return;
+    const snapshot = this.captureHistorySnapshot();
+    window.history.pushState(
+      {
+        ...(window.history.state ?? {}),
+        [APP_HISTORY_KEY]: {
+          ...snapshot,
+          scrollY: typeof scrollY === 'number' ? scrollY : snapshot.scrollY,
+        },
+      },
+      document.title,
+      window.location.href,
+    );
+  }
+
+  private replaceHistorySnapshot(): void {
+    if (typeof window === 'undefined') return;
+    window.history.replaceState(
+      {
+        ...(window.history.state ?? {}),
+        [APP_HISTORY_KEY]: this.captureHistorySnapshot(),
+      },
+      document.title,
+      window.location.href,
+    );
+  }
+
+  private restoreHistorySnapshot(snapshot: AppHistorySnapshot): void {
+    const hadOpenModal = this.currentModalState() !== null;
+
+    this.clearReveal();
+    this.closeAllModals(false);
+    this.sazuService.activeTab.set(snapshot.tab);
+    this.showSazuResult.set(Boolean(snapshot.showSazuResult && this.sazuService.userSazuResult()));
+    this.showPartnerResult.set(
+      Boolean(snapshot.showPartnerResult && this.sazuService.partnerResult()),
+    );
+    this.personalRevealStage.set(this.normalizeRevealStage(snapshot.personalStage));
+    this.partnerRevealStage.set(this.normalizeRevealStage(snapshot.partnerStage));
+
+    let openedModal = false;
+    if (snapshot.modal === 'culture') {
+      this.showCultureModal.set(true);
+      openedModal = true;
+    } else if (snapshot.modal === 'legal:impressum') {
+      this.activeLegalModal.set('impressum');
+      openedModal = true;
+    } else if (snapshot.modal === 'legal:datenschutz') {
+      this.activeLegalModal.set('datenschutz');
+      openedModal = true;
+    } else if (snapshot.modal === 'story:personal' && this.sazuService.userSazuResult()) {
+      this.storyModalType.set('personal');
+      openedModal = true;
+    } else if (snapshot.modal === 'story:partner' && this.sazuService.partnerResult()) {
+      this.storyModalType.set('partner');
+      openedModal = true;
+    }
+
+    this.restoreScrollPosition(snapshot.scrollY);
+    if (openedModal) {
+      this.activateModalAccessibility();
+    } else if (hadOpenModal) {
+      this.restoreModalTriggerFocus();
+    }
+  }
+
+  private normalizeRevealStage(stage: number): 1 | 2 | 3 | 4 {
+    if (stage === 2 || stage === 3 || stage === 4) return stage;
+    return 1;
+  }
+
+  private currentHistorySnapshot(): AppHistorySnapshot | null {
+    if (typeof window === 'undefined') return null;
+    return this.readHistorySnapshot(window.history.state);
+  }
+
+  private currentModalState(): AppModalState {
+    const legalType = this.activeLegalModal();
+    const storyType = this.storyModalType();
+    if (this.showCultureModal()) return 'culture';
+    if (legalType) return `legal:${legalType}`;
+    if (storyType) return `story:${storyType}`;
+    return null;
+  }
+
+  private prepareModalOpen(): void {
+    this.saveCurrentHistoryScroll();
+    if (!this.currentModalState() && typeof document !== 'undefined') {
+      this.modalTrigger =
+        document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    }
+    this.closeAllModals(false);
+  }
+
+  private activateModalAccessibility(): void {
+    this.lockPageScroll();
+    if (typeof document === 'undefined') return;
+    setTimeout(() => {
+      const sheet = document.querySelector<HTMLElement>('.modal-backdrop .modal-sheet');
+      const initialFocus = sheet?.querySelector<HTMLElement>('[data-modal-initial-focus]');
+      (initialFocus ?? sheet)?.focus({ preventScroll: true });
+    });
+  }
+
+  private dismissCurrentModal(): void {
+    const modal = this.currentModalState();
+    if (modal === 'culture') {
+      this.closeCultureModal();
+    } else if (modal?.startsWith('legal:')) {
+      this.closeLegal();
+    } else if (modal?.startsWith('story:')) {
+      this.closeStoryModal();
+    }
+  }
+
+  private lockPageScroll(): void {
+    if (
+      typeof document === 'undefined' ||
+      typeof window === 'undefined' ||
+      this.bodyStyleBeforeModal
+    ) {
+      return;
+    }
+
+    const body = document.body;
+    this.modalScrollY = window.scrollY;
+    this.bodyStyleBeforeModal = {
+      position: body.style.position,
+      top: body.style.top,
+      left: body.style.left,
+      right: body.style.right,
+      width: body.style.width,
+      overflow: body.style.overflow,
+      touchAction: body.style.touchAction,
+    };
+    body.style.position = 'fixed';
+    body.style.top = `-${this.modalScrollY}px`;
+    body.style.left = '0';
+    body.style.right = '0';
+    body.style.width = '100%';
+    body.style.overflow = 'hidden';
+    body.style.touchAction = 'none';
+  }
+
+  private unlockPageScroll(): void {
+    if (
+      typeof document === 'undefined' ||
+      typeof window === 'undefined' ||
+      !this.bodyStyleBeforeModal
+    ) {
+      return;
+    }
+
+    const body = document.body;
+    const previous = this.bodyStyleBeforeModal;
+    body.style.position = previous.position;
+    body.style.top = previous.top;
+    body.style.left = previous.left;
+    body.style.right = previous.right;
+    body.style.width = previous.width;
+    body.style.overflow = previous.overflow;
+    body.style.touchAction = previous.touchAction;
+    this.bodyStyleBeforeModal = null;
+    window.scrollTo({ top: this.modalScrollY, left: 0, behavior: 'auto' });
+  }
+
+  private restoreModalTriggerFocus(): void {
+    const trigger = this.modalTrigger;
+    this.modalTrigger = null;
+    if (!trigger) return;
+    setTimeout(() => {
+      if (trigger.isConnected) trigger.focus({ preventScroll: true });
+    });
+  }
+
+  private restoreScrollPosition(scrollY: number): void {
+    if (typeof document === 'undefined' || typeof window === 'undefined') return;
+    const previousBehavior = document.documentElement.style.scrollBehavior;
+    document.documentElement.style.scrollBehavior = 'auto';
+    window.scrollTo({ top: Math.max(0, scrollY), left: 0, behavior: 'auto' });
+    requestAnimationFrame(() => {
+      document.documentElement.style.scrollBehavior = previousBehavior;
+    });
+  }
+
+  private hasUnsavedSessionState(): boolean {
+    const sazu = this.sazuForm();
+    const partner = this.partnerForm();
+    return Boolean(
+      this.showSazuResult() ||
+      this.showPartnerResult() ||
+      sazu.name.trim() ||
+      sazu.birthDate ||
+      sazu.birthTime ||
+      partner.person1Name.trim() ||
+      partner.person1BirthDate ||
+      partner.person2Name.trim() ||
+      partner.person2BirthDate,
+    );
+  }
+
+  private detachExitGuard(): void {
+    if (typeof window === 'undefined' || !this.exitGuardAttached) return;
+    window.removeEventListener('beforeunload', this.handleBeforeUnload);
+    this.exitGuardAttached = false;
+  }
+
+  private closeModalWithHistory(expectedModal: AppModalState): void {
+    const shouldStepBack =
+      expectedModal !== null && this.currentHistorySnapshot()?.modal === expectedModal;
+    this.closeAllModals(true);
+
+    if (shouldStepBack && typeof window !== 'undefined') {
+      window.history.back();
+    } else {
+      this.replaceHistorySnapshot();
+    }
+  }
+
+  private closeAllModals(restoreFocus = false): void {
+    const hadOpenModal = this.currentModalState() !== null;
+    this.showCultureModal.set(false);
+    this.activeLegalModal.set(null);
+    this.storyModalType.set(null);
+    if (hadOpenModal || this.bodyStyleBeforeModal) this.unlockPageScroll();
+    if (restoreFocus && hadOpenModal) this.restoreModalTriggerFocus();
   }
 
   private triggerReveal(type: 'personal' | 'partner', targetId: string): void {
@@ -270,9 +722,64 @@ export class MainViewComponent {
   sharePartner(): void {
     const res = this.sazuService.partnerResult();
     if (!res) return;
+    const contextCopy = this.getPartnerContextCopy(res);
     const title = `${res.score}% Match, ${res.toxicScore}% Drama: ${res.person1.name} × ${res.person2.name}`;
-    const text = `${res.person1.name} × ${res.person2.name}\n${res.score}% MATCH • ${res.flirtScore}% ANZIEHUNG • ${res.toxicScore}% DRAMA\n\n${res.memeVerdict}\n\nZwei Geburtsdaten. Eine brutale Wahrheit: https://sazu.usogi.org`;
+    const text = `${res.person1.name} × ${res.person2.name}\n${res.score}% MATCH • ${res.flirtScore}% ANZIEHUNG • ${res.toxicScore}% DRAMA\n\n${contextCopy.headline}\n${contextCopy.verdict}\n\nZwei Geburtsdaten. Eine brutale Wahrheit: https://sazu.usogi.org`;
     this.sazuService.shareResult(title, text);
+  }
+
+  protected getPartnerContextCopy(res: CompatibilityResult): PartnerContextCopy {
+    switch (res.context) {
+      case 'relationship':
+        return {
+          kicker: 'BEZIEHUNGS-TÜV',
+          headline: 'Langzeitpotenzial oder gemeinsame Therapie?',
+          verdict:
+            res.stabilityScore >= 70
+              ? 'Der Alltag kann funktionieren. Vorausgesetzt, niemand sagt „Ist doch nicht so schlimm“.'
+              : 'Große Gefühle, kleine Chance auf einen friedlichen IKEA-Besuch.',
+          redFlagLabel: 'WAS EUEREN ALLTAG SPRENGT',
+          sharePrompt: 'ZIEHT IHR TROTZDEM ZUSAMMEN?',
+          shareAnswer: 'JA, MIT GETRENNTEN DECKEN / NIEMALS IKEA',
+        };
+      case 'bestie':
+        return {
+          kicker: 'BESTIE-LOYALITÄTSTEST',
+          headline: 'Ride-or-die oder heimlicher Konkurrenzkampf?',
+          verdict:
+            res.toxicScore >= 65
+              ? 'Ihr verteidigt euch vor allen – und rottet euch danach privat komplett aus.'
+              : 'Eine Freundschaft mit Sprachmemos, Insiderwitzen und erstaunlich wenig Therapiebedarf.',
+          redFlagLabel: 'WAS DEN GRUPPENCHAT ESKALIEREN LÄSST',
+          sharePrompt: 'WER SAGT IMMER „BIN IN 5 MIN DA“?',
+          shareAnswer: 'ICH / DIE ANDERE LÜGT',
+        };
+      case 'ex':
+        return {
+          kicker: 'RÜCKFALL-RADAR',
+          headline: 'Schicksalsverbindung oder Rückfallgefahr?',
+          verdict:
+            res.toxicScore >= 60
+              ? 'Das Universum sagt Lektion. Dein Chatverlauf sagt „eine letzte Nachricht“.'
+              : 'Nicht komplett toxisch – aber Nostalgie ist noch kein Beziehungsgrund.',
+          redFlagLabel: 'WARUM BLOCKIEREN GESÜNDER WÄRE',
+          sharePrompt: 'NOCH EINE RUNDE?',
+          shareAnswer: 'BLOCKIERT / NUR KURZ SCHAUEN',
+        };
+      case 'crush':
+      default:
+        return {
+          kicker: 'CRUSH-RADAR',
+          headline: 'Wird daraus ein Date oder nur Story-Views?',
+          verdict:
+            res.flirtScore >= 70
+              ? 'Die Chemie schreit Date. Die Kommunikation flüstert „mal schauen“. '
+              : 'Mehr Interpretationsarbeit als echte Nachrichten – klassischer Crush-Sport.',
+          redFlagLabel: 'WAS EURE TALKING STAGE SABOTIERT',
+          sharePrompt: 'WÜRDEST DU TROTZDEM SCHREIBEN?',
+          shareAnswer: 'JA, LEIDER / ICH WARTE AUF IHN',
+        };
+    }
   }
 
   /**
@@ -290,6 +797,7 @@ export class MainViewComponent {
   async downloadPersonalStoryCard(): Promise<void> {
     const res = this.sazuService.userSazuResult();
     if (!res) return;
+    const variant = this.storyVariant();
 
     this.isGeneratingStory.set(true);
 
@@ -354,15 +862,32 @@ export class MainViewComponent {
       ctx.fillText(res.dayMaster.hanja, 942, 235);
 
       ctx.textAlign = 'left';
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '900 174px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillText(`${res.dayMaster.deluluScore}%`, 72, 438);
-      ctx.fillStyle = '#ef6975';
-      ctx.font = '900 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillText('DELULU', 78, 486);
-      ctx.fillStyle = '#ad9d94';
-      ctx.font = '700 18px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillText('DAS URTEIL IST OFFIZIELL', 224, 485);
+      if (variant === 'redflag') {
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '900 105px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+        ctx.fillText('RED FLAG', 72, 426);
+        ctx.fillStyle = '#ef6975';
+        ctx.font = '900 27px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+        ctx.fillText('OFFIZIELL ENTLARVT', 78, 486);
+      } else if (variant === 'celebrity') {
+        const celebrityName = res.celebrities[0]?.name || 'K-POP TWIN';
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '900 78px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+        this.renderWrappedText(ctx, celebrityName.toUpperCase(), 72, 386, 920, 82, 'left', 2);
+        ctx.fillStyle = '#ef6975';
+        ctx.font = '900 25px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+        ctx.fillText('DEIN CELEBRITY ENERGY MATCH', 78, 486);
+      } else {
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '900 174px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+        ctx.fillText(`${res.dayMaster.deluluScore}%`, 72, 438);
+        ctx.fillStyle = '#ef6975';
+        ctx.font = '900 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+        ctx.fillText('DELULU', 78, 486);
+        ctx.fillStyle = '#ad9d94';
+        ctx.font = '700 18px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+        ctx.fillText('DAS URTEIL IST OFFIZIELL', 224, 485);
+      }
 
       ctx.fillStyle = 'rgba(255, 255, 255, 0.065)';
       ctx.beginPath();
@@ -403,16 +928,7 @@ export class MainViewComponent {
       ctx.fillText('LIVE AUS DEINEM GRUPPENCHAT', 108, 1238);
       ctx.fillStyle = '#f3e9e2';
       ctx.font = 'italic 30px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      this.renderWrappedText(
-        ctx,
-        `„${res.dayMaster.whatsAppSignature}“`,
-        108,
-        1292,
-        850,
-        42,
-        'left',
-        3,
-      );
+      this.renderWrappedText(ctx, res.dayMaster.whatsAppSignature, 108, 1292, 850, 42, 'left', 3);
 
       const celebText =
         res.celebrities && res.celebrities.length > 0
@@ -435,10 +951,22 @@ export class MainViewComponent {
       ctx.textAlign = 'center';
       ctx.fillStyle = '#201318';
       ctx.font = '900 34px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillText('WER KENNT MICH ZU GUT?', 540, 1667);
+      const personalPrompt =
+        variant === 'redflag'
+          ? 'WER KENNT DIESE RED FLAG?'
+          : variant === 'celebrity'
+            ? 'WER TEILT MEINE ENERGY?'
+            : 'WER IST NOCH SO DELULU?';
+      ctx.fillText(personalPrompt, 540, 1667);
       ctx.fillStyle = '#8c3640';
       ctx.font = '700 22px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillText('Markiere die Freundin, die jetzt lachen muss.', 540, 1712);
+      ctx.fillText(
+        variant === 'celebrity'
+          ? 'Schick das deinem K-Pop Gruppenchat.'
+          : 'Markiere die Freundin mit den Beweisen.',
+        540,
+        1712,
+      );
 
       ctx.fillStyle = '#ffffff';
       ctx.font = '800 27px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
@@ -454,15 +982,23 @@ export class MainViewComponent {
           return;
         }
 
-        const fileName = `sazu-story-${res.input.name}.png`;
+        const fileName = `sazu-${variant}-${res.input.name}.png`;
         const file = new File([blob], fileName, { type: 'image/png' });
 
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
           try {
             await navigator.share({
               files: [file],
-              title: `${res.dayMaster.deluluScore}% Delulu: ${res.input.name}s Destiny Roast`,
-              text: `Meine Red Flag: ${res.dayMaster.toxicTrait}`,
+              title:
+                variant === 'celebrity'
+                  ? `${res.input.name}s Celebrity Energy Match`
+                  : variant === 'redflag'
+                    ? `${res.input.name}s Red Flag wurde entlarvt`
+                    : `${res.dayMaster.deluluScore}% Delulu: ${res.input.name}s Destiny Roast`,
+              text:
+                variant === 'celebrity'
+                  ? `Ich teile meine Energy mit ${res.celebrities[0]?.name || 'einem K-Pop Twin'}.`
+                  : `Meine Red Flag: ${res.dayMaster.toxicTrait}`,
             });
             this.sazuService.showToast('Story-Bild geteilt.');
           } catch {
@@ -482,6 +1018,8 @@ export class MainViewComponent {
   async downloadPartnerStoryCard(): Promise<void> {
     const res = this.sazuService.partnerResult();
     if (!res) return;
+    const variant = this.storyVariant();
+    const contextCopy = this.getPartnerContextCopy(res);
 
     this.isGeneratingStory.set(true);
 
@@ -528,14 +1066,23 @@ export class MainViewComponent {
       ctx.fillText(`${res.person1.name}  ×  ${res.person2.name}`, 540, 200);
       ctx.fillStyle = '#c6b7ae';
       ctx.font = '650 22px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillText('SOULMATES ODER NUR TOXISCHE CHEMIE?', 540, 246);
+      this.renderWrappedText(
+        ctx,
+        contextCopy.headline.toUpperCase(),
+        540,
+        246,
+        900,
+        30,
+        'center',
+        2,
+      );
 
       ctx.fillStyle = '#ffffff';
       ctx.font = '900 178px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillText(`${res.score}%`, 540, 462);
+      ctx.fillText(`${variant === 'drama' ? res.toxicScore : res.score}%`, 540, 462);
       ctx.fillStyle = '#ef6975';
       ctx.font = '900 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillText('MATCH', 540, 512);
+      ctx.fillText(variant === 'drama' ? 'DRAMA' : 'MATCH', 540, 512);
 
       const metrics = [
         { value: res.flirtScore, label: 'ANZIEHUNG' },
@@ -568,10 +1115,10 @@ export class MainViewComponent {
       ctx.textAlign = 'left';
       ctx.fillStyle = '#e4b8a2';
       ctx.font = '800 20px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillText('DAS SCHONUNGSLOSE URTEIL', 108, 798);
+      ctx.fillText(contextCopy.kicker, 108, 798);
       ctx.fillStyle = '#ffffff';
       ctx.font = 'italic 38px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      this.renderWrappedText(ctx, res.memeVerdict, 108, 860, 850, 50, 'left', 4);
+      this.renderWrappedText(ctx, contextCopy.verdict, 108, 860, 850, 50, 'left', 4);
 
       const redFlagGradient = ctx.createLinearGradient(72, 0, 1008, 0);
       redFlagGradient.addColorStop(0, 'rgba(181, 43, 55, 0.42)');
@@ -585,7 +1132,7 @@ export class MainViewComponent {
       ctx.stroke();
       ctx.fillStyle = '#ff7c86';
       ctx.font = '900 22px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillText('EURE RED FLAG', 108, 1110);
+      ctx.fillText(contextCopy.redFlagLabel, 108, 1110);
       ctx.fillStyle = '#ffffff';
       ctx.font = '650 36px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
       this.renderWrappedText(ctx, res.redFlag, 108, 1172, 850, 48, 'left', 4);
@@ -610,10 +1157,10 @@ export class MainViewComponent {
       ctx.textAlign = 'center';
       ctx.fillStyle = '#201318';
       ctx.font = '900 32px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillText('WÜRDET IHR ES TROTZDEM TUN?', 540, 1646);
+      ctx.fillText(contextCopy.sharePrompt, 540, 1646);
       ctx.fillStyle = '#8c3640';
       ctx.font = '800 23px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillText('JA, LEIDER   /   NATÜRLICH', 540, 1696);
+      ctx.fillText(contextCopy.shareAnswer, 540, 1696);
       ctx.fillStyle = '#685b56';
       ctx.font = '600 18px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
       ctx.fillText('Markiere deinen Partner, Crush oder deine Bestie.', 540, 1734);
@@ -632,15 +1179,18 @@ export class MainViewComponent {
           return;
         }
 
-        const fileName = `sazu-story-${res.person1.name}-${res.person2.name}.png`;
+        const fileName = `sazu-${variant}-${res.person1.name}-${res.person2.name}.png`;
         const file = new File([blob], fileName, { type: 'image/png' });
 
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
           try {
             await navigator.share({
               files: [file],
-              title: `${res.score}% Match, ${res.toxicScore}% Drama`,
-              text: `${res.person1.name} × ${res.person2.name}: ${res.memeVerdict}`,
+              title:
+                variant === 'drama'
+                  ? `${res.toxicScore}% Drama: ${res.person1.name} × ${res.person2.name}`
+                  : `${res.score}% Match: ${res.person1.name} × ${res.person2.name}`,
+              text: `${contextCopy.headline} ${contextCopy.verdict}`,
             });
             this.sazuService.showToast('Story-Bild geteilt.');
           } catch {

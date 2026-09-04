@@ -98,6 +98,63 @@ describe('MainViewComponent with DateSplitInput', () => {
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelector('.reveal-overlay')).toBeFalsy();
   });
+
+  it('should restore the input form when browser history goes back from a result', () => {
+    const inputState = window.history.state;
+    component.loadSazuPreset('creative');
+    component.submitSazu();
+    fixture.detectChanges();
+
+    expect((component as any).showSazuResult()).toBe(true);
+    expect(fixture.nativeElement.querySelector('#sazu-result')).toBeTruthy();
+
+    window.dispatchEvent(new PopStateEvent('popstate', { state: inputState }));
+    fixture.detectChanges();
+
+    expect((component as any).showSazuResult()).toBe(false);
+    expect(fixture.nativeElement.querySelector('#sazu-result')).toBeFalsy();
+    expect(fixture.nativeElement.querySelector('.sazu-input-form')).toBeTruthy();
+    expect(component['sazuService'].userSazuResult()).toBeTruthy();
+  });
+
+  it('should step backward through reveal stages before returning to the form', () => {
+    component.loadSazuPreset('creative');
+    component.submitSazu();
+    const stageOneState = window.history.state;
+    (component as any).advancePersonalReveal();
+    fixture.detectChanges();
+
+    expect((component as any).personalRevealStage()).toBe(2);
+    window.dispatchEvent(new PopStateEvent('popstate', { state: stageOneState }));
+    fixture.detectChanges();
+
+    expect((component as any).personalRevealStage()).toBe(1);
+    expect(fixture.nativeElement.textContent).toContain('Meine Red Flag entsperren');
+  });
+
+  it('should preserve the current scroll position in the history entry before a result opens', () => {
+    const originalScrollY = window.scrollY;
+    Object.defineProperty(window, 'scrollY', { configurable: true, value: 420 });
+    const replaceSpy = vi.spyOn(window.history, 'replaceState');
+
+    component.loadSazuPreset('creative');
+    component.submitSazu();
+
+    expect(replaceSpy.mock.calls.some(([state]) => state?.__sazuPalzaUi?.scrollY === 420)).toBe(
+      true,
+    );
+    Object.defineProperty(window, 'scrollY', { configurable: true, value: originalScrollY });
+  });
+
+  it('should warn before unloading after the user has entered personal data', () => {
+    (component as any).sazuForm.update((form: any) => ({ ...form, name: 'Sophie' }));
+    (component as any).enableExitGuard();
+    const event = new Event('beforeunload', { cancelable: true });
+
+    window.dispatchEvent(event);
+
+    expect(event.defaultPrevented).toBe(true);
+  });
 });
 
 describe('MainViewComponent - Instagram Story Modal', () => {
@@ -141,6 +198,45 @@ describe('MainViewComponent - Instagram Story Modal', () => {
     expect((component as any).showStoryModal()).toBe(false);
   });
 
+  it('should close a bottom sheet when browser history returns to the previous UI state', () => {
+    const fixture = TestBed.createComponent(MainViewComponent);
+    const modalComponent = fixture.componentInstance;
+    const pageState = window.history.state;
+    modalComponent.openStoryModal('personal');
+    fixture.detectChanges();
+
+    expect((modalComponent as any).showStoryModal()).toBe(true);
+    window.dispatchEvent(new PopStateEvent('popstate', { state: pageState }));
+    fixture.detectChanges();
+
+    expect((modalComponent as any).showStoryModal()).toBe(false);
+  });
+
+  it('should lock page scroll, support Escape, and restore focus after a bottom sheet closes', async () => {
+    const fixture = TestBed.createComponent(MainViewComponent);
+    const modalComponent = fixture.componentInstance as any;
+    const trigger = document.createElement('button');
+    trigger.textContent = 'Open culture';
+    document.body.appendChild(trigger);
+    trigger.focus();
+
+    modalComponent.openCultureModal();
+    fixture.detectChanges();
+    await new Promise((resolve) => setTimeout(resolve));
+
+    expect(document.body.style.position).toBe('fixed');
+    expect(document.activeElement?.hasAttribute('data-modal-initial-focus')).toBe(true);
+
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', cancelable: true }));
+    fixture.detectChanges();
+    await new Promise((resolve) => setTimeout(resolve));
+
+    expect(modalComponent.showCultureModal()).toBe(false);
+    expect(document.body.style.position).not.toBe('fixed');
+    expect(document.activeElement).toBe(trigger);
+    trigger.remove();
+  });
+
   it('should render Instagram story button in personal Saju view when result is present', async () => {
     sazuService.calculateSazu({
       name: 'Tester',
@@ -149,6 +245,8 @@ describe('MainViewComponent - Instagram Story Modal', () => {
     });
 
     const fixture = TestBed.createComponent(MainViewComponent);
+    const resultComponent = fixture.componentInstance as any;
+    resultComponent.personalRevealStage.set(4);
     fixture.detectChanges();
     await fixture.whenStable();
 
@@ -169,6 +267,8 @@ describe('MainViewComponent - Instagram Story Modal', () => {
     sazuService.activeTab.set('partner');
 
     const fixture = TestBed.createComponent(MainViewComponent);
+    const resultComponent = fixture.componentInstance as any;
+    resultComponent.partnerRevealStage.set(2);
     fixture.detectChanges();
     await fixture.whenStable();
 
@@ -176,7 +276,7 @@ describe('MainViewComponent - Instagram Story Modal', () => {
     expect(compiled.querySelector('.partner-viral-card')).toBeTruthy();
     expect(compiled.querySelector('.viral-metrics')?.textContent).toContain('Drama');
     expect(compiled.querySelector('.partner-viral-card')?.textContent).toContain(
-      'Beweise es im Gruppenchat',
+      'Unsere Red Flag entsperren',
     );
   });
 
@@ -188,6 +288,8 @@ describe('MainViewComponent - Instagram Story Modal', () => {
     });
 
     const fixture = TestBed.createComponent(MainViewComponent);
+    const resultComponent = fixture.componentInstance as any;
+    resultComponent.personalRevealStage.set(4);
     fixture.detectChanges();
     await fixture.whenStable();
 
@@ -235,5 +337,57 @@ describe('MainViewComponent - Instagram Story Modal', () => {
     const spy = vi.spyOn(component, 'downloadPartnerStoryCard');
     await component.downloadStoryCard();
     expect(spy).toHaveBeenCalled();
+  });
+
+  it('should unlock the personal report one reveal stage at a time', () => {
+    sazuService.calculateSazu({
+      name: 'Sophie',
+      birthDate: '1995-10-24',
+      gender: 'w',
+    });
+
+    const fixture = TestBed.createComponent(MainViewComponent);
+    const resultComponent = fixture.componentInstance as any;
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.daily-energy-card')).toBeFalsy();
+    expect(fixture.nativeElement.textContent).toContain('Meine Red Flag entsperren');
+
+    resultComponent.advancePersonalReveal();
+    resultComponent.advancePersonalReveal();
+    resultComponent.advancePersonalReveal();
+    fixture.detectChanges();
+
+    expect(resultComponent.personalRevealStage()).toBe(4);
+    expect(fixture.nativeElement.querySelector('.daily-energy-card')).toBeTruthy();
+    expect(fixture.nativeElement.textContent).toContain('Vollständiger Report entsperrt');
+  });
+
+  it('should select context-specific partner copy and share-card variants', () => {
+    sazuService.calculateCompatibility({
+      person1Name: 'Alex',
+      person1BirthDate: '1992-03-15',
+      person2Name: 'Sam',
+      person2BirthDate: '1994-07-20',
+      context: 'ex',
+    });
+    sazuService.activeTab.set('partner');
+
+    const fixture = TestBed.createComponent(MainViewComponent);
+    const resultComponent = fixture.componentInstance as any;
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).toContain(
+      'Schicksalsverbindung oder Rückfallgefahr?',
+    );
+    resultComponent.openStoryModal('partner');
+    resultComponent.setStoryVariant('drama');
+    fixture.detectChanges();
+
+    expect(resultComponent.storyVariant()).toBe('drama');
+    expect(fixture.nativeElement.querySelector('.story-viral-score')?.textContent).toContain(
+      'DRAMA',
+    );
+    expect(fixture.nativeElement.textContent).toContain('NOCH EINE RUNDE?');
   });
 });

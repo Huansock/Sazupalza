@@ -3469,3 +3469,209 @@ input:focus-visible {
   background: linear-gradient(135deg, #b63c3c, #7d1f25);
   box-shadow: 0 9px 22px rgba(168, 50, 50, 0.22);
 }
+
+/* Tap-to-unlock result sequence */
+.reveal-stage-dots {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin: 10px 0 18px;
+}
+
+.reveal-stage-dots span {
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.13);
+  transition:
+    background 180ms ease,
+    transform 180ms ease;
+}
+
+.reveal-stage-dots span.active {
+  background: #ef6975;
+  transform: scaleY(1.5);
+}
+
+.reveal-stage-dots span.done {
+  background: rgba(239, 105, 117, 0.46);
+}
+
+.stage-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 285px;
+}
+
+.stage-kicker {
+  margin-bottom: 11px;
+  color: #e4b8a2;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1.1px;
+}
+
+.stage-kicker.danger {
+  color: #ff7c86;
+}
+
+.stage-feature {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 154px;
+  margin: 4px 0 16px;
+  padding: 20px;
+}
+
+.stage-feature p {
+  font-size: clamp(18px, 5.2vw, 23px);
+  font-weight: 780;
+  line-height: 1.32;
+}
+
+.stage-verdict {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  margin: 2px 0 10px;
+  color: #fff;
+  font-size: clamp(20px, 5.5vw, 27px);
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.stage-meme,
+.stage-chat {
+  margin: 0 0 14px;
+  color: #e9d9cf;
+  font-size: 16px;
+  font-style: italic;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.stage-chat {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  padding: 20px;
+  border-left: 3px solid #ef6975;
+  border-radius: 0 13px 13px 0;
+  background: rgba(255, 255, 255, 0.055);
+  color: #fff;
+  font-size: clamp(20px, 5.5vw, 26px);
+}
+
+.stage-footnote {
+  margin: 0 0 16px;
+  color: #ad9d94;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.stage-footnote.unlocked {
+  color: #e4b8a2;
+  text-align: center;
+}
+
+.stage-unlock-btn {
+  width: 100%;
+  min-height: 50px;
+  margin-top: auto;
+  padding: 12px 15px;
+  border: 1px solid rgba(239, 105, 117, 0.42);
+  border-radius: 13px;
+  background: linear-gradient(135deg, #bd3543, #7d1f2a);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 850;
+  box-shadow: 0 10px 26px rgba(133, 25, 38, 0.3);
+}
+
+.stage-unlock-btn:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+.context-title {
+  font-size: clamp(21px, 6vw, 29px);
+  line-height: 1.16;
+}
+
+.deep-report {
+  display: contents;
+}
+
+.session-reset-note {
+  margin: -10px 16px 18px;
+  color: var(--ink-muted);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: center;
+}
+
+/* Pick one of several intentionally distinct share-card hooks. */
+.story-variant-picker {
+  margin: 4px 0 14px;
+}
+
+.variant-picker-label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--ink-muted);
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0.9px;
+}
+
+.variant-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.variant-buttons.two-up {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.variant-buttons button {
+  min-height: 42px;
+  padding: 8px 6px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper-deep);
+  color: var(--ink-muted);
+  font-size: 11px;
+  font-weight: 750;
+  line-height: 1.2;
+}
+
+.variant-buttons button.selected {
+  border-color: #9f2f3a;
+  background: #291419;
+  color: #fff;
+  box-shadow: inset 0 0 0 1px rgba(239, 105, 117, 0.22);
+}
+
+.story-viral-score.text-hero {
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-height: 52px;
+}
+
+.story-viral-score.text-hero strong {
+  max-width: 100%;
+  color: #fff;
+  font-size: 25px;
+  line-height: 1;
+  letter-spacing: -1px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.story-viral-score.text-hero span {
+  font-size: 7px;
+  text-align: center;
+}
