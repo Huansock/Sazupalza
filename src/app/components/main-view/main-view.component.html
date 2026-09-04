@@ -81,18 +81,14 @@
 
             <!-- Birth Date -->
             <div class="form-group">
-              <label for="birthDate" class="field-label">Geburtsdatum (Sonnenkalender)</label>
-              <input
+              <label for="birthDate-day" class="field-label">Geburtsdatum (Sonnenkalender)</label>
+              <app-date-split-input
                 id="birthDate"
-                type="date"
-                class="text-input date-input"
                 [(ngModel)]="sazuForm().birthDate"
                 name="birthDate"
-                min="1920-01-01"
-                max="2030-12-31"
-                required
+                [required]="true"
               />
-              <span class="field-hint">Geburtsdatum laut Ausweis</span>
+              <span class="field-hint">Geburtsdatum laut Ausweis (TT.MM.JJJJ)</span>
             </div>
 
             <!-- Birth Time (Optional) -->
@@ -312,7 +308,9 @@
                 </ul>
               </div>
               <div class="traits-column weaknesses">
-                <h4 class="column-header"><span class="trait-tag minus">−</span> Typische Schwächen</h4>
+                <h4 class="column-header">
+                  <span class="trait-tag minus">−</span> Typische Schwächen
+                </h4>
                 <ul class="trait-list">
                   @for (wk of res.dayMaster.weaknesses; track $index) {
                     <li>{{ wk }}</li>
@@ -466,14 +464,11 @@
               </div>
               <div class="form-group">
                 <label class="field-label-compact">Geburtsdatum:</label>
-                <input
-                  type="date"
-                  class="text-input date-input"
+                <app-date-split-input
+                  id="p1Birth"
                   [(ngModel)]="partnerForm().person1BirthDate"
                   name="p1Birth"
-                  min="1920-01-01"
-                  max="2030-12-31"
-                  required
+                  [required]="true"
                 />
               </div>
             </div>
@@ -499,14 +494,11 @@
               </div>
               <div class="form-group">
                 <label class="field-label-compact">Geburtsdatum:</label>
-                <input
-                  type="date"
-                  class="text-input date-input"
+                <app-date-split-input
+                  id="p2Birth"
                   [(ngModel)]="partnerForm().person2BirthDate"
                   name="p2Birth"
-                  min="1920-01-01"
-                  max="2030-12-31"
-                  required
+                  [required]="true"
                 />
               </div>
             </div>
@@ -1154,8 +1146,7 @@
               }
             </button>
             <p class="story-hint">
-              Tipp: Tippe auf den Button oder mache einfach einen Screenshot für deine
-              Insta-Story!
+              Tipp: Tippe auf den Button oder mache einfach einen Screenshot für deine Insta-Story!
             </p>
           </div>
         }

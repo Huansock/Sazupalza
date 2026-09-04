@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SazuService } from '../../services/sazu.service';
 import { DatingContext, PartnerCheckInput, UserSazuInput } from '../../models/sazu.model';
+import { DateSplitInputComponent } from '../date-split-input/date-split-input.component';
 
 @Component({
   selector: 'app-main-view',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, DateSplitInputComponent],
   templateUrl: './main-view.component.html',
   styleUrl: './main-view.component.css',
 })

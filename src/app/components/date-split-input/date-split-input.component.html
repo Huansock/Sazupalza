@@ -1,0 +1,71 @@
+<div class="date-split-container" [class.disabled]="disabled()">
+  <!-- Day input (TT) -->
+  <div class="field-wrapper day-wrapper">
+    <input
+      #dayInputRef
+      [id]="id() + '-day'"
+      type="text"
+      inputmode="numeric"
+      pattern="[0-9]*"
+      maxlength="2"
+      placeholder="TT"
+      [value]="day()"
+      (input)="onDayInput($event)"
+      (blur)="onDayBlur()"
+      (keydown)="onKeyDown('day', $event)"
+      (paste)="onPaste($event)"
+      [disabled]="disabled()"
+      class="date-field"
+      aria-label="Tag (Geburtstag)"
+      autocomplete="bday-day"
+    />
+  </div>
+
+  <span class="date-sep" aria-hidden="true">.</span>
+
+  <!-- Month input (MM) -->
+  <div class="field-wrapper month-wrapper">
+    <input
+      #monthInputRef
+      [id]="id() + '-month'"
+      type="text"
+      inputmode="numeric"
+      pattern="[0-9]*"
+      maxlength="2"
+      placeholder="MM"
+      [value]="month()"
+      (input)="onMonthInput($event)"
+      (blur)="onMonthBlur()"
+      (keydown)="onKeyDown('month', $event)"
+      (paste)="onPaste($event)"
+      [disabled]="disabled()"
+      class="date-field"
+      aria-label="Monat (Geburtsmonat)"
+      autocomplete="bday-month"
+    />
+  </div>
+
+  <span class="date-sep" aria-hidden="true">.</span>
+
+  <!-- Year input (JJJJ) -->
+  <div class="field-wrapper year-wrapper">
+    <input
+      #yearInputRef
+      [id]="id() + '-year'"
+      type="text"
+      inputmode="numeric"
+      pattern="[0-9]*"
+      maxlength="4"
+      placeholder="JJJJ"
+      [value]="year()"
+      (input)="onYearInput($event)"
+      (blur)="onYearBlur()"
+      (keydown)="onKeyDown('year', $event)"
+      (paste)="onPaste($event)"
+      [disabled]="disabled()"
+      class="date-field"
+      aria-label="Jahr (Geburtsjahr)"
+      autocomplete="bday-year"
+    />
+  </div>
+</div>
