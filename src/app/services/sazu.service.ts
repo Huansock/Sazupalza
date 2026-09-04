@@ -1,14 +1,23 @@
 import { Injectable, signal } from '@angular/core';
 import {
+  CelebrityMatch,
   CompatibilityResult,
+  DailySazuEnergy,
   DayMaster,
   DayMasterId,
+  FiveElement,
   PartnerCheckInput,
   SajuAuraStar,
   UserSazuInput,
   UserSazuResult,
 } from '../models/sazu.model';
-import { AURA_STARS, DAY_MASTERS, SPECIAL_COMPATIBILITY, STEM_KEYS } from '../data/sazu-data';
+import {
+  AURA_STARS,
+  CELEBRITY_MATCHES,
+  DAY_MASTERS,
+  SPECIAL_COMPATIBILITY,
+  STEM_KEYS,
+} from '../data/sazu-data';
 
 @Injectable({
   providedIn: 'root',
@@ -41,6 +50,7 @@ export class SazuService {
     const germanArchetype = base.archetypeByGender?.[gender] || base.germanArchetype;
     const toxicTrait = base.toxicTraitByGender?.[gender] || base.toxicTrait;
     const whatsAppSignature = base.whatsAppSignatureByGender?.[gender] || base.whatsAppSignature;
+    const celebrities = CELEBRITY_MATCHES[stemKey] || [];
 
     return {
       ...base,
@@ -48,6 +58,7 @@ export class SazuService {
       germanArchetype,
       toxicTrait,
       whatsAppSignature,
+      celebrities,
     };
   }
 
@@ -167,11 +178,140 @@ export class SazuService {
   }
 
   /**
+   * Calculates the Daily Sazu Energy (Heutige Tagesenergie / 오늘의 일진)
+   * based on the interaction between user's Day Master and today's cosmic stem.
+   */
+  calculateDailyEnergy(userDayMaster: DayMaster, targetDate: Date = new Date()): DailySazuEnergy {
+    const year = targetDate.getFullYear();
+    const month = targetDate.getMonth() + 1;
+    const day = targetDate.getDate();
+
+    const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    const todayMaster = this.getDayMasterFromDate(dateStr, 'd');
+
+    const weekdayNames = [
+      'Sonntag',
+      'Montag',
+      'Dienstag',
+      'Mittwoch',
+      'Donnerstag',
+      'Freitag',
+      'Samstag',
+    ];
+    const monthNames = [
+      'Januar',
+      'Februar',
+      'März',
+      'April',
+      'Mai',
+      'Juni',
+      'Juli',
+      'August',
+      'September',
+      'Oktober',
+      'November',
+      'Dezember',
+    ];
+    const weekday = weekdayNames[targetDate.getDay()];
+    const monthName = monthNames[targetDate.getMonth()];
+    const dateFormatted = `${weekday}, ${day}. ${monthName}`;
+
+    const generatesMap: Record<FiveElement, FiveElement> = {
+      Holz: 'Feuer',
+      Feuer: 'Erde',
+      Erde: 'Metall',
+      Metall: 'Wasser',
+      Wasser: 'Holz',
+    };
+
+    const controlsMap: Record<FiveElement, FiveElement> = {
+      Holz: 'Erde',
+      Erde: 'Wasser',
+      Wasser: 'Feuer',
+      Feuer: 'Metall',
+      Metall: 'Holz',
+    };
+
+    const uEl = userDayMaster.element;
+    const tEl = todayMaster.element;
+
+    if (uEl === tEl) {
+      return {
+        dateFormatted,
+        energyScore: 88,
+        vibeTitle: 'Spiegel-Tag: Synergie & Teamgeist',
+        vibeSummary: `Heute herrscht dein ${uEl}-Element vor (${todayMaster.name}). Die kosmische Frequenz matcht dich perfekt – ideal für Teamwork und ehrliche Gespräche.`,
+        dos: ['Gemeinsame Projekte anpacken', 'Treffen mit engen Freunden', 'Ideen im Team teilen'],
+        donts: ['Ego-Trips im Gruppenchat', 'Dich mit anderen vergleichen'],
+        luckyBooster: 'Ein Spaziergang mit deinem Bestie & Bubble Tea',
+      };
+    } else if (generatesMap[tEl] === uEl) {
+      // Today generates user (인성)
+      return {
+        dateFormatted,
+        energyScore: 94,
+        vibeTitle: 'Auflade-Tag: Rückenwind & Wohlbefinden',
+        vibeSummary: `Das heutige Tages-Element ${tEl} nährt dein ${uEl}-Element direkt. Deine Intuition ist geschärft, Entscheidungen fallen leicht und du tankst pure Lebenskraft.`,
+        dos: [
+          'Me-Time & Selfcare zelebrieren',
+          'Wichtige Weichen für die Zukunft stellen',
+          'Neues Wissen aufsaugen',
+        ],
+        donts: ['Dich für andere ausbrennen', 'Zu wenig Schlaf riskieren'],
+        luckyBooster: 'Heiße Matcha-Latte & 20 Minuten offline lesen',
+      };
+    } else if (generatesMap[uEl] === tEl) {
+      // User generates today (식상)
+      return {
+        dateFormatted,
+        energyScore: 90,
+        vibeTitle: 'Kreativ-Flow: Ideen & Charisma',
+        vibeSummary: `Deine innere ${uEl}-Energie fließt heute mühelos in die Welt. Dein Charme und dein Funke springen sofort über – du stehst unbemerkt im Mittelpunkt.`,
+        dos: ['Kreative Ideen pitchen', 'Spontanes Date vorschlagen', 'Auf Social Media posten'],
+        donts: ['Dich verstecken oder leise sein', 'Pläne unnötig aufschieben'],
+        luckyBooster: 'Deine Lieblings-Playlist auf voller Lautstärke',
+      };
+    } else if (controlsMap[uEl] === tEl) {
+      // User controls today (재성)
+      return {
+        dateFormatted,
+        energyScore: 92,
+        vibeTitle: 'Macher-Tag: Finanzen & Resultate',
+        vibeSummary: `Du beherrschst die heutige Tagesenergie. Hindernisse räumst du wie von selbst beiseite – besonders bei Deals, Finanzen und konkreten To-Dos bist du unschlagbar.`,
+        dos: [
+          'Finanz-Check oder Gehaltsverhandlung',
+          'Lange To-Do-Listen abhaken',
+          'Dich für Erfolge belohnen',
+        ],
+        donts: ['Chancen aus Bequemlichkeit verpassen', 'Geld unüberlegt verzocken'],
+        luckyBooster: 'Ein doppelter Espresso & das wichtigste Tagesziel sofort erledigen',
+      };
+    } else {
+      // Today controls user (관성)
+      return {
+        dateFormatted,
+        energyScore: 82,
+        vibeTitle: 'Fokus-Tag: Disziplin & Durchhaltevermögen',
+        vibeSummary: `Die Tagesenergie fordert dein ${uEl}-Element heraus, schenkt dir aber enorme mentale Schärfe. Wenn du strukturiert bleibst, schaffst du heute das Unmögliche.`,
+        dos: [
+          'Schwierigste Aufgaben zuerst abhaken',
+          'Klare persönliche Grenzen setzen',
+          'Diszipliniertes Workout',
+        ],
+        donts: ['Dich in unnötige Diskussionen verstricken', 'Auf Kritik impulsiv reagieren'],
+        luckyBooster: 'Frische Luft schnappen, tief durchatmen & kaltes Wasser trinken',
+      };
+    }
+  }
+
+  /**
    * Computes user's Sazu Day Master result
    */
   calculateSazu(input: UserSazuInput): UserSazuResult {
     const dayMaster = this.getDayMasterFromDate(input.birthDate, input.gender || 'w');
     const auraStar = this.calculateAuraStar(input.birthDate);
+    const dailyEnergy = this.calculateDailyEnergy(dayMaster);
+    const celebrities = dayMaster.celebrities || [];
 
     // Format date in German style (DD.MM.YYYY)
     const [y, m, d] = input.birthDate.split('-');
@@ -181,6 +321,8 @@ export class SazuService {
       input,
       dayMaster,
       auraStar,
+      celebrities,
+      dailyEnergy,
       birthDateFormatted,
       calculatedAt: new Date(),
     };
@@ -264,7 +406,7 @@ export class SazuService {
       } else {
         return {
           score: 78,
-          badge: 'Yin-Yang-Geschwister ☯️',
+          badge: 'Yin-Yang-Geschwister',
           relationshipType: 'Elementare Geschwister (Geob-Jae / 겁재)',
           verdict:
             'Ähnlich gepolt, aber unterschiedlich temperiert. Starke Allianz mit gesunder Reibung!',
@@ -318,8 +460,7 @@ export class SazuService {
         flirtScore: 86,
         stabilityScore: 92,
         toxicScore: 22,
-        memeVerdict:
-          '„Gesunde Beziehung ohne Psychospielchen – fast schon unheimlich harmonisch.“',
+        memeVerdict: '„Gesunde Beziehung ohne Psychospielchen – fast schon unheimlich harmonisch.“',
       };
     }
 
@@ -349,7 +490,8 @@ export class SazuService {
       score: 75,
       badge: 'Solide Partnerschaft',
       relationshipType: 'Pragmatische Harmonie',
-      verdict: 'Harmonisch, verlässlich und unaufgeregt wie ein gutes Gespräch bei Hafer-Cappuccino.',
+      verdict:
+        'Harmonisch, verlässlich und unaufgeregt wie ein gutes Gespräch bei Hafer-Cappuccino.',
       description: `Ihr ergänzt euch durch unterschiedliche Talente und Lebensentwürfe. Keine explosive Hollywood-Romanze, sondern echtes Leben.`,
       dailyLifeTip:
         'Schafft gemeinsame Hobbys, um der Beziehungsroutine etwas Pfeffer zu verleihen.',
@@ -379,7 +521,7 @@ export class SazuService {
     if (navigator.share) {
       try {
         await navigator.share(shareData);
-        this.showToast('Erfolgreich geteilt! 🎉');
+        this.showToast('Erfolgreich geteilt.');
         return true;
       } catch (err) {
         // Share was aborted or cancelled by user, fallback to clipboard
@@ -399,7 +541,7 @@ export class SazuService {
   async copyToClipboard(text: string): Promise<boolean> {
     try {
       await navigator.clipboard.writeText(text);
-      this.showToast('Ergebnis in die Zwischenablage kopiert! 📋');
+      this.showToast('Ergebnis in die Zwischenablage kopiert.');
       return true;
     } catch {
       this.showToast('Kopieren fehlgeschlagen.');

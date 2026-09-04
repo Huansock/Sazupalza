@@ -7,11 +7,11 @@
   display: flex;
   align-items: center;
   width: 100%;
-  min-height: 52px;
+  min-height: 50px;
   padding: 0 14px;
-  background: #f8fafc;
-  border: 1.5px solid #cbd5e1;
-  border-radius: 12px;
+  background: #fcfaf7;
+  border: 1px solid #dcd2c4;
+  border-radius: 10px;
   box-sizing: border-box;
   transition:
     border-color 0.2s ease,
@@ -20,15 +20,15 @@
 }
 
 .date-split-container:focus-within {
-  border-color: #d32f2f;
+  border-color: #8c6239;
   background: #ffffff;
-  box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.15);
+  box-shadow: 0 0 0 2px rgba(140, 98, 57, 0.12);
 }
 
 .date-split-container.disabled {
   opacity: 0.6;
   cursor: not-allowed;
-  background: #f1f5f9;
+  background: #f4efe6;
 }
 
 .field-wrapper {
@@ -55,12 +55,12 @@
   border: none;
   outline: none;
   font-size: 16px;
-  font-weight: 600;
-  color: #0f172a;
+  font-weight: 500;
+  color: #1c1917;
   font-family: inherit;
-  padding: 13px 4px;
+  padding: 12px 4px;
   margin: 0;
-  caret-color: #d32f2f;
+  caret-color: #8c6239;
   letter-spacing: 0.5px;
   -moz-appearance: textfield;
 }
@@ -72,15 +72,15 @@
 }
 
 .date-field::placeholder {
-  color: #94a3b8;
-  font-weight: 500;
+  color: #a89e92;
+  font-weight: 400;
   letter-spacing: 0;
 }
 
 .date-sep {
-  color: #94a3b8;
-  font-size: 20px;
-  font-weight: 700;
+  color: #b5a999;
+  font-size: 18px;
+  font-weight: 400;
   line-height: 1;
   margin: 0 6px;
   user-select: none;

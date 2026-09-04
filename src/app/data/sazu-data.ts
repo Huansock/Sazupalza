@@ -1,4 +1,4 @@
-import { AuraId, DayMaster, DayMasterId, SajuAuraStar } from '../models/sazu.model';
+import { AuraId, CelebrityMatch, DayMaster, DayMasterId, SajuAuraStar } from '../models/sazu.model';
 
 export const AURA_STARS: Record<AuraId, SajuAuraStar> = {
   DOHWA: {
@@ -23,7 +23,8 @@ export const AURA_STARS: Record<AuraId, SajuAuraStar> = {
     emoji: '✈️',
     title: 'Die ruhelose Nomaden-Seele',
     headline: 'Chronisches Fernweh & allergisch gegen 9-to-5-Routine',
-    tagline: 'Kann nicht länger als 3 Monate in derselben WG bleiben, ohne Fluchtpläne zu schmieden.',
+    tagline:
+      'Kann nicht länger als 3 Monate in derselben WG bleiben, ohne Fluchtpläne zu schmieden.',
     description:
       'Yeokma ist der koreanische Wanderer-Stern. Stillstand fühlt sich für dich an wie Ersticken. Du liebst Spontan-Trips mit Handgepäck, buchst Flüge um 2 Uhr nachts und bist im Mädelskreis immer die Erste, die vorschlägt: „Lass uns einfach nach Lissabon abhauen!“. Routine und Bequemlichkeit machen dir Panik.',
     datingCallout:
@@ -43,6 +44,228 @@ export const AURA_STARS: Record<AuraId, SajuAuraStar> = {
     datingCallout:
       'Smalltalk über das Wetter törnt dich ab. Du brauchst um 3 Uhr morgens Deep Talks über Seelenverwandtschaft, Universum und Kindheitstraumata.',
   },
+};
+
+export const CELEBRITY_MATCHES: Record<DayMasterId, CelebrityMatch[]> = {
+  GAP: [
+    {
+      name: 'RM (Kim Namjoon)',
+      groupOrRole: 'BTS Leader & Visionär',
+      badge: 'K-Pop',
+      comment: 'Teilt deine unaufhaltsame Leitwolf-Energie, Weitsicht und Führungskraft.',
+    },
+    {
+      name: 'Jennie',
+      groupOrRole: 'Blackpink Icon & Trendsetterin',
+      badge: 'K-Pop',
+      comment: 'Verkörpert wie du natürliche Autorität gepaart mit kompromisslosem Stil.',
+    },
+    {
+      name: 'Keanu Reeves',
+      groupOrRole: 'Hollywood-Legende',
+      badge: 'Actor',
+      comment:
+        'Steht wie eine uralte Eiche: unerschütterlich, bodenständig und von allen respektiert.',
+    },
+  ],
+  EUL: [
+    {
+      name: 'V (Kim Taehyung)',
+      groupOrRole: 'BTS & Creative Soul',
+      badge: 'K-Pop',
+      comment: 'Besitzt deine charmante Anpassungsfähigkeit, feinsinnige Ästhetik und Magie.',
+    },
+    {
+      name: 'Taylor Swift',
+      groupOrRole: 'Global Pop-Superstar',
+      badge: 'Popstar',
+      comment:
+        'Findet wie die Kletterpflanze immer ihren Weg nach oben, egal welche Mauern im Weg stehen.',
+    },
+    {
+      name: 'Zendaya',
+      groupOrRole: 'Emmy-Gewinnerin & Stilikone',
+      badge: 'Actor',
+      comment:
+        'Verbindet wie du sanfte Eleganz mit überraschender diplomatischer Durchsetzungskraft.',
+    },
+  ],
+  BYEONG: [
+    {
+      name: 'Jungkook',
+      groupOrRole: 'BTS Golden Maknae',
+      badge: 'K-Pop',
+      comment:
+        'Strahlt mit der feurigen Solarenergie von Yang-Feuer: purer Antrieb, Herz und Rampenlicht.',
+    },
+    {
+      name: 'Lisa',
+      groupOrRole: 'Blackpink Superstar',
+      badge: 'K-Pop',
+      comment:
+        'Erleuchtet die Bühne wie die Mittagssonne – voller Energie, Wärme und Begeisterung.',
+    },
+    {
+      name: 'Billie Eilish',
+      groupOrRole: 'Grammy- & Oscar-Ikone',
+      badge: 'Popstar',
+      comment: 'Emotional, intensiv und unmöglich zu übersehen. Pures solares Charisma.',
+    },
+  ],
+  JEONG: [
+    {
+      name: 'Jimin',
+      groupOrRole: 'BTS & Vocal-Genie',
+      badge: 'K-Pop',
+      comment:
+        'Hütet das warme Kerzenfeuer: sanft, empathisch, treu und tiefgründig leidenschaftlich.',
+    },
+    {
+      name: 'IU (Lee Ji-eun)',
+      groupOrRole: 'Koreas Nation’s Sweetheart',
+      badge: 'K-Pop',
+      comment: 'Erwärmt mit sanftem Kerzenschein und ehrlichen Emotionen ganze Generationen.',
+    },
+    {
+      name: 'Timothée Chalamet',
+      groupOrRole: 'Hollywood-Ausnahmetalent',
+      badge: 'Actor',
+      comment: 'Trägt genau deinen poetischen, faszinierenden und zarten Feuer-Vibe in sich.',
+    },
+  ],
+  MU: [
+    {
+      name: 'J-Hope (Jung Hoseok)',
+      groupOrRole: 'BTS Dance-Leader & Sonnenschein',
+      badge: 'K-Pop',
+      comment:
+        'Der Fels in der Brandung: unerschütterlich treu, verlässlich und gigantisch großherzig.',
+    },
+    {
+      name: 'Felix',
+      groupOrRole: 'Stray Kids',
+      badge: 'K-Pop',
+      comment:
+        'Wie ein schützender Berg: tief verankerte Loyalität, warme Stimme und unendliche Güte.',
+    },
+    {
+      name: 'Cillian Murphy',
+      groupOrRole: 'Oscar-Preisträger (Oppenheimer)',
+      badge: 'Actor',
+      comment:
+        'Ruht wie ein monumentales Gebirge in sich selbst. Nichts bringt ihn aus der Fassung.',
+    },
+  ],
+  GI: [
+    {
+      name: 'Suga (Min Yoongi)',
+      groupOrRole: 'BTS Rapper & Producer',
+      badge: 'K-Pop',
+      comment:
+        'Fruchtbarer Gartenboden: Beobachtet ruhig, nährt die Crew und hat einen messerscharfen Verstand.',
+    },
+    {
+      name: 'Cha Eun-woo',
+      groupOrRole: 'ASTRO & K-Drama Star',
+      badge: 'K-Pop',
+      comment: 'Verkörpert die nährende, harmonische und allseits beliebte Yin-Erde-Präsenz.',
+    },
+    {
+      name: 'Emma Watson',
+      groupOrRole: 'Schauspielerin & Aktivistin',
+      badge: 'Actor',
+      comment: 'Verbindet intellektuelle Fürsorge mit Bodenständigkeit und Sinn für Gerechtigkeit.',
+    },
+  ],
+  GYEONG: [
+    {
+      name: 'Jin (Kim Seokjin)',
+      groupOrRole: 'BTS Worldwide Handsome',
+      badge: 'K-Pop',
+      comment:
+        'Geschmiedetes Schwert: Gradlinig, prinzipientreu, scharfsinniger Humor und eiserne Disziplin.',
+    },
+    {
+      name: 'Karina',
+      groupOrRole: 'aespa Leader',
+      badge: 'K-Pop',
+      comment:
+        'Scharf wie eine Klinge, unerschütterlich professionell und glasklar in ihren Zielen.',
+    },
+    {
+      name: 'Margot Robbie',
+      groupOrRole: 'Powerhouse-Produzentin & Star',
+      badge: 'Actor',
+      comment:
+        'Lässt sich von niemandem biegen. Sie schmiedet ihr Schicksal mit eisernem Willen selbst.',
+    },
+  ],
+  SIN: [
+    {
+      name: 'Hyunjin',
+      groupOrRole: 'Stray Kids Main Dancer',
+      badge: 'K-Pop',
+      comment:
+        'Funkelt wie ein geschliffener Diamant: Perfektionist, magnetische Aura und extrem stilsicher.',
+    },
+    {
+      name: 'Song Hye-kyo',
+      groupOrRole: 'K-Drama Legende (The Glory)',
+      badge: 'Actor',
+      comment: 'Kühler, makelloser Edelstein: Eleganz, unnachgiebige Würde und verletzliche Tiefe.',
+    },
+    {
+      name: 'Scarlett Johansson',
+      groupOrRole: 'Hollywood Star',
+      badge: 'Actor',
+      comment: 'Kostbar, glänzend und unzerstörbar – genau wie das Element Yin-Metall.',
+    },
+  ],
+  IM: [
+    {
+      name: 'Wonwoo',
+      groupOrRole: 'SEVENTEEN Rapper',
+      badge: 'K-Pop',
+      comment:
+        'Der weite Ozean: Unergründlich tiefsinnig, voller Weisheit, anpassungsfähig und frei.',
+    },
+    {
+      name: 'Hanni',
+      groupOrRole: 'NewJeans',
+      badge: 'K-Pop',
+      comment:
+        'Fließend wie Wellen am Strand: dynamisch, lebendig, grenzenlos neugierig und charmant.',
+    },
+    {
+      name: 'Tom Cruise',
+      groupOrRole: 'Action-Ikone',
+      badge: 'Actor',
+      comment: 'Eine gewaltige Flutwelle an Tatendrang und Abenteuerlust, die niemals stillsteht.',
+    },
+  ],
+  GYE: [
+    {
+      name: 'Bang Chan',
+      groupOrRole: 'Stray Kids Leader & Producer',
+      badge: 'K-Pop',
+      comment:
+        'Nährender Sommerregen: Empathisch, beschützend, extrem feinfühlig und seelisch tief verbunden.',
+    },
+    {
+      name: 'Wonyoung',
+      groupOrRole: 'IVE It-Girl & Ikone',
+      badge: 'K-Pop',
+      comment:
+        'Sanfter Morgentau: Zauberhaft, schillernd, emotional intelligent und überall geliebt.',
+    },
+    {
+      name: 'Dua Lipa',
+      groupOrRole: 'Pop-Megastar',
+      badge: 'Popstar',
+      comment:
+        'Fließt mit intuitivem Gespür für Stimmungen und berührt Menschen auf emotionaler Ebene.',
+    },
+  ],
 };
 
 export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
@@ -86,7 +309,7 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
     deluluScore: 25,
     whatsAppSignature:
       '„Mädels, ich habe den Tisch reserviert. Wer zu spät kommt, zahlt die erste Runde.“',
-        titleByGender: {
+    titleByGender: {
       w: 'Die unerschütterliche Alpha-Planerin & Mom-Friend',
       m: 'Der unerschütterliche Alpha-Macher mit Notion-Tracker & Macher-Gen',
       d: 'Die strategische Leitfigur mit Masterplan & Null-Toleranz für Chaos',
@@ -107,7 +330,7 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
       d: '„Der Wochenend-Plan steht im geteilten Kalender. Bitte bis 14 Uhr abstimmen, damit wir nicht wieder planlos rumstehen.“',
     },
     color: '#2e7d32',
-    bgGradient: 'linear-gradient(135deg, #1b5e20, #4caf50)',
+    bgGradient: '#221c18',
   },
 
   EUL: {
@@ -148,8 +371,8 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
     toxicTrait:
       'Sagt 30 Minuten vor dem Treffen mit einer absurden Ausrede ab, weil ihre soziale Batterie leer ist.',
     deluluScore: 65,
-    whatsAppSignature: '„Omg sorry girl, mein Handy war den ganzen Tag auf Nicht-Stören!! 🥺🥺“',
-        titleByGender: {
+    whatsAppSignature: '„Omg sorry girl, mein Handy war den ganzen Tag auf Nicht-Stören!!“',
+    titleByGender: {
       w: 'Die zuckersüße People-Pleaserin mit geheimer Weltherrschafts-Agenda',
       m: 'Der charmante Diplomat & Harmonie-Junkie mit Absage-Panik',
       d: 'Der empathische Freigeist mit Social-Battery-Alarm & Ästhetik-Sinn',
@@ -165,12 +388,12 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
       d: 'Nimmt jede kleinste Unstimmigkeit persönlich und überanalysiert tagelang veränderte Schwingungen.',
     },
     whatsAppSignatureByGender: {
-      w: '„Omg sorry girl, mein Handy war den ganzen Tag auf Nicht-Stören!! 🥺🥺“',
+      w: '„Omg sorry girl, mein Handy war den ganzen Tag auf Nicht-Stören!!“',
       m: '„Bro, bin heute komplett platt von der Woche, klinke mich spontan aus. Nächstes Mal zu 100% am Start!“',
       d: '„Meine soziale Batterie ist heute bei minus 10%. Ich brauche dringend Me-Time, bin ab Montag wieder am Start.“',
     },
     color: '#388e3c',
-    bgGradient: 'linear-gradient(135deg, #2e7d32, #81c784)',
+    bgGradient: '#221c18',
   },
 
   BYEONG: {
@@ -211,9 +434,8 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
     toxicTrait:
       'Schreibt nachts um 4 Uhr mit 3 Promille „Ich vermiss dich“ an die größte Red Flag der Stadt.',
     deluluScore: 85,
-    whatsAppSignature:
-      '„HÖRT EUCH BITTE DIESE 7-MINÜTIGE SPRACHNACHRICHT AN ICH KANN NICHT MEHR 💀😭“',
-        titleByGender: {
+    whatsAppSignature: '„HÖRT EUCH BITTE DIESE 7-MINÜTIGE SPRACHNACHRICHT AN ICH KANN NICHT MEHR.“',
+    titleByGender: {
       w: 'Die unzensierte Rampensau mit Main Character Energy & Zero Filter',
       m: 'Der lauteste Hype-Guy im Raum mit Sonnenbrille nachts & Red-Bull-Abo',
       d: 'Die strahlende Supernova mit Main Character Energy & Null Impulskontrolle',
@@ -229,12 +451,12 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
       d: 'Handelt rein aus dem Affekt, brennt in 10 Sekunden lichterloh und hinterlässt emotionales Chaos.',
     },
     whatsAppSignatureByGender: {
-      w: '„HÖRT EUCH BITTE DIESE 7-MINÜTIGE SPRACHNACHRICHT AN ICH KANN NICHT MEHR 💀😭“',
+      w: '„HÖRT EUCH BITTE DIESE 7-MINÜTIGE SPRACHNACHRICHT AN ICH KANN NICHT MEHR.“',
       m: '„MÄNNER, heute eskaliert es komplett. Vorlesung morgen ist gestrichen, Vorglühen ab 21 Uhr bei mir!“',
       d: '„LEUTE, die Nacht ist viel zu kurz zum Schlafen! Wer kommt mit, ich stehe in 15 Minuten am Späti!“',
     },
     color: '#e64a19',
-    bgGradient: 'linear-gradient(135deg, #d84315, #ff7043)',
+    bgGradient: '#221c18',
   },
 
   JEONG: {
@@ -276,7 +498,7 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
       'Analysiert 4 Stunden lang, warum er seinen Satz mit einem Punkt statt einem Smiley beendet hat.',
     deluluScore: 70,
     whatsAppSignature: '„Mädels, setzt euch hin. Ich habe Screenshots, die alles beweisen.“',
-        titleByGender: {
+    titleByGender: {
       w: 'Die emotionale FBI-Agentin mit Deep-Talk-Obsession & Insta-Stalking-Diplom',
       m: 'Der nachdenkliche Altbau-Philosoph mit Spotify-Blend-Komplex & Deep-Talk-Falle',
       d: 'Die sensitive Spürnase mit seelischem Röntgenschein & Nachtmensch-Garantie',
@@ -297,7 +519,7 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
       d: '„Die Stimmung im Raum war eben so seltsam geladen. Habt ihr auch gemerkt, wie schnell sie das Thema gewechselt haben?“',
     },
     color: '#d32f2f',
-    bgGradient: 'linear-gradient(135deg, #b71c1c, #ef5350)',
+    bgGradient: '#221c18',
   },
 
   MU: {
@@ -340,7 +562,7 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
     deluluScore: 15,
     whatsAppSignature:
       '„Können wir das Treffen zu mir verlegen? Ich will meine Jogginghose nicht ausziehen.“',
-        titleByGender: {
+    titleByGender: {
       w: 'Die stoische Sofa-Queen mit gewichteter Decke & Komfortzonen-Abo',
       m: 'Der unerschütterliche Couch-Patriarch mit 3-Tage-Vorwarnzeit & Serien-Marathon',
       d: 'Der ruhende Pol mit Cozy-Space-Garantie & Null-Drama-Politik',
@@ -361,7 +583,7 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
       d: '„Bin für heute im Offline-Modus. Schlafsack, Tee, Buch. Wir hören uns morgen in aller Ruhe.“',
     },
     color: '#795548',
-    bgGradient: 'linear-gradient(135deg, #4e342e, #8d6e63)',
+    bgGradient: '#221c18',
   },
 
   GI: {
@@ -375,7 +597,8 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
     elementEmoji: '🌾',
     symbol: 'Fruchtbarer Gartenboden / Kleingarten-Erde',
     title: 'Die „Mama der Mädelsgruppe“ mit Notfall-Snacks & Kontrollzwang aus Liebe',
-    tagline: '„Hast du heute schon genug Wasser getrunken und warum antwortest du ihm überhaupt noch?“',
+    tagline:
+      '„Hast du heute schon genug Wasser getrunken und warum antwortest du ihm überhaupt noch?“',
     description: [
       'Du bist der nährende Gartenboden, auf dem jede Freundschaft erblüht. In deiner Canvas-Tote-Bag befinden sich zu jedem Zeitpunkt: Blasenpflaster, Kaugummi, Handdesinfektion, Paracetamol und zwei Müsliriegel.',
       'Du sorgst dafür, dass niemand betrunken verloren geht, teilst die Taxikosten gerecht auf und kochst die beste Tröst-Suppe bei Liebeskummer. Du bist warm, empathisch und pragmatisch.',
@@ -404,7 +627,7 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
     deluluScore: 40,
     whatsAppSignature:
       '„Girl, schick mir seinen Live-Standort für das erste Date, nur zur Sicherheit!!“',
-        titleByGender: {
+    titleByGender: {
       w: 'Die „Mama der Mädelsgruppe“ mit Notfall-Snacks & Kontrollzwang aus Liebe',
       m: 'Der Kumpel-Beschützer mit Powerbank, Taxikosten-Split & First-Aid-Vibes',
       d: 'Der fürsorgliche Anker der Wahlfamilie mit Tröst-Suppe & Sicherheitsnetz',
@@ -425,7 +648,7 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
       d: '„Check-in: Sind alle heil angekommen? Bitte kurzes Lebenszeichen im Chat, sonst mach ich mir Gedanken.“',
     },
     color: '#8d6e63',
-    bgGradient: 'linear-gradient(135deg, #5d4037, #a1887f)',
+    bgGradient: '#221c18',
   },
 
   GYEONG: {
@@ -439,7 +662,8 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
     elementEmoji: '⚔️',
     symbol: 'Schwert aus bestem Solinger Stahl',
     title: 'Die kompromisslose Girlboss mit eingebautem Bullshit-Detektor',
-    tagline: '„Ich bin nicht gemein, ich bin nur ehrlich. Willst du Mitleid oder willst du die Wahrheit?“',
+    tagline:
+      '„Ich bin nicht gemein, ich bin nur ehrlich. Willst du Mitleid oder willst du die Wahrheit?“',
     description: [
       'Du bist das scharfe Samuraischwert im koreanischen Sazu. Höflichkeitsfloskeln, zögerliche Typen und scheinheiliges Getue lösen bei dir körperliche Schmerzen aus. Du sagst immer genau das, was alle heimlich denken.',
       'Wer dich zur besten Freundin hat, hat eine Leibwächterin fürs Leben. Wenn jemand deiner Freundin das Herz bricht, musst du aktiv davon abgehalten werden, sein Auto mit Schlüsseln zu verzieren.',
@@ -462,12 +686,13 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
     careerHint: 'Unternehmensberaterin, Verhandlungsführerin, Strafverteidigerin, Tech-Lead.',
     loveHint:
       'Braucht einen Partner mit starkem Rückgrat auf absoluter Augenhöhe – Ja-Sager langweilen sie zu Tode.',
-    quote: '„Entweder du blockierst ihn jetzt vor meinen Augen, oder ich rede heute nicht mehr mit dir.“',
+    quote:
+      '„Entweder du blockierst ihn jetzt vor meinen Augen, oder ich rede heute nicht mehr mit dir.“',
     toxicTrait:
       'Macht aus jeder Bitte um emotionale Zuwendung eine Analyse über mangelnde Selbstdisziplin.',
     deluluScore: 10,
     whatsAppSignature: '„Schluss mit Heulen. Zieh dir was Nettes an, wir gehen jetzt raus.“',
-        titleByGender: {
+    titleByGender: {
       w: 'Die kompromisslose Girlboss mit eingebautem Bullshit-Detektor',
       m: 'Der kompromisslose Straight-Shooter mit 5-Uhr-Gym-Routine & Klartext-Garantie',
       d: 'Die messerscharfe Instanz mit No-Filter-Pragmatismus & Null-Toleranz für Ausreden',
@@ -487,8 +712,8 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
       m: '„Red nicht so viel drumherum, mach einfach. Entweder durchziehen oder aufhören zu jammern.“',
       d: '„Cut the drama: Grenzen setzen, abhaken und nach vorne schauen. Alles andere ist reine Zeitverschwendung.“',
     },
-    color: '#546e7a',
-    bgGradient: 'linear-gradient(135deg, #37474f, #78909c)',
+    color: '#607d8b',
+    bgGradient: '#221c18',
   },
 
   SIN: {
@@ -502,7 +727,8 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
     elementEmoji: '💎',
     symbol: 'Geschliffener Brillant / Juwel & Skalpell',
     title: 'Die Clean-Girl Ästhetin & High-Maintenance Zynikerin mit Skalpell-Zunge',
-    tagline: '„Mein Geschmack ist nicht teuer, er ist einfach makellos. Eure Standards sind nur zu niedrig.“',
+    tagline:
+      '„Mein Geschmack ist nicht teuer, er ist einfach makellos. Eure Standards sind nur zu niedrig.“',
     description: [
       'Während Gyeong das rohe Schwert ist, bist du der funkelnde Diamant oder das feinste Schmuckstück. Dein Geschmack ist erlesen, dein Style sitzt perfekt und du bemerkst sofort, wenn jemand die falsche Sockenfarbe trägt.',
       'Dein Humor ist gestochen scharf: Deine ironischen One-Liner sind gefürchtet und legendär. Du verabscheust Schlampigkeit, billige Ausreden und Männer, die ihre Schuhe nicht putzen.',
@@ -522,7 +748,8 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
     germanArchetype: 'Die Pinterest-Fashionista mit 12-Schritte-Skincare & 10/10 Wardrobe',
     luckyItem: 'Designer-Sonnenbrille, Lip Oil & feiner Goldschmuck',
     luckyFood: 'Sushi Omakase & ein Glas gekühlter Champagner oder Naturwein',
-    careerHint: 'Creative Director Fashion, Luxusgüter-Branding, Ästhetische Medizin, Kunstkuratorin.',
+    careerHint:
+      'Creative Director Fashion, Luxusgüter-Branding, Ästhetische Medizin, Kunstkuratorin.',
     loveHint:
       'Braucht jemanden mit Stil, Bildung und tadellosen Manieren – schlechte Schuhe sind sofortiger Trennungsgrund.',
     quote: '„Es ist keine Arroganz, wenn es nun mal der Wahrheit entspricht.“',
@@ -531,7 +758,7 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
     deluluScore: 50,
     whatsAppSignature:
       '„Girl, der Typ trägt Sneaker mit weißen Tennissocken zum Anzug... Bitte sag mir, dass du das nicht ernst meinst.“',
-        titleByGender: {
+    titleByGender: {
       w: 'Die Clean-Girl Ästhetin & High-Maintenance Zynikerin mit Skalpell-Zunge',
       m: 'Der Perfektionist mit Designermöbel-Fimmel & trockenem Zynismus',
       d: 'Die Ästhetik-Ikone mit Luxus-Standard & kompromissloser Qualitätskontrolle',
@@ -552,7 +779,7 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
       d: '„Die Ästhetik dieses Lokals hat meine Seele beleidigt. Wir gehen jetzt woanders hin, wo man Geschmack besitzt.“',
     },
     color: '#78909c',
-    bgGradient: 'linear-gradient(135deg, #455a64, #b0bec5)',
+    bgGradient: '#221c18',
   },
 
   IM: {
@@ -566,7 +793,8 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
     elementEmoji: '🌊',
     symbol: 'Die offene Nordsee / Reißender Strom',
     title: 'Die unberechenbare Nomaden-Königin mit chronischer Bindungsangst',
-    tagline: '„Ich melde mich nicht, weil ich dich hasse, sondern weil ich gerade mein Leben neu erfinde.“',
+    tagline:
+      '„Ich melde mich nicht, weil ich dich hasse, sondern weil ich gerade mein Leben neu erfinde.“',
     description: [
       'Du bist der endlose Ozean im koreanischen Sazu: tiefsinnig, geheimnisvoll, hochintelligent und niemals dauerhaft einzudämmen. Du denkst in weltweiten Maßstäben und hast immer mindestens ein Flugticket gebucht.',
       'Routine ist für dich die Vorstufe zum Tod. Wenn eine Beziehung oder ein Job zu vorhersehbar wird, packt dich die Panik und du willst sofort nach Lissabon oder Bali auswandern.',
@@ -593,8 +821,9 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
     toxicTrait:
       'Taucht für eine Woche ab und meldet sich dann mit einem Foto vom Strand in Portugal, als wäre nichts gewesen.',
     deluluScore: 60,
-    whatsAppSignature: '„Hey sorry, war kurz im Off-Grid-Modus! Was ging die letzten 5 Tage bei dir?“',
-        titleByGender: {
+    whatsAppSignature:
+      '„Hey sorry, war kurz im Off-Grid-Modus! Was ging die letzten 5 Tage bei dir?“',
+    titleByGender: {
       w: 'Die unberechenbare Nomaden-Königin mit chronischer Bindungsangst',
       m: 'Der rastlose Weltenbummler mit Koffer im Flur & chronischem Fluchtreflex',
       d: 'Die ruhelose Entdeckungsseele mit Fernweh-Garantie & Ozean-Vibes',
@@ -615,7 +844,7 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
       d: '„Hab den nächsten Zug ans Meer genommen. Brauche 3 Tage Weite und Wind, bin ab Mittwoch wieder erreichbar.“',
     },
     color: '#1565c0',
-    bgGradient: 'linear-gradient(135deg, #0d47a1, #42a5f5)',
+    bgGradient: '#221c18',
   },
 
   GYE: {
@@ -652,13 +881,14 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
     careerHint: 'Astrologin, Kunsttherapeutin, Lyrikerin, Creative Copywriter, Musikmanagement.',
     loveHint:
       'Braucht einen sanften, liebevollen Beschützer, der ihre Träume ernst nimmt und sie niemals auslacht.',
-    quote: '„Ich spüre eine komische Energie zwischen uns... hast du dein Karma heute schon gecheckt?“',
+    quote:
+      '„Ich spüre eine komische Energie zwischen uns... hast du dein Karma heute schon gecheckt?“',
     toxicTrait:
       'Verliebt sich Hals über Kopf in Typen, die nur „Haha hey“ schreiben, und ignoriert 17 rote Flaggen gleichzeitig.',
     deluluScore: 95,
     whatsAppSignature:
-      '„Mädels... ich glaube, er ist wirklich mein Seelenverwandter. Er hat dieselbe Augenfarbe wie mein Hund!! 🥺✨“',
-        titleByGender: {
+      '„Mädels... ich glaube, er ist wirklich mein Seelenverwandter. Er hat dieselbe Augenfarbe wie mein Hund!!“',
+    titleByGender: {
       w: 'Die mystische Delulu-Queen & hochsensible Traumtänzerin',
       m: 'Der feinfühlige Overthinker mit Indie-Playlist & Situationship-Trauma',
       d: 'Das intuitive Orakel mit feinsten Antennen & Traumwelt-Passierschein',
@@ -674,12 +904,12 @@ export const DAY_MASTERS: Record<DayMasterId, DayMaster> = {
       d: 'Schwimmt in emotionalen Illusionen davon und verwechselt eigene Projektionen mit der Realität.',
     },
     whatsAppSignatureByGender: {
-      w: '„Mädels... ich glaube, er ist wirklich mein Seelenverwandter. Er hat dieselbe Augenfarbe wie mein Hund!! 🥺✨“',
+      w: '„Mädels... ich glaube, er ist wirklich mein Seelenverwandter. Er hat dieselbe Augenfarbe wie mein Hund!!“',
       m: '„Bro, sie hat meine Story nach 3 Minuten gesehen und geliked. Glaubst du, sie denkt an mich oder interpretiere ich zu viel?“',
       d: '„Das Universum hat uns heute genau im richtigen Moment zusammengeführt. Das war kein Zufall, das spüre ich im ganzen Körper.“',
     },
     color: '#0288d1',
-    bgGradient: 'linear-gradient(135deg, #01579b, #29b6f6)',
+    bgGradient: '#221c18',
   },
 };
 
@@ -830,7 +1060,8 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
     score: 45,
     badge: 'Ego-Kollision (갑경충)',
     relationshipType: 'Elementare Kollision (Gap-Gyeong-Chung / 갑경충)',
-    verdict: 'Axt trifft auf Mammutbaum. Er wird dich in den Wahnsinn treiben, aber die Chemie brennt!',
+    verdict:
+      'Axt trifft auf Mammutbaum. Er wird dich in den Wahnsinn treiben, aber die Chemie brennt!',
     description:
       'Zwei geborene Alpha-Leader prallen frontal aufeinander. Keiner gibt auch nur einen Millimeter nach. Ihr könnt zusammen Konzerne gründen oder die Welt erobern – privat braucht ihr getrennte Schlafzimmer und feste Redezeit-Limits.',
     dailyLifeTip:
@@ -861,8 +1092,7 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
       'Ein scheinbar beiläufiger zynischer Kommentar über das Outfit oder die Frisur der anderen.',
     greenFlag:
       'Modisch und ästhetisch das mit großem Abstand bestangezogene Duo im gesamten Freundeskreis.',
-    redFlag:
-      'Zynischer Witz trifft den wunden Punkt – danach tagelange eisige Funkstille im Chat.',
+    redFlag: 'Zynischer Witz trifft den wunden Punkt – danach tagelange eisige Funkstille im Chat.',
     flirtScore: 78,
     stabilityScore: 32,
     toxicScore: 91,
@@ -901,8 +1131,7 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
       'Gyes melancholische Nebelschwaden ersticken Jeongs feines, leidenschaftliches Feuer. Beide neigen dazu, gekränkt zu schweigen statt Klartext zu reden. Eine emotionale Achterbahnfahrt mit hoher Taschentuch-Gefahr.',
     dailyLifeTip:
       'Schreibt euch Briefe oder Sprachnachrichten, wenn das direkte Reden zu geladen ist.',
-    conflictTrigger:
-      'Stundenlanges Anschweigen bei der Frage: „Was hast du denn?“ – „Nichts.“',
+    conflictTrigger: 'Stundenlanges Anschweigen bei der Frage: „Was hast du denn?“ – „Nichts.“',
     greenFlag:
       'Beide spüren kleinste Stimmungsveränderungen des anderen im Raum sofort telepathisch.',
     redFlag:
@@ -910,8 +1139,7 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
     flirtScore: 68,
     stabilityScore: 38,
     toxicScore: 87,
-    memeVerdict:
-      '„Zwei hochsensible Overthinker, die 5 Stunden über ein fehlendes Emoji grübeln.“',
+    memeVerdict: '„Zwei hochsensible Overthinker, die 5 Stunden über ein fehlendes Emoji grübeln.“',
   },
 
   // --- SANGSAENG (Nährende Element-Partnerschaften) ---
@@ -924,17 +1152,14 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
       'Ein unschlagbares Power-Team voller Tatkraft. Gap schätzt Byeongs ansteckende Begeisterung, Byeong profitiert von Gaps Ausdauer und Statur. Zusammen reißt ihr Bäume aus und seid der Mittelpunkt jeder Party.',
     dailyLifeTip:
       'Achtet darauf, euch nicht gegenseitig in verrückte Projekte zu verrennen, bis die Puste ausgeht.',
-    conflictTrigger:
-      'Wenn beide gleichzeitig die Führung für das Wochenendprogramm beanspruchen.',
+    conflictTrigger: 'Wenn beide gleichzeitig die Führung für das Wochenendprogramm beanspruchen.',
     greenFlag:
       'Mitreißende Energie – zusammen seid ihr die absoluten Stimmungskanonen auf jeder WG-Party.',
-    redFlag:
-      'Wer hat das Sagen? Beide wollen vorne am Steuer sitzen und hassen Beifahrer-Rollen.',
+    redFlag: 'Wer hat das Sagen? Beide wollen vorne am Steuer sitzen und hassen Beifahrer-Rollen.',
     flirtScore: 89,
     stabilityScore: 90,
     toxicScore: 28,
-    memeVerdict:
-      '„Wenn ihr beide denselben Club betretet, gehört euch der Laden nach 20 Minuten.“',
+    memeVerdict: '„Wenn ihr beide denselben Club betretet, gehört euch der Laden nach 20 Minuten.“',
   },
 
   EUL_JEONG: {
@@ -944,14 +1169,11 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
     verdict: 'Sanftes Reisig nährt die feine Flamme. Gemütlicher als ein verregneter Sonntag.',
     description:
       'Eine unglaublich feinfühlige, fast poetische Verbindung. Eul bringt charmante Ästhetik und Leichtigkeit ein, Jeong vertieft sie mit Leidenschaft und emotionaler Substanz. Ihr versteht euch oft ohne Worte.',
-    dailyLifeTip:
-      'Ladet Freunde ein, um nicht in eurer kuscheligen Zweier-Kapsel zu versauern.',
+    dailyLifeTip: 'Ladet Freunde ein, um nicht in eurer kuscheligen Zweier-Kapsel zu versauern.',
     conflictTrigger:
       'Wenn beide zu sensibel auf Nuancen reagieren und reale Probleme totschweigen.',
-    greenFlag:
-      'Kuscheldecke, heißer Tee und bedingungslose Geborgenheit an verregneten Sonntagen.',
-    redFlag:
-      'Beide schlucken Ärger wochenlang runter, bis plötzlich die aufgestaute Bombe platzt.',
+    greenFlag: 'Kuscheldecke, heißer Tee und bedingungslose Geborgenheit an verregneten Sonntagen.',
+    redFlag: 'Beide schlucken Ärger wochenlang runter, bis plötzlich die aufgestaute Bombe platzt.',
     flirtScore: 85,
     stabilityScore: 94,
     toxicScore: 22,
@@ -970,15 +1192,12 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
       'Byeong darf Mu nicht hetzen; Mu muss Byeongs Spontanität mit einem Lächeln honorieren.',
     conflictTrigger:
       'Byeong will sofort losfeiern, Mu schnürt noch in aller Seelenruhe 25 Minuten die Schuhe.',
-    greenFlag:
-      'Bodenständige Sicherheit fängt deine verrückten Spontan-Ideen immer liebevoll auf.',
-    redFlag:
-      'Sie will jetzt sofort raus ins Café, er sucht noch in Seelenruhe die Sonnenbrille.',
+    greenFlag: 'Bodenständige Sicherheit fängt deine verrückten Spontan-Ideen immer liebevoll auf.',
+    redFlag: 'Sie will jetzt sofort raus ins Café, er sucht noch in Seelenruhe die Sonnenbrille.',
     flirtScore: 82,
     stabilityScore: 92,
     toxicScore: 25,
-    memeVerdict:
-      '„Die Partymaus und der Couch-Potato: Klingt unmöglich, hält aber ewig.“',
+    memeVerdict: '„Die Partymaus und der Couch-Potato: Klingt unmöglich, hält aber ewig.“',
   },
 
   JEONG_GI: {
@@ -992,10 +1211,8 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
       'Gönnt euch Ausflüge aus der Komfortzone – bucht mal spontan ein Wellness-Wochenende.',
     conflictTrigger:
       'Stille Abrechnung darüber, wer mehr mentale Last und Haushaltsarbeit übernommen hat.',
-    greenFlag:
-      'Pures Geborgenheitsgefühl: Bei euch fühlt sich jeder sofort wie zu Hause.',
-    redFlag:
-      'Stummes Aufrechnen von Gefälligkeiten, statt offen zu sagen, was man braucht.',
+    greenFlag: 'Pures Geborgenheitsgefühl: Bei euch fühlt sich jeder sofort wie zu Hause.',
+    redFlag: 'Stummes Aufrechnen von Gefälligkeiten, statt offen zu sagen, was man braucht.',
     flirtScore: 80,
     stabilityScore: 95,
     toxicScore: 18,
@@ -1010,12 +1227,10 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
     verdict: 'Aus dem Berg wird der edle Stahl gewonnen. Felsenfeste Allianz!',
     description:
       'Hier regieren Verlässlichkeit und Disziplin. Mu bietet den unerschütterlichen Rückhalt, Gyeong setzt Pläne mit eiserner Entschlossenheit um. Ihr baut gemeinsam eine unbezwingbare Festung.',
-    dailyLifeTip:
-      'Vergesst über all den Zielen und Sparplänen nicht das Kuscheln und den Humor.',
+    dailyLifeTip: 'Vergesst über all den Zielen und Sparplänen nicht das Kuscheln und den Humor.',
     conflictTrigger:
       'Wenn beide stur auf ihren Prinzipien beharren und niemand den ersten Schritt zur Versöhnung macht.',
-    greenFlag:
-      'Absprachen stehen bombenfest – kein Zaudern, kein Ghosting, 100% Verlässlichkeit.',
+    greenFlag: 'Absprachen stehen bombenfest – kein Zaudern, kein Ghosting, 100% Verlässlichkeit.',
     redFlag:
       'Romantik und Komplimente geraten unter die Räder – fühlt sich manchmal an wie eine GmbH.',
     flirtScore: 78,
@@ -1038,8 +1253,7 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
       'Sin bemängelt die Ästhetik der Deko, die Gi stundenlang liebevoll arrangiert hat.',
     greenFlag:
       'Verwöhnt dich bedingungslos mit Liebe, während der andere Stil, Glanz und Ästhetik schenkt.',
-    redFlag:
-      'Mäckelt an kleinen Haushaltsdingen herum, die der andere liebevoll vorbereitet hat.',
+    redFlag: 'Mäckelt an kleinen Haushaltsdingen herum, die der andere liebevoll vorbereitet hat.',
     flirtScore: 84,
     stabilityScore: 95,
     toxicScore: 21,
@@ -1058,10 +1272,8 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
       'Bringt mehr emotionale Weichheit ins Spiel – ihr seid Liebende, keine Geschäftspartner.',
     conflictTrigger:
       'Wer das letzte Wort beim großen Zukunftsplan für die nächsten fünf Jahre hat.',
-    greenFlag:
-      'Scharfsinnige Wortgefechte und grandiose Pläne auf absolut gleicher Augenhöhe.',
-    redFlag:
-      'Beide verabscheuen Schwäche – emotionale Tränen werden krampfhaft weggedrückt.',
+    greenFlag: 'Scharfsinnige Wortgefechte und grandiose Pläne auf absolut gleicher Augenhöhe.',
+    redFlag: 'Beide verabscheuen Schwäche – emotionale Tränen werden krampfhaft weggedrückt.',
     flirtScore: 87,
     stabilityScore: 88,
     toxicScore: 29,
@@ -1076,10 +1288,8 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
     verdict: 'Feinste Ästhetik und tiefe Gefühle. Stilvoller geht es kaum.',
     description:
       'Zwei Feingeister unter sich. Sins ästhetischer Anspruch harmoniert herrlich mit Gyes geheimnisvoller Sanftheit. Ihr versteht Blicke und feine Untertöne, die allen anderen verborgen bleiben.',
-    dailyLifeTip:
-      'Meidet giftige äußere Einflüsse und schafft euch eine stilvolle Wohlfühloase.',
-    conflictTrigger:
-      'Wenn beide sich in verletztem Stolz zurückziehen und keiner nachfragt.',
+    dailyLifeTip: 'Meidet giftige äußere Einflüsse und schafft euch eine stilvolle Wohlfühloase.',
+    conflictTrigger: 'Wenn beide sich in verletztem Stolz zurückziehen und keiner nachfragt.',
     greenFlag:
       'Feinsinniges Verständnis für Ästhetik, Kunst und Blicke, die sonst niemand versteht.',
     redFlag:
@@ -1104,13 +1314,11 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
       'Gaps Pünktlichkeitswahn kollidiert mit Ims „Ich lasse mich treiben“-Mentalität.',
     greenFlag:
       'Großzügige Freiheit und gegenseitige Motivation, persönliche Träume mutig umzusetzen.',
-    redFlag:
-      'Pünktlichkeits-Fimmel kollidiert frontal mit der „Ich lass mich treiben“-Attitüde.',
+    redFlag: 'Pünktlichkeits-Fimmel kollidiert frontal mit der „Ich lass mich treiben“-Attitüde.',
     flirtScore: 90,
     stabilityScore: 92,
     toxicScore: 23,
-    memeVerdict:
-      '„Die Weltenbummlerin und die Alpha-Planerin: Zusammen reißt ihr die Welt ein.“',
+    memeVerdict: '„Die Weltenbummlerin und die Alpha-Planerin: Zusammen reißt ihr die Welt ein.“',
   },
 
   GYE_EUL: {
@@ -1126,12 +1334,10 @@ export const SPECIAL_COMPATIBILITY: Record<string, CompatibilityMatrixItem> = {
       'Wenn alltägliche Pflichten (wie die Steuererklärung) vor lauter Harmoniesucht ignoriert werden.',
     greenFlag:
       'Sanfte Geborgenheit ohne Drama – fühlt sich an wie ein friedlicher, sonniger Frühlingstag.',
-    redFlag:
-      'Reale bürokratische Pflichten werden aus Harmoniesucht monatelang verdrängt.',
+    redFlag: 'Reale bürokratische Pflichten werden aus Harmoniesucht monatelang verdrängt.',
     flirtScore: 84,
     stabilityScore: 96,
     toxicScore: 16,
-    memeVerdict:
-      '„Zero Toxic Traits: Bei euch gibt es nur Matcha, Kuscheldecken und Seelenruhe.“',
+    memeVerdict: '„Zero Toxic Traits: Bei euch gibt es nur Matcha, Kuscheldecken und Seelenruhe.“',
   },
 };

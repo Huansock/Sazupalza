@@ -155,7 +155,7 @@
         @let res = sazuService.userSazuResult()!;
         <div id="sazu-result" class="result-container fade-in">
           <!-- Main Archetype Card with Hanok Frame -->
-          <div class="sazu-hero-card" [style.background]="res.dayMaster.bgGradient">
+          <div class="sazu-hero-card">
             <!-- Hanok Corner Brackets (한옥 귀퉁이 장식) -->
             <div class="hanok-corners" aria-hidden="true">
               <span class="corner tl"></span>
@@ -183,7 +183,6 @@
               </div>
               <div class="hero-titles">
                 <div class="element-tag">
-                  <span class="emoji">{{ res.dayMaster.elementEmoji }}</span>
                   <span>{{ res.dayMaster.polarity }}-{{ res.dayMaster.element }}</span>
                 </div>
                 <h3 class="daymaster-name">{{ res.dayMaster.name }}</h3>
@@ -210,7 +209,6 @@
           <!-- K-Aura Star Card (신살 / Kosmischer X-Faktor) -->
           <div class="content-card aura-card">
             <div class="aura-badge-header">
-              <span class="aura-badge-emoji">{{ res.auraStar.emoji }}</span>
               <div class="aura-badge-titles">
                 <span class="aura-mini-tag">K-Aura Stern (신살)</span>
                 <h3 class="aura-name">
@@ -230,6 +228,88 @@
             </div>
           </div>
 
+          <!-- Heutige Tagesenergie (Daily Cosmic Vibe) -->
+          @if (res.dailyEnergy; as daily) {
+            <div class="content-card daily-energy-card">
+              <div class="card-section-title daily-header">
+                <div class="daily-title-badge">
+                  <span class="live-dot" aria-hidden="true"></span>
+                  <span class="daily-badge-text">TÄGLICHER SAZU-VIBE</span>
+                </div>
+                <span class="daily-date">{{ daily.dateFormatted }}</span>
+              </div>
+
+              <div class="daily-score-header">
+                <div class="daily-vibe-info">
+                  <h3 class="daily-vibe-title">{{ daily.vibeTitle }}</h3>
+                  <p class="daily-vibe-summary">{{ daily.vibeSummary }}</p>
+                </div>
+                <div class="daily-score-bubble">
+                  <span class="score-number">{{ daily.energyScore }}%</span>
+                  <span class="score-label">ENERGIE</span>
+                </div>
+              </div>
+
+              <div class="daily-actions-grid">
+                <div class="daily-action-box daily-dos-box">
+                  <h4 class="daily-box-header">
+                    <span class="check-icon">✓</span> Heute perfekt für
+                  </h4>
+                  <ul class="daily-list dos-list">
+                    @for (item of daily.dos; track $index) {
+                      <li>{{ item }}</li>
+                    }
+                  </ul>
+                </div>
+                <div class="daily-action-box daily-donts-box">
+                  <h4 class="daily-box-header"><span class="cross-icon">✕</span> Vorsicht bei</h4>
+                  <ul class="daily-list donts-list">
+                    @for (item of daily.donts; track $index) {
+                      <li>{{ item }}</li>
+                    }
+                  </ul>
+                </div>
+              </div>
+
+              <div class="daily-booster-box">
+                <span class="booster-tag">Glücks-Booster:</span>
+                <p class="booster-text">{{ daily.luckyBooster }}</p>
+              </div>
+            </div>
+          }
+
+          <!-- K-Pop & Promi Sazu Match -->
+          @if (res.celebrities.length > 0) {
+            <div class="content-card celebrity-card">
+              <div class="card-section-title celeb-header">
+                <div class="celeb-header-left">
+                  <span class="celeb-badge">K-POP & PROMI MATCH</span>
+                  <h3>Deine kosmischen Seelenverwandten</h3>
+                </div>
+                <span class="celeb-subhint">Gleiches Day Master</span>
+              </div>
+
+              <p class="celeb-intro">
+                Diese Ikonen teilen dein Geburts-Element
+                <strong>{{ res.dayMaster.polarity }}-{{ res.dayMaster.element }}</strong>
+                und schwingen auf deiner Frequenz:
+              </p>
+
+              <div class="celebrity-grid">
+                @for (celeb of res.celebrities; track $index) {
+                  <div class="celeb-item">
+                    <div class="celeb-top">
+                      <strong class="celeb-name">{{ celeb.name }}</strong>
+                      <span class="celeb-role-badge">{{ celeb.badge }}</span>
+                    </div>
+                    <span class="celeb-group">{{ celeb.groupOrRole }}</span>
+                    <p class="celeb-comment">„{{ celeb.comment }}“</p>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+
           <!-- Reality Check: Toxic Trait, Delulu Meter & WhatsApp Quote -->
           <div class="content-card reality-check-card">
             <div class="card-section-title">
@@ -240,7 +320,6 @@
               <!-- Toxic Trait -->
               <div class="reality-box toxic-box">
                 <div class="reality-header">
-                  <span class="r-icon">🚩</span>
                   <h4>Größter Toxic Trait</h4>
                 </div>
                 <p class="reality-text">{{ res.dayMaster.toxicTrait }}</p>
@@ -575,14 +654,12 @@
             </div>
 
             <div class="duo-person left">
-              <div class="duo-avatar" [style.background]="c.person1.dayMaster.bgGradient">
+              <div class="duo-avatar">
                 <span class="duo-hanja">{{ c.person1.dayMaster.hanja }}</span>
               </div>
               <strong class="duo-name">{{ c.person1.name }}</strong>
               <span class="duo-dm">{{ c.person1.dayMaster.name }}</span>
-              <span class="duo-element"
-                >{{ c.person1.dayMaster.elementEmoji }} {{ c.person1.dayMaster.element }}</span
-              >
+              <span class="duo-element">{{ c.person1.dayMaster.element }}</span>
             </div>
 
             <div class="duo-connector">
@@ -592,14 +669,12 @@
             </div>
 
             <div class="duo-person right">
-              <div class="duo-avatar" [style.background]="c.person2.dayMaster.bgGradient">
+              <div class="duo-avatar">
                 <span class="duo-hanja">{{ c.person2.dayMaster.hanja }}</span>
               </div>
               <strong class="duo-name">{{ c.person2.name }}</strong>
               <span class="duo-dm">{{ c.person2.dayMaster.name }}</span>
-              <span class="duo-element"
-                >{{ c.person2.dayMaster.elementEmoji }} {{ c.person2.dayMaster.element }}</span
-              >
+              <span class="duo-element">{{ c.person2.dayMaster.element }}</span>
             </div>
           </div>
 
@@ -679,15 +754,15 @@
             <div class="flags-grid">
               <div class="flag-box green-flag-box">
                 <div class="flag-title">
-                  <span class="flag-emoji">💚</span>
-                  <h4>Green Flag (Warum es matcht)</h4>
+                  <span class="flag-tag green">Green Flag</span>
+                  <h4>Warum es matcht</h4>
                 </div>
                 <p class="flag-desc">{{ c.greenFlag }}</p>
               </div>
               <div class="flag-box red-flag-box">
                 <div class="flag-title">
-                  <span class="flag-emoji">🚩</span>
-                  <h4>Red Flag Trigger (Zündstoff)</h4>
+                  <span class="flag-tag red">Red Flag</span>
+                  <h4>Zündstoff</h4>
                 </div>
                 <p class="flag-desc">{{ c.redFlag }}</p>
               </div>
@@ -1009,7 +1084,7 @@
                     rel="noopener noreferrer"
                     class="gh-cta-btn"
                   >
-                    <span>📁 Quellcode auf GitHub prüfen (Huansock/Sazupalza)</span> ↗
+                    <span>Quellcode auf GitHub prüfen (Huansock/Sazupalza)</span> ↗
                   </a>
                 </p>
               </div>
@@ -1055,12 +1130,15 @@
                   <li>Recht auf Löschung (Art. 17 DSGVO)</li>
                   <li>Recht auf Einschränkung der Verarbeitung (Art. 18 DSGVO)</li>
                   <li>Recht auf Datenübertragbarkeit (Art. 20 DSGVO)</li>
-                  <li>Widerspruchsrecht (Art. 21 DSGVO)</li>
                 </ul>
-                <p class="legal-note">
-                  <em>Praktischer Hinweis:</em> Da der Betreiber selbst keinerlei personenbezogene
-                  Daten aus den Sazu-Berechnungen speichert oder sammelt, existieren beim Betreiber
-                  keine Daten, die eingesehen oder gelöscht werden könnten.
+              </div>
+
+              <div class="legal-block">
+                <h4>7. Deine Rechte</h4>
+                <p>
+                  Da wir keinerlei personenbezogene Daten speichern, weiterleiten oder analysieren,
+                  liegen uns keine Daten vor, die wir berichtigen, sperren oder löschen könnten. Du
+                  hast jederzeit die vollständige Kontrolle über deine Daten.
                 </p>
               </div>
 
@@ -1092,33 +1170,30 @@
         @if (storyModalType() === 'personal') {
           @if (sazuService.userSazuResult(); as res) {
             <div class="story-preview-wrapper">
-              <!-- 9:16 Personal Sazu Aesthetic Preview Card -->
+              <!-- 9:16 Personal Sazu Character Profile Preview Card -->
               <div class="story-card-916 personal-story-card">
                 <div class="story-top">
-                  <span class="story-kr-badge">KOREANISCHES SAZU (사주)</span>
-                  <h4 class="story-headline">PERSÖNLICHE CHARAKTER-ANALYSE</h4>
+                  <span class="story-kr-badge">KOREANISCHES SAZU • 사주</span>
+                  <h4 class="story-headline">WESENS-ARCHETYP</h4>
                 </div>
 
                 <div class="story-personal-profile">
                   <div class="personal-seal">
                     <span>{{ res.dayMaster.hanja }}</span>
                   </div>
-                  <strong class="personal-name">{{ res.input.name }}</strong>
-                  <span class="personal-element-tag">
-                    {{ res.dayMaster.elementEmoji }} {{ res.dayMaster.polarity }}-{{
-                      res.dayMaster.element
-                    }}
-                    • {{ res.dayMaster.name }}
-                  </span>
-                  <p class="personal-tagline">„{{ res.dayMaster.tagline }}“</p>
+                  <div class="personal-info">
+                    <strong class="personal-name">{{ res.input.name }}</strong>
+                    <span class="personal-element-tag">
+                      {{ res.dayMaster.polarity }}-{{ res.dayMaster.element }} •
+                      {{ res.dayMaster.name }}
+                    </span>
+                  </div>
                 </div>
 
                 <div class="personal-archetype-box">
                   <span class="s-label">ARCHETYP</span>
                   <div class="personal-archetype-title">{{ res.dayMaster.germanArchetype }}</div>
-                  <span class="personal-aura-sub"
-                    >✨ {{ res.auraStar.name }} ({{ res.auraStar.korean }})</span
-                  >
+                  <p class="personal-quote">„{{ res.dayMaster.whatsAppSignature }}“</p>
                 </div>
 
                 <div class="personal-delulu-box">
@@ -1136,13 +1211,25 @@
 
                 <div class="story-flags">
                   <div class="s-flag red">
-                    <span class="s-flag-tag">🚩 Toxic Trait:</span>
+                    <span class="s-flag-tag">Toxic Trait:</span>
                     <p>{{ res.dayMaster.toxicTrait }}</p>
                   </div>
-                  <div class="s-flag quote">
-                    <span class="s-flag-tag">💬 Status:</span>
-                    <p>„{{ res.dayMaster.whatsAppSignature }}“</p>
-                  </div>
+                  @if (res.celebrities && res.celebrities.length > 0) {
+                    <div class="s-flag soulmate">
+                      <span class="s-flag-tag">Soulmate Match:</span>
+                      <p>
+                        {{ res.celebrities[0].name }} ({{ res.celebrities[0].groupOrRole }})
+                        @if (res.celebrities[1]) {
+                          • {{ res.celebrities[1].name }}
+                        }
+                      </p>
+                    </div>
+                  }
+                </div>
+
+                <div class="story-interaction-box">
+                  <span class="story-prompt-text">Stimmt das zu 100%? 👇</span>
+                  <span class="story-prompt-sub">(Hier Sticker platzieren)</span>
                 </div>
 
                 <div class="story-watermark">
@@ -1173,10 +1260,10 @@
         } @else {
           @if (sazuService.partnerResult(); as c) {
             <div class="story-preview-wrapper">
-              <!-- 9:16 Aspect Ratio Aesthetic Preview Card -->
-              <div class="story-card-916">
+              <!-- 9:16 Partner Sazu Compatibility Preview Card -->
+              <div class="story-card-916 partner-story-card">
                 <div class="story-top">
-                  <span class="story-kr-badge">KOREANISCHES SAZU (사주)</span>
+                  <span class="story-kr-badge">KOREANISCHES GUNGHAP • 궁합</span>
                   <h4 class="story-headline">DATING- & CRUSH-RADAR</h4>
                 </div>
 
@@ -1205,18 +1292,18 @@
                     <span class="story-pill">WG: {{ c.stabilityScore }}%</span>
                     <span class="story-pill">Toxic: {{ c.toxicScore }}%</span>
                   </div>
-                  <p class="s-meme-verdict">{{ c.memeVerdict }}</p>
                 </div>
 
                 <div class="story-flags">
-                  <div class="s-flag green">
-                    <span class="s-flag-tag">Green Flag:</span>
-                    <p>{{ c.greenFlag }}</p>
-                  </div>
                   <div class="s-flag red">
-                    <span class="s-flag-tag">Red Flag:</span>
+                    <span class="s-flag-tag">Red Flag Trigger:</span>
                     <p>{{ c.redFlag }}</p>
                   </div>
+                </div>
+
+                <div class="story-interaction-box">
+                  <span class="story-prompt-text">Passt das zu uns? 👇</span>
+                  <span class="story-prompt-sub">(Markiere Partner / Crush)</span>
                 </div>
 
                 <div class="story-watermark">

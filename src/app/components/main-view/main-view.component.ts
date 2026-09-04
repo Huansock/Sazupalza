@@ -264,200 +264,291 @@ export class MainViewComponent {
         return;
       }
 
-      // 1. Draw Deep Aesthetic Gradient Background
-      const bgGrad = ctx.createLinearGradient(0, 0, 1080, 1920);
-      bgGrad.addColorStop(0, '#090d16');
-      bgGrad.addColorStop(0.35, '#1e1b4b');
-      bgGrad.addColorStop(0.7, '#111827');
-      bgGrad.addColorStop(1, '#020617');
-      ctx.fillStyle = bgGrad;
+      // 1. Deep Giwa Dusk Slate Canvas Background (Inspired by Hanok evening photo)
+      ctx.fillStyle = '#181b22';
       ctx.fillRect(0, 0, 1080, 1920);
 
-      // Radial Glow Accents
-      const rad1 = ctx.createRadialGradient(540, 380, 50, 540, 380, 550);
-      rad1.addColorStop(0, 'rgba(139, 92, 246, 0.28)');
-      rad1.addColorStop(1, 'transparent');
-      ctx.fillStyle = rad1;
-      ctx.fillRect(0, 0, 1080, 1920);
-
-      const rad2 = ctx.createRadialGradient(830, 1300, 50, 830, 1300, 500);
-      rad2.addColorStop(0, 'rgba(244, 63, 94, 0.22)');
-      rad2.addColorStop(1, 'transparent');
-      ctx.fillStyle = rad2;
-      ctx.fillRect(0, 0, 1080, 1920);
-
-      // 2. Top Header Brand
-      ctx.textAlign = 'center';
-      ctx.fillStyle = '#f43f5e';
-      ctx.font = 'bold 34px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillText('KOREANISCHES SAZU • 사주팔자', 540, 150);
-
-      ctx.fillStyle = '#94a3b8';
-      ctx.font = '500 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillText('PERSÖNLICHE CHARAKTER-ANALYSE', 540, 205);
-
-      // 3. Profile Card (Hanja Seal, Name, Day Master)
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.07)';
-      ctx.beginPath();
-      ctx.roundRect(80, 255, 920, 365, 32);
-      ctx.fill();
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.16)';
+      // Subtle Traditional Rafter/Roofline motif at top (서까래/처마)
+      ctx.strokeStyle = 'rgba(214, 180, 140, 0.25)';
       ctx.lineWidth = 2;
-      ctx.stroke();
-
-      // Hanja Seal Stamp Circle
       ctx.beginPath();
-      ctx.arc(540, 345, 50, 0, 2 * Math.PI);
-      ctx.fillStyle = 'rgba(244, 63, 94, 0.2)';
-      ctx.fill();
-      ctx.strokeStyle = '#f43f5e';
-      ctx.lineWidth = 3;
+      ctx.moveTo(80, 52);
+      ctx.lineTo(1000, 52);
       ctx.stroke();
 
+      for (let rx = 140; rx <= 940; rx += 80) {
+        ctx.beginPath();
+        ctx.moveTo(rx, 36);
+        ctx.lineTo(rx, 52);
+        ctx.stroke();
+      }
+
+      // 2. Central Hanok Pavilion Card (Warm Hanji Paper with Natural Timber Frame)
+      const px = 60;
+      const py = 70;
+      const pw = 960;
+      const ph = 1780;
+
+      ctx.fillStyle = '#faf6ee';
+      ctx.beginPath();
+      ctx.roundRect(px, py, pw, ph, 24);
+      ctx.fill();
+
+      // Natural timber wood architectural frame (4px)
+      ctx.strokeStyle = '#c59b6d';
+      ctx.lineWidth = 4;
+      ctx.stroke();
+
+      // Delicate inner hairline accent (1.5px)
+      ctx.strokeStyle = '#e8decb';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.roundRect(px + 12, py + 12, pw - 24, ph - 24, 18);
+      ctx.stroke();
+
+      // 3. Top Header: Refined Editorial
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#8c673d';
+      ctx.font = '600 20px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillText('KOREANISCHES SAZU • 사주', 540, 140);
+
+      ctx.fillStyle = '#1f1d1a';
+      ctx.font = '600 32px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillText('WESENS-ARCHETYP & CHARAKTER', 540, 185);
+
+      // Hairline Divider
+      ctx.strokeStyle = '#e6ddd0';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(120, 220);
+      ctx.lineTo(960, 220);
+      ctx.stroke();
+
+      // 4. Person Profile Section (Card Box)
+      const profX = 110;
+      const profY = 245;
+      const profW = 860;
+      const profH = 135;
+
+      ctx.fillStyle = '#f5efe5';
+      ctx.beginPath();
+      ctx.roundRect(profX, profY, profW, profH, 16);
+      ctx.fill();
+      ctx.strokeStyle = '#e4d9c7';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Traditional Vermilion Seal Stamp (낙관 / 인장)
+      const sealX = profX + 24;
+      const sealY = profY + 18;
+      const sealSize = 100;
+      ctx.fillStyle = '#a83232';
+      ctx.beginPath();
+      ctx.roundRect(sealX, sealY, sealSize, sealSize, 12);
+      ctx.fill();
+
+      // Seal Hanja inside
       ctx.textAlign = 'center';
       ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 44px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillText(res.dayMaster.hanja, 540, 360);
+      ctx.font = '700 56px "Apple SD Gothic Neo", "Nanum Myeongjo", serif';
+      ctx.fillText(res.dayMaster.hanja, sealX + sealSize / 2, sealY + 70);
 
-      // Name
-      ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 46px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillText(res.input.name, 540, 445);
-
-      // Element & DayMaster
-      ctx.font = 'bold 30px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillStyle = '#fca5a5';
-      ctx.fillText(
-        `${res.dayMaster.elementEmoji} ${res.dayMaster.polarity}-${res.dayMaster.element} • ${res.dayMaster.name}`,
-        540,
-        495,
-      );
-
-      // Tagline
-      ctx.font = 'italic 25px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillStyle = '#cbd5e1';
-      this.drawWrappedText(ctx, `„${res.dayMaster.tagline}“`, 540, 550, 840, 34, 'center');
-
-      // 4. German Archetype & K-Aura Star Card
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.06)';
-      ctx.beginPath();
-      ctx.roundRect(80, 645, 920, 320, 28);
-      ctx.fill();
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      ctx.textAlign = 'center';
-      ctx.font = 'bold 22px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillStyle = '#94a3b8';
-      ctx.fillText('DEUTSCHER WESENS-ARCHETYP', 540, 695);
-
-      ctx.font = 'bold 38px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillStyle = '#ffffff';
-      ctx.fillText(res.dayMaster.germanArchetype, 540, 745);
-
-      // Divider line
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
-      ctx.beginPath();
-      ctx.moveTo(140, 780);
-      ctx.lineTo(940, 780);
-      ctx.stroke();
-
-      // K-Aura Star
-      ctx.font = 'bold 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillStyle = '#c084fc';
-      ctx.fillText(
-        `K-AURA: ${res.auraStar.emoji} ${res.auraStar.name} (${res.auraStar.korean})`,
-        540,
-        830,
-      );
-
-      ctx.font = 'italic 25px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillStyle = '#e2e8f0';
-      this.drawWrappedText(ctx, `„${res.auraStar.headline}“`, 540, 880, 840, 34, 'center');
-
-      // 5. Delulu Meter Box
-      ctx.fillStyle = 'rgba(99, 102, 241, 0.12)';
-      ctx.beginPath();
-      ctx.roundRect(80, 990, 920, 160, 24);
-      ctx.fill();
-      ctx.strokeStyle = 'rgba(99, 102, 241, 0.4)';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
+      // Name & Day Master Info
       ctx.textAlign = 'left';
-      ctx.font = 'bold 26px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillStyle = '#a5b4fc';
-      ctx.fillText('DELULU-SCORE', 120, 1045);
+      ctx.fillStyle = '#1f1d1a';
+      ctx.font = '600 42px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillText(res.input.name, profX + 145, profY + 60);
+
+      ctx.fillStyle = '#8c673d';
+      ctx.font = '500 24px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillText(
+        `${res.dayMaster.polarity}-${res.dayMaster.element} • ${res.dayMaster.name}`,
+        profX + 145,
+        profY + 102,
+      );
+
+      // 5. Card 1: Hero German Archetype & Relatable Punchline
+      const archX = 110;
+      const archY = 405;
+      const archW = 860;
+      const archH = 265;
+
+      ctx.fillStyle = '#f7f1e7';
+      ctx.beginPath();
+      ctx.roundRect(archX, archY, archW, archH, 16);
+      ctx.fill();
+      ctx.strokeStyle = '#e8decb';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      ctx.fillStyle = '#8c673d';
+      ctx.font = '600 20px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillText('DEUTSCHER WESENS-ARCHETYP', archX + 30, archY + 45);
+
+      ctx.fillStyle = '#1f1d1a';
+      ctx.font = '600 44px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      this.renderWrappedText(
+        ctx,
+        res.dayMaster.germanArchetype,
+        archX + 30,
+        archY + 100,
+        800,
+        54,
+        'left',
+        2,
+      );
+
+      ctx.fillStyle = '#574f46';
+      ctx.font = 'italic 26px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      this.renderWrappedText(
+        ctx,
+        `„${res.dayMaster.whatsAppSignature}“`,
+        archX + 30,
+        archY + 225,
+        800,
+        36,
+        'left',
+        1,
+      );
+
+      // 6. Card 2: Delulu-Meter
+      const delX = 110;
+      const delY = 695;
+      const delW = 860;
+      const delH = 135;
+
+      ctx.fillStyle = '#faf6ee';
+      ctx.beginPath();
+      ctx.roundRect(delX, delY, delW, delH, 16);
+      ctx.fill();
+      ctx.strokeStyle = '#e4d9c7';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      ctx.fillStyle = '#574f46';
+      ctx.font = '600 22px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillText('DELULU-SCORE', delX + 30, delY + 46);
 
       ctx.textAlign = 'right';
-      ctx.font = '900 36px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillStyle = '#ffffff';
-      ctx.fillText(`${res.dayMaster.deluluScore}%`, 960, 1048);
+      ctx.fillStyle = '#1f1d1a';
+      ctx.font = '600 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillText(`${res.dayMaster.deluluScore}%`, delX + delW - 30, delY + 46);
 
-      // Progress bar background
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+      // Delulu minimal bar
+      ctx.textAlign = 'left';
+      ctx.fillStyle = '#e8e0d2';
       ctx.beginPath();
-      ctx.roundRect(120, 1075, 840, 24, 12);
+      ctx.roundRect(delX + 30, delY + 72, 800, 22, 11);
       ctx.fill();
 
-      // Progress bar fill
-      const deluluFillWidth = Math.max(24, Math.min(840, (840 * res.dayMaster.deluluScore) / 100));
-      const deluluGrad = ctx.createLinearGradient(120, 0, 120 + deluluFillWidth, 0);
-      deluluGrad.addColorStop(0, '#6366f1');
-      deluluGrad.addColorStop(1, '#ec4899');
-      ctx.fillStyle = deluluGrad;
+      ctx.fillStyle = '#c59b6d';
+      const deluluW = Math.max(22, Math.min(800, (800 * res.dayMaster.deluluScore) / 100));
       ctx.beginPath();
-      ctx.roundRect(120, 1075, deluluFillWidth, 24, 12);
+      ctx.roundRect(delX + 30, delY + 72, deluluW, 22, 11);
       ctx.fill();
 
-      // 6. Toxic Trait Box
-      ctx.fillStyle = 'rgba(244, 63, 94, 0.12)';
+      // 7. Card 3: Toxic Trait / Roast
+      const toxX = 110;
+      const toxY = 855;
+      const toxW = 860;
+      const toxH = 265;
+
+      ctx.fillStyle = 'rgba(168, 50, 50, 0.05)';
       ctx.beginPath();
-      ctx.roundRect(80, 1175, 920, 220, 24);
+      ctx.roundRect(toxX, toxY, toxW, toxH, 16);
       ctx.fill();
-      ctx.strokeStyle = '#f43f5e';
-      ctx.lineWidth = 2.5;
+      ctx.strokeStyle = 'rgba(168, 50, 50, 0.25)';
+      ctx.lineWidth = 1.5;
       ctx.stroke();
 
-      ctx.textAlign = 'left';
-      ctx.font = 'bold 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillStyle = '#fb7185';
-      ctx.fillText('🚩 GRÖSSTER TOXIC TRAIT:', 120, 1230);
+      ctx.fillStyle = '#a83232';
+      ctx.font = '600 22px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillText('CHARAKTER-SCHATTEN (TOXIC TRAIT)', toxX + 30, toxY + 46);
 
-      ctx.font = '500 25px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillStyle = '#f1f5f9';
-      this.drawWrappedText(ctx, res.dayMaster.toxicTrait, 120, 1280, 840, 36, 'left');
+      ctx.fillStyle = '#2c2523';
+      ctx.font = '400 30px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      this.renderWrappedText(
+        ctx,
+        res.dayMaster.toxicTrait,
+        toxX + 30,
+        toxY + 98,
+        800,
+        42,
+        'left',
+        4,
+      );
 
-      // 7. Status / WhatsApp Quote Box
-      ctx.fillStyle = 'rgba(245, 158, 11, 0.12)';
+      // 8. Card 4: Celebrity Twin / Soulmate
+      const soulX = 110;
+      const soulY = 1145;
+      const soulW = 860;
+      const soulH = 175;
+
+      ctx.fillStyle = '#f5efe5';
       ctx.beginPath();
-      ctx.roundRect(80, 1420, 920, 210, 24);
+      ctx.roundRect(soulX, soulY, soulW, soulH, 16);
       ctx.fill();
-      ctx.strokeStyle = '#f59e0b';
+      ctx.strokeStyle = '#e4d9c7';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      ctx.fillStyle = '#8c673d';
+      ctx.font = '600 22px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillText('K-POP & PROMI SEELENVERWANDTE', soulX + 30, soulY + 46);
+
+      const celebText =
+        res.celebrities && res.celebrities.length > 0
+          ? res.celebrities
+              .slice(0, 3)
+              .map((c) => `${c.name} (${c.groupOrRole})`)
+              .join(' • ')
+          : 'Day Master Resonanz';
+
+      ctx.fillStyle = '#1f1d1a';
+      ctx.font = '600 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      this.renderWrappedText(ctx, celebText, soulX + 30, soulY + 94, 800, 38, 'left', 2);
+
+      // 9. Card 5: Social Interaction / Sticker Call-to-Action
+      const ctaX = 110;
+      const ctaY = 1345;
+      const ctaW = 860;
+      const ctaH = 155;
+
+      ctx.fillStyle = '#f9f4ea';
+      ctx.beginPath();
+      ctx.roundRect(ctaX, ctaY, ctaW, ctaH, 16);
+      ctx.fill();
+      ctx.strokeStyle = '#c59b6d';
       ctx.lineWidth = 2;
       ctx.stroke();
 
-      ctx.textAlign = 'left';
-      ctx.font = 'bold 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillStyle = '#fbbf24';
-      ctx.fillText('💬 STATUS / TYPISCHER SATZ:', 120, 1475);
-
-      ctx.font = 'italic 26px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillStyle = '#f1f5f9';
-      this.drawWrappedText(ctx, `„${res.dayMaster.whatsAppSignature}“`, 120, 1525, 840, 36, 'left');
-
-      // 8. Watermark Footer
       ctx.textAlign = 'center';
-      ctx.font = 'bold 32px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillStyle = '#f43f5e';
-      ctx.fillText('sazu.usogi.org', 540, 1740);
+      ctx.fillStyle = '#1f1d1a';
+      ctx.font = '600 34px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillText('Stimmt das zu 100%? 👇', 540, ctaY + 65);
 
-      ctx.font = '24px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillStyle = '#94a3b8';
-      ctx.fillText('Finde dein persönliches Sazu auf sazu.usogi.org', 540, 1790);
+      ctx.fillStyle = '#8c673d';
+      ctx.font = 'italic 22px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillText('(Platziere hier deinen Umfrage- oder Fragen-Sticker)', 540, ctaY + 112);
 
-      // 9. Export to File / Share
+      // 10. Architectural Hanok Footer
+      ctx.textAlign = 'center';
+      ctx.strokeStyle = '#d6c8b4';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(460, 1660);
+      ctx.lineTo(620, 1660);
+      ctx.stroke();
+
+      ctx.fillStyle = '#8c673d';
+      ctx.font = '600 26px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillText('sazu.usogi.org', 540, 1705);
+
+      ctx.fillStyle = '#78716a';
+      ctx.font = '400 18px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillText('Koreanische Schicksalsanalyse • Teste deinen Archetyp', 540, 1740);
+
+      // Export to File / Share
       canvas.toBlob(async (blob) => {
         if (!blob) {
           this.isGeneratingStory.set(false);
@@ -472,9 +563,9 @@ export class MainViewComponent {
             await navigator.share({
               files: [file],
               title: `${res.input.name}s Sazu-Story`,
-              text: `Mein Sazu: ${res.dayMaster.name} (${res.dayMaster.elementEmoji} ${res.dayMaster.polarity}-${res.dayMaster.element})! 🔮`,
+              text: `Mein Sazu: ${res.dayMaster.name} (${res.dayMaster.polarity}-${res.dayMaster.element})`,
             });
-            this.sazuService.showToast('Story-Bild geteilt! 📸');
+            this.sazuService.showToast('Story-Bild geteilt.');
           } catch {
             this.downloadBlob(blob, fileName);
           }
@@ -505,170 +596,268 @@ export class MainViewComponent {
         return;
       }
 
-      // 1. Draw Deep Aesthetic Gradient Background
-      const bgGrad = ctx.createLinearGradient(0, 0, 1080, 1920);
-      bgGrad.addColorStop(0, '#090d16');
-      bgGrad.addColorStop(0.35, '#1e1b4b');
-      bgGrad.addColorStop(0.7, '#111827');
-      bgGrad.addColorStop(1, '#020617');
-      ctx.fillStyle = bgGrad;
+      // 1. Deep Giwa Dusk Slate Canvas Background (Inspired by Hanok evening photo)
+      ctx.fillStyle = '#181b22';
       ctx.fillRect(0, 0, 1080, 1920);
 
-      // Radial Glow Accents
-      const rad1 = ctx.createRadialGradient(250, 380, 50, 250, 380, 500);
-      rad1.addColorStop(0, 'rgba(244, 63, 94, 0.28)');
-      rad1.addColorStop(1, 'transparent');
-      ctx.fillStyle = rad1;
-      ctx.fillRect(0, 0, 1080, 1920);
-
-      const rad2 = ctx.createRadialGradient(830, 1200, 50, 830, 1200, 500);
-      rad2.addColorStop(0, 'rgba(99, 102, 241, 0.25)');
-      rad2.addColorStop(1, 'transparent');
-      ctx.fillStyle = rad2;
-      ctx.fillRect(0, 0, 1080, 1920);
-
-      // 2. Top Header Brand
-      ctx.textAlign = 'center';
-      ctx.fillStyle = '#f43f5e';
-      ctx.font = 'bold 34px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillText('KOREANISCHES SAZU • GUNGHAP (궁합)', 540, 160);
-
-      ctx.fillStyle = '#94a3b8';
-      ctx.font = '500 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillText('DATING- & CRUSH-RADAR', 540, 215);
-
-      // 3. Names and Matchup Box
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
-      ctx.beginPath();
-      ctx.roundRect(80, 270, 920, 330, 32);
-      ctx.fill();
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.18)';
+      // Subtle Traditional Rafter/Roofline motif at top
+      ctx.strokeStyle = 'rgba(214, 180, 140, 0.25)';
       ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(80, 52);
+      ctx.lineTo(1000, 52);
+      ctx.stroke();
+
+      for (let rx = 140; rx <= 940; rx += 80) {
+        ctx.beginPath();
+        ctx.moveTo(rx, 36);
+        ctx.lineTo(rx, 52);
+        ctx.stroke();
+      }
+
+      // 2. Central Hanok Pavilion Card (Warm Hanji Paper with Natural Timber Frame)
+      const px = 60;
+      const py = 70;
+      const pw = 960;
+      const ph = 1780;
+
+      ctx.fillStyle = '#faf6ee';
+      ctx.beginPath();
+      ctx.roundRect(px, py, pw, ph, 24);
+      ctx.fill();
+
+      // Natural timber wood architectural frame (4px)
+      ctx.strokeStyle = '#c59b6d';
+      ctx.lineWidth = 4;
+      ctx.stroke();
+
+      // Delicate inner hairline accent (1.5px)
+      ctx.strokeStyle = '#e8decb';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.roundRect(px + 12, py + 12, pw - 24, ph - 24, 18);
+      ctx.stroke();
+
+      // 3. Top Header: Modern Hanok Editorial
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#8c673d';
+      ctx.font = '600 20px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillText('KOREANISCHES GUNGHAP • 궁합', 540, 140);
+
+      ctx.fillStyle = '#1f1d1a';
+      ctx.font = '600 32px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillText('DATING- & CRUSH-RADAR', 540, 185);
+
+      // Hairline Divider
+      ctx.strokeStyle = '#e6ddd0';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(120, 220);
+      ctx.lineTo(960, 220);
+      ctx.stroke();
+
+      // 4. Duo Matchup Box
+      const duoX = 110;
+      const duoY = 245;
+      const duoW = 860;
+      const duoH = 145;
+
+      ctx.fillStyle = '#f5efe5';
+      ctx.beginPath();
+      ctx.roundRect(duoX, duoY, duoW, duoH, 16);
+      ctx.fill();
+      ctx.strokeStyle = '#e4d9c7';
+      ctx.lineWidth = 1.5;
       ctx.stroke();
 
       // Person 1
       ctx.textAlign = 'center';
-      ctx.font = 'bold 50px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillStyle = '#ffffff';
-      ctx.fillText(res.person1.name, 280, 420);
-      ctx.font = 'bold 32px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillStyle = '#fca5a5';
-      ctx.fillText(res.person1.dayMaster.name, 280, 475);
-      ctx.font = '28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillStyle = '#94a3b8';
-      ctx.fillText(
-        `${res.person1.dayMaster.elementEmoji} ${res.person1.dayMaster.element}`,
-        280,
-        525,
-      );
+      ctx.fillStyle = '#1f1d1a';
+      ctx.font = '600 40px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillText(res.person1.name, 280, duoY + 60);
 
-      // Match Connector (結)
-      ctx.font = 'bold 44px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillStyle = '#f43f5e';
-      ctx.fillText('結', 540, 465);
+      ctx.fillStyle = '#8c673d';
+      ctx.font = '500 22px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillText(res.person1.dayMaster.name, 280, duoY + 105);
+
+      // Vermilion Bond Seal Stamp (結)
+      const knotX = 495;
+      const knotY = duoY + 28;
+      const knotSize = 90;
+      ctx.fillStyle = '#a83232';
+      ctx.beginPath();
+      ctx.roundRect(knotX, knotY, knotSize, knotSize, 12);
+      ctx.fill();
+
+      ctx.textAlign = 'center';
+      ctx.font = '700 52px "Apple SD Gothic Neo", "Nanum Myeongjo", serif';
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText('結', knotX + knotSize / 2, knotY + 64);
 
       // Person 2
-      ctx.font = 'bold 50px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillStyle = '#ffffff';
-      ctx.fillText(res.person2.name, 800, 420);
-      ctx.font = 'bold 32px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillStyle = '#fca5a5';
-      ctx.fillText(res.person2.dayMaster.name, 800, 475);
-      ctx.font = '28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillStyle = '#94a3b8';
-      ctx.fillText(
-        `${res.person2.dayMaster.elementEmoji} ${res.person2.dayMaster.element}`,
-        800,
-        525,
-      );
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#1f1d1a';
+      ctx.font = '600 40px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillText(res.person2.name, 800, duoY + 60);
 
-      // 4. Big Chemistry Score Circle
+      ctx.fillStyle = '#8c673d';
+      ctx.font = '500 22px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillText(res.person2.dayMaster.name, 800, duoY + 105);
+
+      // 5. Chemistry Hero Box (Score Ring + Badge + Verdict)
+      const chemX = 110;
+      const chemY = 415;
+      const chemW = 860;
+      const chemH = 345;
+
+      ctx.fillStyle = '#faf6ee';
       ctx.beginPath();
-      ctx.arc(540, 770, 130, 0, 2 * Math.PI);
-      ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
+      ctx.roundRect(chemX, chemY, chemW, chemH, 16);
       ctx.fill();
-      ctx.lineWidth = 8;
-      ctx.strokeStyle = res.score >= 85 ? '#10b981' : res.score >= 65 ? '#f59e0b' : '#f43f5e';
+      ctx.strokeStyle = '#e8decb';
+      ctx.lineWidth = 1.5;
       ctx.stroke();
 
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '900 86px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillText(`${res.score}%`, 540, 790);
+      // Chemistry Score Ring
+      ctx.beginPath();
+      ctx.arc(540, chemY + 95, 68, 0, 2 * Math.PI);
+      ctx.fillStyle = '#f5ede0';
+      ctx.fill();
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = '#c59b6d';
+      ctx.stroke();
 
-      ctx.font = 'bold 24px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillStyle = res.score >= 85 ? '#6ee7b7' : res.score >= 65 ? '#fcd34d' : '#fda4af';
-      ctx.fillText('CHEMIE-SCORE', 540, 840);
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#1f1d1a';
+      ctx.font = '700 54px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillText(`${res.score}%`, 540, chemY + 114);
+
+      ctx.font = '600 18px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillStyle = '#8c673d';
+      ctx.fillText('CHEMIE-SCORE', 540, chemY + 195);
 
       // Badge & Verdict
-      ctx.font = 'bold 38px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillStyle = '#ffffff';
-      ctx.fillText(res.badge, 540, 950);
+      ctx.font = '600 32px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillStyle = '#a83232';
+      ctx.fillText(res.badge, 540, chemY + 242);
 
-      ctx.font = 'italic 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillStyle = '#e2e8f0';
-      this.drawWrappedText(ctx, `„${res.verdict}“`, 540, 1005, 880, 40, 'center');
+      ctx.font = 'italic 24px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillStyle = '#3d3832';
+      this.renderWrappedText(ctx, `„${res.verdict}“`, 540, chemY + 288, 800, 34, 'center', 2);
 
-      // 4.5 Clean Spicy Pills
-      ctx.textAlign = 'center';
-      ctx.font = 'bold 26px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillStyle = '#fca5a5';
-      ctx.fillText(
-        `Flirt: ${res.flirtScore}%   •   WG: ${res.stabilityScore}%   •   Toxic: ${res.toxicScore}%`,
-        540,
-        1100,
-      );
+      // 6. Spicy Score Pills
+      const pillY = 785;
+      const pillW = 265;
+      const pillH = 75;
+      const pillGap = 32;
 
-      // 5. Green Flag & Red Flag Box
-      // Green Flag
-      ctx.fillStyle = 'rgba(16, 185, 129, 0.15)';
+      const pills = [
+        { label: `Flirt: ${res.flirtScore}%`, x: 110 },
+        { label: `WG: ${res.stabilityScore}%`, x: 110 + pillW + pillGap },
+        { label: `Toxic: ${res.toxicScore}%`, x: 110 + (pillW + pillGap) * 2 },
+      ];
+
+      for (const p of pills) {
+        ctx.fillStyle = '#f5efe5';
+        ctx.beginPath();
+        ctx.roundRect(p.x, pillY, pillW, pillH, 14);
+        ctx.fill();
+        ctx.strokeStyle = '#e4d9c7';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#1f1d1a';
+        ctx.font = '600 24px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+        ctx.fillText(p.label, p.x + pillW / 2, pillY + 46);
+      }
+
+      // 7. Green Flag Box
+      const gfX = 110;
+      const gfY = 885;
+      const gfW = 860;
+      const gfH = 205;
+
+      ctx.fillStyle = 'rgba(62, 107, 78, 0.06)';
       ctx.beginPath();
-      ctx.roundRect(80, 1145, 920, 185, 24);
+      ctx.roundRect(gfX, gfY, gfW, gfH, 16);
       ctx.fill();
-      ctx.strokeStyle = '#10b981';
-      ctx.lineWidth = 3;
+      ctx.strokeStyle = 'rgba(62, 107, 78, 0.25)';
+      ctx.lineWidth = 1.5;
       ctx.stroke();
 
       ctx.textAlign = 'left';
-      ctx.font = 'bold 30px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillStyle = '#34d399';
-      ctx.fillText('GREEN FLAG:', 120, 1195);
-      ctx.font = '500 26px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillStyle = '#f1f5f9';
-      this.drawWrappedText(ctx, res.greenFlag, 120, 1240, 840, 38, 'left');
+      ctx.fillStyle = '#2e694a';
+      ctx.font = '600 22px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillText('GREEN FLAG', gfX + 30, gfY + 44);
 
-      // Red Flag
-      ctx.fillStyle = 'rgba(244, 63, 94, 0.15)';
+      ctx.fillStyle = '#1e2821';
+      ctx.font = '400 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      this.renderWrappedText(ctx, res.greenFlag, gfX + 30, gfY + 92, 800, 38, 'left', 3);
+
+      // 8. Red Flag Trigger Box
+      const rfX = 110;
+      const rfY = 1115;
+      const rfW = 860;
+      const rfH = 205;
+
+      ctx.fillStyle = 'rgba(168, 50, 50, 0.06)';
       ctx.beginPath();
-      ctx.roundRect(80, 1355, 920, 185, 24);
+      ctx.roundRect(rfX, rfY, rfW, rfH, 16);
       ctx.fill();
-      ctx.strokeStyle = '#f43f5e';
-      ctx.lineWidth = 3;
+      ctx.strokeStyle = 'rgba(168, 50, 50, 0.25)';
+      ctx.lineWidth = 1.5;
       ctx.stroke();
 
-      ctx.font = 'bold 30px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillStyle = '#fb7185';
-      ctx.fillText('RED FLAG TRIGGER:', 120, 1405);
-      ctx.font = '500 26px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillStyle = '#f1f5f9';
-      this.drawWrappedText(ctx, res.redFlag, 120, 1450, 840, 38, 'left');
+      ctx.fillStyle = '#a83232';
+      ctx.font = '600 22px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillText('RED FLAG TRIGGER', rfX + 30, rfY + 44);
 
-      // Meme Verdict Callout
+      ctx.fillStyle = '#2c2523';
+      ctx.font = '400 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      this.renderWrappedText(ctx, res.redFlag, rfX + 30, rfY + 92, 800, 38, 'left', 3);
+
+      // 9. Social Interaction / Sticker Prompt
+      const ctaX = 110;
+      const ctaY = 1345;
+      const ctaW = 860;
+      const ctaH = 155;
+
+      ctx.fillStyle = '#f9f4ea';
+      ctx.beginPath();
+      ctx.roundRect(ctaX, ctaY, ctaW, ctaH, 16);
+      ctx.fill();
+      ctx.strokeStyle = '#c59b6d';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
       ctx.textAlign = 'center';
-      ctx.font = 'bold italic 26px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillStyle = '#fda4af';
-      this.drawWrappedText(ctx, res.memeVerdict, 540, 1595, 880, 36, 'center');
+      ctx.fillStyle = '#1f1d1a';
+      ctx.font = '600 34px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillText('Passt das zu uns? 👇', 540, ctaY + 65);
 
-      // 6. Watermark Footer
+      ctx.fillStyle = '#8c673d';
+      ctx.font = 'italic 22px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillText('(Markiere Partner / Crush & stimme ab)', 540, ctaY + 112);
+
+      // 10. Architectural Hanok Footer
       ctx.textAlign = 'center';
-      ctx.font = 'bold 32px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillStyle = '#f43f5e';
-      ctx.fillText('sazu.usogi.org', 540, 1740);
+      ctx.strokeStyle = '#d6c8b4';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(460, 1660);
+      ctx.lineTo(620, 1660);
+      ctx.stroke();
 
-      ctx.font = '24px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      ctx.fillStyle = '#94a3b8';
-      ctx.fillText('Mach den Test für dich & deinen Crush auf sazu.usogi.org', 540, 1790);
+      ctx.fillStyle = '#8c673d';
+      ctx.font = '600 26px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillText('sazu.usogi.org', 540, 1705);
 
-      // 7. Export to File / Share
+      ctx.fillStyle = '#78716a';
+      ctx.font = '400 18px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillText('Koreanisches Gunghap • Dating & Crush Check', 540, 1740);
+
+      // Export to File / Share
       canvas.toBlob(async (blob) => {
         if (!blob) {
           this.isGeneratingStory.set(false);
@@ -683,9 +872,9 @@ export class MainViewComponent {
             await navigator.share({
               files: [file],
               title: 'Unser Sazu Partner-Check',
-              text: `Unser Sazu Chemie-Score: ${res.score}%! 💘`,
+              text: `Unser Sazu Chemie-Score: ${res.score}%`,
             });
-            this.sazuService.showToast('Story-Bild geteilt! 📸');
+            this.sazuService.showToast('Story-Bild geteilt.');
           } catch {
             this.downloadBlob(blob, fileName);
           }
@@ -700,7 +889,86 @@ export class MainViewComponent {
     }
   }
 
-  private drawWrappedText(
+  /**
+   * Splits text into wrapped lines that strictly respect maxWidth.
+   * Handles long compound words (e.g. German words) by breaking them safely.
+   */
+  private getWrappedLines(
+    ctx: CanvasRenderingContext2D,
+    text: string,
+    maxWidth: number,
+    maxLines: number = 99,
+  ): string[] {
+    const words = text.split(/\s+/);
+    const lines: string[] = [];
+    let currentLine = '';
+    let wasTruncated = false;
+
+    for (let i = 0; i < words.length; i++) {
+      const word = words[i];
+      if (!word) continue;
+
+      // If word itself exceeds maxWidth, split character by character
+      if (ctx.measureText(word).width > maxWidth) {
+        if (currentLine.trim()) {
+          lines.push(currentLine.trim());
+          currentLine = '';
+          if (lines.length >= maxLines) {
+            wasTruncated = true;
+            break;
+          }
+        }
+        for (let c = 0; c < word.length; c++) {
+          const testCharLine = currentLine + word[c];
+          if (ctx.measureText(testCharLine).width > maxWidth && currentLine.length > 0) {
+            lines.push(currentLine.trim());
+            currentLine = word[c];
+            if (lines.length >= maxLines) {
+              wasTruncated = true;
+              break;
+            }
+          } else {
+            currentLine = testCharLine;
+          }
+        }
+        if (wasTruncated) break;
+        currentLine += ' ';
+        continue;
+      }
+
+      const testLine = currentLine ? `${currentLine} ${word}` : word;
+      if (ctx.measureText(testLine).width > maxWidth) {
+        if (currentLine) {
+          lines.push(currentLine.trim());
+          if (lines.length >= maxLines) {
+            wasTruncated = true;
+            break;
+          }
+        }
+        currentLine = word;
+      } else {
+        currentLine = testLine;
+      }
+    }
+
+    if (!wasTruncated && currentLine.trim() && lines.length < maxLines) {
+      lines.push(currentLine.trim());
+    } else if (currentLine.trim() && lines.length >= maxLines) {
+      wasTruncated = true;
+    }
+
+    if (wasTruncated && lines.length > 0) {
+      let last = lines[lines.length - 1];
+      while (last.length > 0 && ctx.measureText(last + '…').width > maxWidth) {
+        last = last.slice(0, -1);
+      }
+      lines[lines.length - 1] = last.trim() + '…';
+    }
+
+    return lines;
+  }
+
+  private renderWrappedText(
     ctx: CanvasRenderingContext2D,
     text: string,
     x: number,
@@ -708,24 +976,16 @@ export class MainViewComponent {
     maxWidth: number,
     lineHeight: number,
     align: CanvasTextAlign = 'center',
-  ): void {
+    maxLines: number = 6,
+  ): number {
     ctx.textAlign = align;
-    const words = text.split(' ');
-    let line = '';
+    const lines = this.getWrappedLines(ctx, text, maxWidth, maxLines);
     let currentY = y;
-
-    for (let n = 0; n < words.length; n++) {
-      const testLine = line + words[n] + ' ';
-      const metrics = ctx.measureText(testLine);
-      if (metrics.width > maxWidth && n > 0) {
-        ctx.fillText(line.trim(), x, currentY);
-        line = words[n] + ' ';
-        currentY += lineHeight;
-      } else {
-        line = testLine;
-      }
+    for (const line of lines) {
+      ctx.fillText(line, x, currentY);
+      currentY += lineHeight;
     }
-    ctx.fillText(line.trim(), x, currentY);
+    return currentY;
   }
 
   private downloadBlob(blob: Blob, fileName: string): void {
@@ -737,7 +997,7 @@ export class MainViewComponent {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    this.sazuService.showToast('Story-Bild erfolgreich heruntergeladen! 📸');
+    this.sazuService.showToast('Story-Bild erfolgreich heruntergeladen.');
   }
 
   getHourInfo() {

@@ -141,4 +141,54 @@ describe('SazuService', () => {
     expect(maleRes.dayMaster.whatsAppSignature).not.toBe(diverseRes.dayMaster.whatsAppSignature);
     expect(femaleRes.dayMaster.title).not.toBe(maleRes.dayMaster.title);
   });
+
+  it('should include matching K-Pop and Promi celebrities in Sazu result', () => {
+    const result = service.calculateSazu({
+      name: 'RM Fan',
+      birthDate: '2024-01-01', // GAP (Yang-Holz)
+      gender: 'm',
+    });
+
+    expect(result.celebrities).toBeDefined();
+    expect(result.celebrities.length).toBeGreaterThanOrEqual(3);
+    const names = result.celebrities.map((c) => c.name);
+    expect(names).toContain('RM (Kim Namjoon)');
+    expect(names).toContain('Jennie');
+
+    // Check structure
+    const firstCeleb = result.celebrities[0];
+    expect(firstCeleb.badge).toBeTruthy();
+    expect(firstCeleb.groupOrRole).toBeTruthy();
+    expect(firstCeleb.comment).toBeTruthy();
+  });
+
+  it('should calculate Heutige Tagesenergie based on user day master', () => {
+    const result = service.calculateSazu({
+      name: 'Test Person',
+      birthDate: '1995-10-24',
+      gender: 'w',
+    });
+
+    expect(result.dailyEnergy).toBeDefined();
+    expect(result.dailyEnergy.energyScore).toBeGreaterThanOrEqual(50);
+    expect(result.dailyEnergy.energyScore).toBeLessThanOrEqual(100);
+    expect(result.dailyEnergy.vibeTitle).toBeTruthy();
+    expect(result.dailyEnergy.vibeSummary).toBeTruthy();
+    expect(result.dailyEnergy.dos.length).toBeGreaterThanOrEqual(2);
+    expect(result.dailyEnergy.donts.length).toBeGreaterThanOrEqual(2);
+    expect(result.dailyEnergy.luckyBooster).toBeTruthy();
+    expect(result.dailyEnergy.dateFormatted).toBeTruthy();
+  });
+
+  it('should calculate predictable element interactions for calculateDailyEnergy', () => {
+    const gapMaster = service.getDayMasterFromDate('2024-01-01'); // GAP (Holz)
+
+    // Reference target date: 2024-01-01 (GAP day -> Holz = Holz -> Spiegel-Tag)
+    const spiegelEnergy = service.calculateDailyEnergy(gapMaster, new Date(2024, 0, 1));
+    expect(spiegelEnergy.vibeTitle).toContain('Spiegel-Tag');
+
+    // Reference target date: 2024-01-10 (GYE day -> Wasser generates Holz -> Auflade-Tag)
+    const aufladeEnergy = service.calculateDailyEnergy(gapMaster, new Date(2024, 0, 10));
+    expect(aufladeEnergy.vibeTitle).toContain('Auflade-Tag');
+  });
 });

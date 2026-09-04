@@ -1,39 +1,40 @@
 :root {
-  --primary: #c22b2b;
-  --primary-dark: #991b1b;
-  --primary-light: #fee2e2;
+  --primary: #8c6239;
+  --primary-dark: #5c3e21;
+  --primary-light: #f5efe6;
   --surface: #ffffff;
-  --surface-subtle: #faf7f2;
-  --surface-border: #e8e2d4;
-  --text-main: #18202c;
-  --text-muted: #5c6878;
-  --text-subtle: #8e9aab;
+  --surface-subtle: #fbf8f2;
+  --surface-border: #e6dfd3;
+  --text-main: #1c1917;
+  --text-muted: #635b52;
+  --text-subtle: #8e8376;
   --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
-  --radius-xl: 26px;
-  --shadow-sm: 0 1px 3px rgba(35, 25, 15, 0.06);
-  --shadow-md: 0 4px 14px rgba(35, 25, 15, 0.07);
-  --shadow-lg: 0 12px 30px rgba(35, 25, 15, 0.1);
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 22px;
+  --shadow-sm: 0 1px 3px rgba(35, 25, 15, 0.04);
+  --shadow-md: 0 4px 12px rgba(35, 25, 15, 0.06);
+  --shadow-lg: 0 8px 24px rgba(35, 25, 15, 0.08);
 
-  /* Hanok & Traditional Korean Palette (한옥 & 전통 한지 배색) */
-  --hanji-paper: #faf7f2;
+  /* Hanok & Traditional Korean Palette (한옥 인테리어 & 한지 배색) */
+  --hanji-paper: #fcfaf7;
   --hanji-card: #ffffff;
-  --hanok-wood: #3e2e21;
-  --hanok-wood-light: #6d5440;
-  --hanok-roof: #151d2a;
-  --hanok-giwa: #283344;
-  --injang-red: #ba1e1e;
-  --injang-bg: rgba(186, 30, 30, 0.08);
-  --dancheong-teal: #1e594f;
-  --dancheong-clay: #b8623d;
-  --brass-gold: #c29944;
-  --hanok-border: #e8e2d4;
+  --hanok-wood: #8c6239;
+  --hanok-wood-light: #b88d5e;
+  --hanok-wood-dark: #3a2b1e;
+  --hanok-roof: #1c1815;
+  --injang-red: #a83232;
+  --injang-bg: rgba(168, 50, 50, 0.08);
+  --bamboo-green: #3d5a45;
+  --dancheong-clay: #a85c3b;
+  --brass-gold: #b58d54;
+  --hanok-border: #e6dfd3;
 
   /* 100% DSGVO-konforme System-Schriftarten */
-  --font-sans:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --font-kr: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Nanum Myeongjo', 'Malgun Gothic', serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-kr:
+    -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Nanum Myeongjo', 'Malgun Gothic',
+    serif;
 }
 
 * {
@@ -61,14 +62,8 @@ body {
   font-family: var(--font-sans);
   font-size: 16px;
   line-height: 1.6;
-  background-color: #090d16;
+  background-color: #1e1b18;
   color: var(--text-main);
-  background-image:
-    radial-gradient(circle at 50% 0%, rgba(211, 47, 47, 0.15), transparent 40%),
-    radial-gradient(circle at 10% 40%, rgba(30, 58, 138, 0.12), transparent 30%),
-    radial-gradient(circle at 90% 80%, rgba(180, 83, 9, 0.1), transparent 35%);
-  background-repeat: no-repeat;
-  background-size: cover;
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -82,16 +77,10 @@ body {
   max-width: 430px;
   min-height: 100dvh;
   background-color: var(--hanji-paper);
-  background-image:
-    linear-gradient(to right, rgba(160, 140, 115, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(160, 140, 115, 0.04) 1px, transparent 1px);
-  background-size: 22px 22px;
   display: flex;
   flex-direction: column;
   position: relative;
-  box-shadow:
-    0 0 50px rgba(0, 0, 0, 0.6),
-    0 0 0 1px rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.35);
   margin: 0 auto;
 }
 

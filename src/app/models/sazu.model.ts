@@ -1,14 +1,5 @@
 export type DayMasterId =
-  | 'GAP'
-  | 'EUL'
-  | 'BYEONG'
-  | 'JEONG'
-  | 'MU'
-  | 'GI'
-  | 'GYEONG'
-  | 'SIN'
-  | 'IM'
-  | 'GYE';
+  'GAP' | 'EUL' | 'BYEONG' | 'JEONG' | 'MU' | 'GI' | 'GYEONG' | 'SIN' | 'IM' | 'GYE';
 
 export type FiveElement = 'Holz' | 'Feuer' | 'Erde' | 'Metall' | 'Wasser';
 export type YinYang = 'Yang' | 'Yin';
@@ -27,6 +18,23 @@ export interface SajuAuraStar {
   tagline: string;
   description: string;
   datingCallout: string;
+}
+
+export interface CelebrityMatch {
+  name: string;
+  groupOrRole: string;
+  badge: string;
+  comment: string;
+}
+
+export interface DailySazuEnergy {
+  dateFormatted: string;
+  energyScore: number; // 0-100%
+  vibeTitle: string;
+  vibeSummary: string;
+  dos: string[];
+  donts: string[];
+  luckyBooster: string;
 }
 
 export interface DayMaster {
@@ -57,6 +65,7 @@ export interface DayMaster {
   archetypeByGender?: Record<'w' | 'm' | 'd', string>;
   toxicTraitByGender?: Record<'w' | 'm' | 'd', string>;
   whatsAppSignatureByGender?: Record<'w' | 'm' | 'd', string>;
+  celebrities?: CelebrityMatch[];
   color: string;
   bgGradient: string;
 }
@@ -72,6 +81,8 @@ export interface UserSazuResult {
   input: UserSazuInput;
   dayMaster: DayMaster;
   auraStar: SajuAuraStar;
+  celebrities: CelebrityMatch[];
+  dailyEnergy: DailySazuEnergy;
   birthDateFormatted: string;
   calculatedAt: Date;
 }

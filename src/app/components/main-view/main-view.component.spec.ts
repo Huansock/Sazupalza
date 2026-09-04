@@ -147,4 +147,61 @@ describe('MainViewComponent - Instagram Story Modal', () => {
     expect(storyBtn).toBeTruthy();
     expect(storyBtn?.textContent).toContain('Als Instagram Story teilen');
   });
+
+  it('should render Heutige Tagesenergie card and K-Pop & Promi match card when Sazu is calculated', async () => {
+    sazuService.calculateSazu({
+      name: 'Sophie',
+      birthDate: '1995-10-24',
+      gender: 'w',
+    });
+
+    const fixture = TestBed.createComponent(MainViewComponent);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    // Daily energy card checks
+    const dailyEnergyCard = compiled.querySelector('.daily-energy-card');
+    expect(dailyEnergyCard).toBeTruthy();
+    expect(dailyEnergyCard?.querySelector('.daily-badge-text')?.textContent).toContain(
+      'TÄGLICHER SAZU-VIBE',
+    );
+    expect(dailyEnergyCard?.querySelector('.score-label')?.textContent).toContain('ENERGIE');
+    expect(dailyEnergyCard?.querySelector('.daily-dos-box')).toBeTruthy();
+    expect(dailyEnergyCard?.querySelector('.daily-donts-box')).toBeTruthy();
+
+    // Celebrity match card checks
+    const celebCard = compiled.querySelector('.celebrity-card');
+    expect(celebCard).toBeTruthy();
+    expect(celebCard?.querySelector('.celeb-badge')?.textContent).toContain('K-POP & PROMI MATCH');
+    const celebItems = celebCard?.querySelectorAll('.celeb-item');
+    expect(celebItems?.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it('should call downloadPersonalStoryCard when storyModalType is personal', async () => {
+    sazuService.calculateSazu({
+      name: 'Maximilian',
+      birthDate: '1990-05-18',
+      gender: 'm',
+    });
+    component.openStoryModal('personal');
+    const spy = vi.spyOn(component, 'downloadPersonalStoryCard');
+    await component.downloadStoryCard();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should call downloadPartnerStoryCard when storyModalType is partner', async () => {
+    sazuService.calculateCompatibility({
+      person1Name: 'Alex',
+      person1BirthDate: '1992-03-15',
+      person2Name: 'Sam',
+      person2BirthDate: '1994-07-20',
+      context: 'crush',
+    });
+    component.openStoryModal('partner');
+    const spy = vi.spyOn(component, 'downloadPartnerStoryCard');
+    await component.downloadStoryCard();
+    expect(spy).toHaveBeenCalled();
+  });
 });
