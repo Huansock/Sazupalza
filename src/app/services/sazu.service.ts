@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import {
   CelebrityMatch,
   CompatibilityResult,
@@ -18,11 +18,13 @@ import {
   SPECIAL_COMPATIBILITY,
   STEM_KEYS,
 } from '../data/sazu-data';
+import { ViralCopyService } from './viral-copy.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SazuService {
+  private readonly viralCopyService = inject(ViralCopyService);
   // Signals for application state
   readonly activeTab = signal<'sazu' | 'partner'>('sazu');
   readonly userSazuResult = signal<UserSazuResult | null>(null);
@@ -308,6 +310,8 @@ export class SazuService {
    * Computes user's Sazu Day Master result
    */
   calculateSazu(input: UserSazuInput): UserSazuResult {
+    const roastMode = this.viralCopyService.normalizeMode(input.roastMode);
+    const normalizedInput: UserSazuInput = { ...input, roastMode };
     const dayMaster = this.getDayMasterFromDate(input.birthDate, input.gender || 'w');
     const auraStar = this.calculateAuraStar(input.birthDate);
     const dailyEnergy = this.calculateDailyEnergy(dayMaster);
@@ -318,13 +322,15 @@ export class SazuService {
     const birthDateFormatted = `${d}.${m}.${y}`;
 
     const result: UserSazuResult = {
-      input,
+      input: normalizedInput,
       dayMaster,
       auraStar,
       celebrities,
       dailyEnergy,
       birthDateFormatted,
       calculatedAt: new Date(),
+      roastMode,
+      viralCopy: this.viralCopyService.buildPersonalCopy(normalizedInput, dayMaster, auraStar),
     };
 
     this.userSazuResult.set(result);
@@ -335,6 +341,8 @@ export class SazuService {
    * Computes compatibility between two persons based on their Day Masters
    */
   calculateCompatibility(input: PartnerCheckInput): CompatibilityResult {
+    const roastMode = this.viralCopyService.normalizeMode(input.roastMode);
+    const normalizedInput: PartnerCheckInput = { ...input, roastMode };
     const dm1 = this.getDayMasterFromDate(input.person1BirthDate);
     const dm2 = this.getDayMasterFromDate(input.person2BirthDate);
 
@@ -348,7 +356,7 @@ export class SazuService {
       compatData = this.generateDynamicCompatibility(dm1, dm2);
     }
 
-    const result: CompatibilityResult = {
+    const baseResult: Omit<CompatibilityResult, 'roastMode' | 'viralCopy'> = {
       person1: {
         name: input.person1Name.trim() || 'Person 1',
         dayMaster: dm1,
@@ -371,6 +379,12 @@ export class SazuService {
       toxicScore: compatData.toxicScore,
       memeVerdict: compatData.memeVerdict,
       context: input.context || 'crush',
+    };
+
+    const result: CompatibilityResult = {
+      ...baseResult,
+      roastMode,
+      viralCopy: this.viralCopyService.buildPartnerCopy(normalizedInput, baseResult),
     };
 
     this.partnerResult.set(result);

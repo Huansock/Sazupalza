@@ -3351,6 +3351,18 @@ input:focus-visible {
   font-weight: 800;
 }
 
+.story-mode-badge {
+  display: inline-flex;
+  margin-right: 4px;
+  padding: 2px 4px;
+  border: 1px solid rgba(239, 105, 117, 0.55);
+  border-radius: 999px;
+  color: #ff8b94;
+  font-size: 5px;
+  letter-spacing: 0.3px;
+  vertical-align: 1px;
+}
+
 .story-personal-profile,
 .story-duo-names {
   border-color: rgba(255, 255, 255, 0.1);
@@ -3439,6 +3451,16 @@ input:focus-visible {
 }
 
 .story-card-916 .s-flag.soulmate .s-flag-tag {
+  color: #e4b8a2;
+}
+
+.story-card-916 .s-flag.receipt {
+  border-color: rgba(228, 184, 162, 0.3);
+  background: rgba(255, 255, 255, 0.045);
+  color: #efe4dd;
+}
+
+.story-card-916 .s-flag.receipt .s-flag-tag {
   color: #e4b8a2;
 }
 

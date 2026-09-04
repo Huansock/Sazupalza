@@ -146,6 +146,12 @@
               </div>
             </div>
 
+            <app-roast-mode-selector
+              [value]="sazuForm().roastMode ?? 'honest'"
+              context="personal"
+              (valueChange)="setSazuRoastMode($event)"
+            />
+
             <!-- Error message if any -->
             @if (sazuFormError()) {
               <div class="error-banner animate-shake">
@@ -171,67 +177,12 @@
         <!-- RESULT CARD: MEIN SAZU -->
         @let res = sazuService.userSazuResult()!;
         <div id="sazu-result" class="result-container fade-in">
-          <section class="viral-result-card personal-viral-card" aria-labelledby="personal-verdict">
-            <div class="viral-topline">
-              <span>ENTHÜLLUNG {{ personalRevealStage() }} VON 4</span>
-              <span class="viral-stamp">판정</span>
-            </div>
-            <div class="reveal-stage-dots" aria-label="Fortschritt der Enthüllung">
-              @for (stage of [1, 2, 3, 4]; track stage) {
-                <span
-                  [class.active]="personalRevealStage() === stage"
-                  [class.done]="personalRevealStage() > stage"
-                ></span>
-              }
-            </div>
-
-            @if (personalRevealStage() === 1) {
-              <div class="stage-panel fade-in">
-                <span class="stage-kicker">AKTE 01 • IDENTITÄT</span>
-                <div class="viral-score-lockup">
-                  <strong class="viral-score">{{ res.dayMaster.deluluScore }}%</strong>
-                  <span class="viral-score-label">DELULU</span>
-                </div>
-                <h2 id="personal-verdict" class="viral-title">
-                  {{ res.dayMaster.germanArchetype }}
-                </h2>
-                <button type="button" class="stage-unlock-btn" (click)="advancePersonalReveal()">
-                  Meine Red Flag entsperren
-                </button>
-              </div>
-            } @else if (personalRevealStage() === 2) {
-              <div class="stage-panel fade-in">
-                <span class="stage-kicker danger">AKTE 02 • DIE RED FLAG</span>
-                <div class="viral-red-flag stage-feature">
-                  <span>VON DEINEN FREUNDINNEN BEREITS BESTÄTIGT</span>
-                  <p>{{ res.dayMaster.toxicTrait }}</p>
-                </div>
-                <button type="button" class="stage-unlock-btn" (click)="advancePersonalReveal()">
-                  Mein Dating-Muster enthüllen
-                </button>
-              </div>
-            } @else if (personalRevealStage() === 3) {
-              <div class="stage-panel fade-in">
-                <span class="stage-kicker">AKTE 03 • ROMANTISCHE BEWEISLAGE</span>
-                <p class="stage-verdict">{{ res.dayMaster.loveHint }}</p>
-                <p class="stage-footnote">
-                  Das war persönlich. Leider war es auch dein Geburtsdatum.
-                </p>
-                <button type="button" class="stage-unlock-btn" (click)="advancePersonalReveal()">
-                  Gruppenchat-Beweis öffnen
-                </button>
-              </div>
-            } @else {
-              <div class="stage-panel fade-in">
-                <span class="stage-kicker">AKTE 04 • LIVE AUS DEM GRUPPENCHAT</span>
-                <blockquote class="stage-chat">{{ res.dayMaster.whatsAppSignature }}</blockquote>
-                <p class="stage-footnote unlocked">Vollständiger Report entsperrt ↓</p>
-                <button type="button" class="viral-share-btn" (click)="openStoryModal('personal')">
-                  Von meiner besten Freundin bestätigen lassen
-                </button>
-              </div>
-            }
-          </section>
+          <app-personal-result
+            [result]="res"
+            [stage]="personalRevealStage()"
+            (advance)="advancePersonalReveal()"
+            (share)="openStoryModal('personal')"
+          />
 
           <p class="session-reset-note">
             Privat bleibt privat: Beim Neuladen wird dieses Ergebnis zurückgesetzt.
@@ -410,7 +361,7 @@
                     <div class="reality-header">
                       <h4>Größter Toxic Trait</h4>
                     </div>
-                    <p class="reality-text">{{ res.dayMaster.toxicTrait }}</p>
+                    <p class="reality-text">{{ res.viralCopy.redFlag }}</p>
                   </div>
 
                   <!-- Delulu Meter -->
@@ -439,7 +390,7 @@
                 <!-- WhatsApp Signature -->
                 <div class="chat-signature-box">
                   <span class="chat-tag">Typischer Satz im Gruppenchat:</span>
-                  <p class="chat-bubble-text">{{ res.dayMaster.whatsAppSignature }}</p>
+                  <p class="chat-bubble-text">{{ res.viralCopy.groupChatEvidence }}</p>
                 </div>
               </div>
 
@@ -573,9 +524,9 @@
                           ' (' +
                           res.dayMaster.element +
                           ')! Toxic Trait: ' +
-                          res.dayMaster.toxicTrait +
+                          res.viralCopy.redFlag +
                           ' | „' +
-                          res.dayMaster.whatsAppSignature +
+                          res.viralCopy.groupChatEvidence +
                           '“'
                       )
                     "
@@ -705,6 +656,12 @@
               </div>
             </div>
 
+            <app-roast-mode-selector
+              [value]="partnerForm().roastMode ?? 'honest'"
+              context="partner"
+              (valueChange)="setPartnerRoastMode($event)"
+            />
+
             @if (partnerFormError()) {
               <div class="error-banner animate-shake">
                 <span>{{ partnerFormError() }}</span>
@@ -730,78 +687,12 @@
         @let c = sazuService.partnerResult()!;
         @let contextCopy = getPartnerContextCopy(c);
         <div id="partner-result" class="result-container fade-in">
-          <section class="viral-result-card partner-viral-card" aria-labelledby="partner-verdict">
-            <div class="viral-topline">
-              <span>{{ contextCopy.kicker }} • {{ partnerRevealStage() }}/4</span>
-              <span class="viral-stamp">궁합</span>
-            </div>
-            <div class="reveal-stage-dots" aria-label="Fortschritt der Enthüllung">
-              @for (stage of [1, 2, 3, 4]; track stage) {
-                <span
-                  [class.active]="partnerRevealStage() === stage"
-                  [class.done]="partnerRevealStage() > stage"
-                ></span>
-              }
-            </div>
-            <div class="partner-viral-names">
-              {{ c.person1.name }} <span>×</span> {{ c.person2.name }}
-            </div>
-
-            @if (partnerRevealStage() === 1) {
-              <div class="stage-panel fade-in">
-                <span class="stage-kicker">AKTE 01 • ERSTER VERDACHT</span>
-                <div class="viral-score-lockup">
-                  <strong class="viral-score">{{ c.score }}%</strong>
-                  <span class="viral-score-label">MATCH</span>
-                </div>
-                <h2 id="partner-verdict" class="viral-title context-title">
-                  {{ contextCopy.headline }}
-                </h2>
-                <button type="button" class="stage-unlock-btn" (click)="advancePartnerReveal()">
-                  Die drei gefährlichen Zahlen zeigen
-                </button>
-              </div>
-            } @else if (partnerRevealStage() === 2) {
-              <div class="stage-panel fade-in">
-                <span class="stage-kicker">AKTE 02 • CHEMIE-LABOR</span>
-                <div class="viral-metrics" aria-label="Chemie-Zusammenfassung">
-                  <div>
-                    <strong>{{ c.flirtScore }}%</strong><span>Anziehung</span>
-                  </div>
-                  <div>
-                    <strong>{{ c.stabilityScore }}%</strong><span>Alltag</span>
-                  </div>
-                  <div>
-                    <strong>{{ c.toxicScore }}%</strong><span>Drama</span>
-                  </div>
-                </div>
-                <p class="partner-viral-verdict">{{ contextCopy.verdict }}</p>
-                <button type="button" class="stage-unlock-btn" (click)="advancePartnerReveal()">
-                  Unsere Red Flag entsperren
-                </button>
-              </div>
-            } @else if (partnerRevealStage() === 3) {
-              <div class="stage-panel fade-in">
-                <span class="stage-kicker danger">AKTE 03 • {{ contextCopy.redFlagLabel }}</span>
-                <div class="viral-red-flag stage-feature">
-                  <p>{{ c.redFlag }}</p>
-                </div>
-                <button type="button" class="stage-unlock-btn" (click)="advancePartnerReveal()">
-                  Das endgültige Urteil öffnen
-                </button>
-              </div>
-            } @else {
-              <div class="stage-panel fade-in">
-                <span class="stage-kicker">AKTE 04 • DAS URTEIL</span>
-                <p class="stage-verdict">{{ contextCopy.verdict }}</p>
-                <p class="stage-meme">{{ c.memeVerdict }}</p>
-                <p class="stage-footnote unlocked">Vollständiger Chemie-Report entsperrt ↓</p>
-                <button type="button" class="viral-share-btn" (click)="openStoryModal('partner')">
-                  Beweise es im Gruppenchat
-                </button>
-              </div>
-            }
-          </section>
+          <app-partner-result
+            [result]="c"
+            [stage]="partnerRevealStage()"
+            (advance)="advancePartnerReveal()"
+            (share)="openStoryModal('partner')"
+          />
 
           <p class="session-reset-note">
             Privat bleibt privat: Beim Neuladen wird dieses Ergebnis zurückgesetzt.
@@ -933,7 +824,7 @@
                       <span class="flag-tag red">Red Flag</span>
                       <h4>{{ contextCopy.redFlagLabel }}</h4>
                     </div>
-                    <p class="flag-desc">{{ c.redFlag }}</p>
+                    <p class="flag-desc">{{ c.viralCopy.redFlag }}</p>
                   </div>
                 </div>
               </div>
@@ -1049,562 +940,545 @@
 
   <!-- Modal: Korean Culture Explained -->
   @if (showCultureModal()) {
-    <div class="modal-backdrop fade-in" (click)="closeCultureModal()">
-      <div
-        class="modal-sheet animate-slide-up"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="culture-modal-title"
-        tabindex="-1"
-        (click)="$event.stopPropagation()"
-      >
-        <div class="modal-header">
-          <div class="modal-tag">Koreanische Philosophie</div>
-          <h3 id="culture-modal-title" class="modal-title">Was ist Sazu (사주팔자)?</h3>
-          <button
-            type="button"
-            class="modal-close-btn"
-            data-modal-initial-focus
-            (click)="closeCultureModal()"
-          >
-            ✕
-          </button>
-        </div>
-        <div class="modal-body">
-          <p>
-            <strong>Sazu (사주)</strong> bedeutet wörtlich <em>„Vier Säulen“</em> (Jahr, Monat, Tag
-            und Stunde deiner Geburt) und <strong>Palza (팔자)</strong> steht für die
-            <em>„Acht Schriftzeichen“</em>.
-          </p>
-          <div class="modal-highlight-box">
-            <h4>Der entscheidende Unterschied zum westlichen Horoskop:</h4>
-            <p>
-              Während im Westen dein <strong>Geburtsmonat</strong> (Sternzeichen wie Widder, Waage
-              etc.) im Zentrum steht, ist im koreanischen Sazu der
-              <strong>Tagesmeister (일간 / Ilgan)</strong> der absolute Herrscher deiner Seele.
-            </p>
-          </div>
-          <p>
-            Es gibt genau <strong>10 Tagesmeister</strong>, zusammengesetzt aus den 5 Elementen
-            (Holz, Feuer, Erde, Metall, Wasser) und Yin & Yang.
-          </p>
-          <p>
-            <strong>Gunghap (궁합)</strong> wiederum ist die Kunst, die Anziehung, Reibung und
-            Harmonie zwischen den Elementen zweier Menschen zu entschlüsseln.
-          </p>
-        </div>
-        <button type="button" class="modal-action-btn" (click)="closeCultureModal()">
-          Verstanden, zurück zur Analyse
+    <app-bottom-sheet labelledBy="culture-modal-title" (dismiss)="closeCultureModal()">
+      <div class="modal-header">
+        <div class="modal-tag">Koreanische Philosophie</div>
+        <h3 id="culture-modal-title" class="modal-title">Was ist Sazu (사주팔자)?</h3>
+        <button
+          type="button"
+          class="modal-close-btn"
+          data-modal-initial-focus
+          (click)="closeCultureModal()"
+        >
+          ✕
         </button>
       </div>
-    </div>
+      <div class="modal-body">
+        <p>
+          <strong>Sazu (사주)</strong> bedeutet wörtlich <em>„Vier Säulen“</em> (Jahr, Monat, Tag
+          und Stunde deiner Geburt) und <strong>Palza (팔자)</strong> steht für die
+          <em>„Acht Schriftzeichen“</em>.
+        </p>
+        <div class="modal-highlight-box">
+          <h4>Der entscheidende Unterschied zum westlichen Horoskop:</h4>
+          <p>
+            Während im Westen dein <strong>Geburtsmonat</strong> (Sternzeichen wie Widder, Waage
+            etc.) im Zentrum steht, ist im koreanischen Sazu der
+            <strong>Tagesmeister (일간 / Ilgan)</strong> der absolute Herrscher deiner Seele.
+          </p>
+        </div>
+        <p>
+          Es gibt genau <strong>10 Tagesmeister</strong>, zusammengesetzt aus den 5 Elementen (Holz,
+          Feuer, Erde, Metall, Wasser) und Yin & Yang.
+        </p>
+        <p>
+          <strong>Gunghap (궁합)</strong> wiederum ist die Kunst, die Anziehung, Reibung und
+          Harmonie zwischen den Elementen zweier Menschen zu entschlüsseln.
+        </p>
+      </div>
+      <button type="button" class="modal-action-btn" (click)="closeCultureModal()">
+        Verstanden, zurück zur Analyse
+      </button>
+    </app-bottom-sheet>
   }
 
   <!-- Modal: Impressum & Datenschutz -->
   @if (activeLegalModal(); as legalType) {
-    <div class="modal-backdrop fade-in" (click)="closeLegal()">
-      <div
-        class="modal-sheet legal-sheet animate-slide-up"
-        role="dialog"
-        aria-modal="true"
-        aria-label="Rechtliche Hinweise"
-        tabindex="-1"
-        (click)="$event.stopPropagation()"
-      >
-        <div class="modal-header">
-          <div class="modal-tag">Rechtliche Hinweise (DE / DSGVO)</div>
-          <div class="legal-toggle-bar">
-            <button
-              type="button"
-              class="legal-tab-btn"
-              [class.active]="legalType === 'impressum'"
-              (click)="openLegal('impressum')"
-            >
-              Impressum
-            </button>
-            <button
-              type="button"
-              class="legal-tab-btn"
-              [class.active]="legalType === 'datenschutz'"
-              (click)="openLegal('datenschutz')"
-            >
-              Datenschutz
-            </button>
-          </div>
+    <app-bottom-sheet ariaLabel="Rechtliche Hinweise" sheetClass="legal" (dismiss)="closeLegal()">
+      <div class="modal-header">
+        <div class="modal-tag">Rechtliche Hinweise (DE / DSGVO)</div>
+        <div class="legal-toggle-bar">
           <button
             type="button"
-            class="modal-close-btn"
-            data-modal-initial-focus
-            (click)="closeLegal()"
+            class="legal-tab-btn"
+            [class.active]="legalType === 'impressum'"
+            (click)="openLegal('impressum')"
           >
-            ✕
+            Impressum
+          </button>
+          <button
+            type="button"
+            class="legal-tab-btn"
+            [class.active]="legalType === 'datenschutz'"
+            (click)="openLegal('datenschutz')"
+          >
+            Datenschutz
           </button>
         </div>
-
-        <div class="modal-body legal-content-body">
-          <!-- IMPRESSUM -->
-          @if (legalType === 'impressum') {
-            <div class="legal-text-wrapper">
-              <h3 class="legal-h3">Impressum</h3>
-
-              <div class="legal-block">
-                <h4>Angaben gemäß § 5 DDG (Digitale-Dienste-Gesetz):</h4>
-                <p class="legal-address">
-                  <strong>Wooseok Yang</strong><br />
-                  Hoferstraße 54A<br />
-                  04317 Leipzig<br />
-                  Deutschland
-                </p>
-              </div>
-
-              <div class="legal-block">
-                <h4>Kontakt:</h4>
-                <p>
-                  E-Mail:
-                  <a href="mailto:wooseok.yang@proton.me" class="inline-link"
-                    >wooseok.yang&#64;proton.me</a
-                  ><br />
-                  Online-Kontakt / GitHub Issues:
-                  <a
-                    href="https://github.com/Huansock/Sazupalza/issues"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="inline-link"
-                    >github.com/Huansock/Sazupalza/issues</a
-                  >
-                </p>
-              </div>
-
-              <div class="legal-block">
-                <h4>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV:</h4>
-                <p class="legal-address">
-                  <strong>Wooseok Yang</strong><br />
-                  Hoferstraße 54A<br />
-                  04317 Leipzig<br />
-                  Deutschland
-                </p>
-              </div>
-
-              <div class="legal-block highlight-disclaimer">
-                <h4>Haftungsausschluss für Unterhaltungsangebote (Disclaimer):</h4>
-                <p>
-                  Die auf dieser Webseite bereitgestellten Inhalte zur koreanischen Sazu-Astrologie
-                  (Tagesmeister) und Gunghap-Partneranalyse dienen ausschließlich der allgemeinen
-                  Unterhaltung, dem kulturellen Austausch und humorvollen Zwecken.
-                </p>
-                <p>
-                  Sie stellen zu keinem Zeitpunkt eine Lebensberatung, psychologische Beratung,
-                  Partnerschaftsmediation oder medizinische bzw. finanzielle Auskunft dar. Wichtige
-                  Entscheidungen im echten Leben (z. B. Heirat, Trennungen, Kündigungen oder
-                  Investitionen) sollten niemals ausschließlich auf der Grundlage dieser
-                  astrologischen Spaß-Ergebnisse getroffen werden.
-                </p>
-              </div>
-
-              <div class="legal-block">
-                <h4>Urheberrecht & Open Source:</h4>
-                <p>
-                  Diese Anwendung ist als Open-Source-Software lizenziert. Der gesamte Quellcode ist
-                  öffentlich auf GitHub einsehbar.
-                </p>
-              </div>
-            </div>
-          }
-
-          <!-- DATENSCHUTZ -->
-          @if (legalType === 'datenschutz') {
-            <div class="legal-text-wrapper">
-              <h3 class="legal-h3">Datenschutzerklärung</h3>
-
-              <div class="legal-block">
-                <h4>1. Datenschutz auf einen Blick</h4>
-                <p>
-                  Der Schutz Ihrer persönlichen Daten ist uns ein wichtiges Anliegen. Nachfolgend
-                  informieren wir Sie darüber, welche Daten verarbeitet werden – und vor allem,
-                  welche Daten wir <em>nicht</em> erheben.
-                </p>
-              </div>
-
-              <div class="legal-block">
-                <h4>2. Verantwortliche Stelle (Art. 4 Nr. 7 DSGVO):</h4>
-                <p class="legal-address">
-                  <strong>Wooseok Yang</strong><br />
-                  Hoferstraße 54A<br />
-                  04317 Leipzig<br />
-                  Deutschland<br />
-                  E-Mail:
-                  <a href="mailto:wooseok.yang@proton.me" class="inline-link"
-                    >wooseok.yang&#64;proton.me</a
-                  ><br />
-                  GitHub:
-                  <a
-                    href="https://github.com/Huansock/Sazupalza"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="inline-link"
-                    >github.com/Huansock/Sazupalza</a
-                  >
-                </p>
-              </div>
-
-              <div class="legal-block secure-box">
-                <h4>3. 100% Lokale Datenverarbeitung (Client-Side Only)</h4>
-                <p>
-                  Alle von Ihnen eingegebenen Daten (Vorname/Spitzname, Geburtsdatum, Uhrzeit,
-                  Geschlecht) werden
-                  <strong>ausschließlich lokal im Webbrowser auf Ihrem Endgerät</strong>
-                  verarbeitet.
-                </p>
-                <p>
-                  Es erfolgt
-                  <strong
-                    >zu keinem Zeitpunkt eine Übertragung, Speicherung oder serverseitige
-                    Verarbeitung</strong
-                  >
-                  Ihrer Eingaben. Sobald Sie die Seite neu laden oder den Browser schließen, sind
-                  die temporär im Speicher gehaltenen Daten vollständig gelöscht.
-                </p>
-              </div>
-
-              <div class="legal-block open-source-highlight">
-                <h4>4. 100% Open-Source-Transparenz (GitHub)</h4>
-                <p>
-                  Dieses Projekt ist vollständig Open Source. Der komplette Programmcode ist für
-                  jedermann öffentlich einsehbar. Wer sich selbst davon überzeugen möchte, dass
-                  keinerlei persönliche Daten an Server oder Dritte gesendet werden, kann jede Zeile
-                  Code direkt im GitHub-Repository überprüfen:
-                </p>
-                <p class="gh-link-row">
-                  <a
-                    href="https://github.com/Huansock/Sazupalza"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="gh-cta-btn"
-                  >
-                    <span>Quellcode auf GitHub prüfen (Huansock/Sazupalza)</span> ↗
-                  </a>
-                </p>
-              </div>
-
-              <div class="legal-block">
-                <h4>5. Keine Cookies & kein Tracking</h4>
-                <p>
-                  Diese Webseite setzt <strong>keine Tracking-Cookies</strong>, keine Analyse-Tools
-                  (wie Google Analytics) und keine Werbe-Pixel ein. Es werden auch keine externen
-                  Webfonts (wie Google Fonts) dynamisch nachgeladen, sondern ausschließlich lokale
-                  System-Schriftarten verwendet. Daher ist kein Cookie-Banner erforderlich.
-                </p>
-              </div>
-
-              <div class="legal-block">
-                <h4>6. Hosting über Cloudflare Pages & Server-Log-Dateien</h4>
-                <p>
-                  Diese Website wird über <strong>Cloudflare Pages</strong> gehostet
-                  (Dienstanbieter: Cloudflare, Inc., 101 Townsend St, San Francisco, CA 94107, USA).
-                </p>
-                <p>
-                  Beim Aufruf der Website erfasst Cloudflare technisch unvermeidbare
-                  Server-Log-Dateien (z. B. IP-Adresse des anfragenden Geräts, Datum und Uhrzeit der
-                  Anfrage, aufgerufene URL, HTTP-Statuscode, Browsertyp und Betriebssystem). Dies
-                  ist technisch erforderlich, um die Website über das weltweite Content Delivery
-                  Network (CDN) sicher und performant auszuliefern sowie DDoS-Angriffe und
-                  Sicherheitsbedrohungen abzuwehren.
-                </p>
-                <p>
-                  Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einer
-                  sicheren, stabilen und schnellen Bereitstellung unseres Online-Angebots).
-                  Cloudflare ist unter dem <em>EU-US Data Privacy Framework</em> zertifiziert und
-                  nutzt EU-Standardvertragsklauseln (SCC).
-                </p>
-              </div>
-
-              <div class="legal-block">
-                <h4>7. Ihre Rechte als betroffene Person</h4>
-                <p>Nach der DSGVO stehen Ihnen folgende Rechte zu:</p>
-                <ul class="legal-ul">
-                  <li>Recht auf Auskunft (Art. 15 DSGVO)</li>
-                  <li>Recht auf Berichtigung (Art. 16 DSGVO)</li>
-                  <li>Recht auf Löschung (Art. 17 DSGVO)</li>
-                  <li>Recht auf Einschränkung der Verarbeitung (Art. 18 DSGVO)</li>
-                  <li>Recht auf Datenübertragbarkeit (Art. 20 DSGVO)</li>
-                </ul>
-              </div>
-
-              <div class="legal-block">
-                <h4>7. Deine Rechte</h4>
-                <p>
-                  Da wir keinerlei personenbezogene Daten speichern, weiterleiten oder analysieren,
-                  liegen uns keine Daten vor, die wir berichtigen, sperren oder löschen könnten. Du
-                  hast jederzeit die vollständige Kontrolle über deine Daten.
-                </p>
-              </div>
-
-              <div class="legal-block highlight-disclaimer">
-                <h4>8. Unterhaltungs-Haftungsausschluss</h4>
-                <p>
-                  Alle astrologischen Berechnungen dienen ausschließlich Unterhaltungszwecken und
-                  stellen keine verbindliche Lebens- oder Partnerschaftsberatung dar.
-                </p>
-              </div>
-            </div>
-          }
-        </div>
-
-        <button type="button" class="modal-action-btn" (click)="closeLegal()">Schließen</button>
+        <button
+          type="button"
+          class="modal-close-btn"
+          data-modal-initial-focus
+          (click)="closeLegal()"
+        >
+          ✕
+        </button>
       </div>
-    </div>
+
+      <div class="modal-body legal-content-body">
+        <!-- IMPRESSUM -->
+        @if (legalType === 'impressum') {
+          <div class="legal-text-wrapper">
+            <h3 class="legal-h3">Impressum</h3>
+
+            <div class="legal-block">
+              <h4>Angaben gemäß § 5 DDG (Digitale-Dienste-Gesetz):</h4>
+              <p class="legal-address">
+                <strong>Wooseok Yang</strong><br />
+                Hoferstraße 54A<br />
+                04317 Leipzig<br />
+                Deutschland
+              </p>
+            </div>
+
+            <div class="legal-block">
+              <h4>Kontakt:</h4>
+              <p>
+                E-Mail:
+                <a href="mailto:wooseok.yang@proton.me" class="inline-link"
+                  >wooseok.yang&#64;proton.me</a
+                ><br />
+                Online-Kontakt / GitHub Issues:
+                <a
+                  href="https://github.com/Huansock/Sazupalza/issues"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-link"
+                  >github.com/Huansock/Sazupalza/issues</a
+                >
+              </p>
+            </div>
+
+            <div class="legal-block">
+              <h4>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV:</h4>
+              <p class="legal-address">
+                <strong>Wooseok Yang</strong><br />
+                Hoferstraße 54A<br />
+                04317 Leipzig<br />
+                Deutschland
+              </p>
+            </div>
+
+            <div class="legal-block highlight-disclaimer">
+              <h4>Haftungsausschluss für Unterhaltungsangebote (Disclaimer):</h4>
+              <p>
+                Die auf dieser Webseite bereitgestellten Inhalte zur koreanischen Sazu-Astrologie
+                (Tagesmeister) und Gunghap-Partneranalyse dienen ausschließlich der allgemeinen
+                Unterhaltung, dem kulturellen Austausch und humorvollen Zwecken.
+              </p>
+              <p>
+                Sie stellen zu keinem Zeitpunkt eine Lebensberatung, psychologische Beratung,
+                Partnerschaftsmediation oder medizinische bzw. finanzielle Auskunft dar. Wichtige
+                Entscheidungen im echten Leben (z. B. Heirat, Trennungen, Kündigungen oder
+                Investitionen) sollten niemals ausschließlich auf der Grundlage dieser
+                astrologischen Spaß-Ergebnisse getroffen werden.
+              </p>
+            </div>
+
+            <div class="legal-block">
+              <h4>Urheberrecht & Open Source:</h4>
+              <p>
+                Diese Anwendung ist als Open-Source-Software lizenziert. Der gesamte Quellcode ist
+                öffentlich auf GitHub einsehbar.
+              </p>
+            </div>
+          </div>
+        }
+
+        <!-- DATENSCHUTZ -->
+        @if (legalType === 'datenschutz') {
+          <div class="legal-text-wrapper">
+            <h3 class="legal-h3">Datenschutzerklärung</h3>
+
+            <div class="legal-block">
+              <h4>1. Datenschutz auf einen Blick</h4>
+              <p>
+                Der Schutz Ihrer persönlichen Daten ist uns ein wichtiges Anliegen. Nachfolgend
+                informieren wir Sie darüber, welche Daten verarbeitet werden – und vor allem, welche
+                Daten wir <em>nicht</em> erheben.
+              </p>
+            </div>
+
+            <div class="legal-block">
+              <h4>2. Verantwortliche Stelle (Art. 4 Nr. 7 DSGVO):</h4>
+              <p class="legal-address">
+                <strong>Wooseok Yang</strong><br />
+                Hoferstraße 54A<br />
+                04317 Leipzig<br />
+                Deutschland<br />
+                E-Mail:
+                <a href="mailto:wooseok.yang@proton.me" class="inline-link"
+                  >wooseok.yang&#64;proton.me</a
+                ><br />
+                GitHub:
+                <a
+                  href="https://github.com/Huansock/Sazupalza"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-link"
+                  >github.com/Huansock/Sazupalza</a
+                >
+              </p>
+            </div>
+
+            <div class="legal-block secure-box">
+              <h4>3. 100% Lokale Datenverarbeitung (Client-Side Only)</h4>
+              <p>
+                Alle von Ihnen eingegebenen Daten (Vorname/Spitzname, Geburtsdatum, Uhrzeit,
+                Geschlecht) werden
+                <strong>ausschließlich lokal im Webbrowser auf Ihrem Endgerät</strong>
+                verarbeitet.
+              </p>
+              <p>
+                Es erfolgt
+                <strong
+                  >zu keinem Zeitpunkt eine Übertragung, Speicherung oder serverseitige
+                  Verarbeitung</strong
+                >
+                Ihrer Eingaben. Sobald Sie die Seite neu laden oder den Browser schließen, sind die
+                temporär im Speicher gehaltenen Daten vollständig gelöscht.
+              </p>
+            </div>
+
+            <div class="legal-block open-source-highlight">
+              <h4>4. 100% Open-Source-Transparenz (GitHub)</h4>
+              <p>
+                Dieses Projekt ist vollständig Open Source. Der komplette Programmcode ist für
+                jedermann öffentlich einsehbar. Wer sich selbst davon überzeugen möchte, dass
+                keinerlei persönliche Daten an Server oder Dritte gesendet werden, kann jede Zeile
+                Code direkt im GitHub-Repository überprüfen:
+              </p>
+              <p class="gh-link-row">
+                <a
+                  href="https://github.com/Huansock/Sazupalza"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="gh-cta-btn"
+                >
+                  <span>Quellcode auf GitHub prüfen (Huansock/Sazupalza)</span> ↗
+                </a>
+              </p>
+            </div>
+
+            <div class="legal-block">
+              <h4>5. Keine Cookies & kein Tracking</h4>
+              <p>
+                Diese Webseite setzt <strong>keine Tracking-Cookies</strong>, keine Analyse-Tools
+                (wie Google Analytics) und keine Werbe-Pixel ein. Es werden auch keine externen
+                Webfonts (wie Google Fonts) dynamisch nachgeladen, sondern ausschließlich lokale
+                System-Schriftarten verwendet. Daher ist kein Cookie-Banner erforderlich.
+              </p>
+            </div>
+
+            <div class="legal-block">
+              <h4>6. Hosting über Cloudflare Pages & Server-Log-Dateien</h4>
+              <p>
+                Diese Website wird über <strong>Cloudflare Pages</strong> gehostet (Dienstanbieter:
+                Cloudflare, Inc., 101 Townsend St, San Francisco, CA 94107, USA).
+              </p>
+              <p>
+                Beim Aufruf der Website erfasst Cloudflare technisch unvermeidbare
+                Server-Log-Dateien (z. B. IP-Adresse des anfragenden Geräts, Datum und Uhrzeit der
+                Anfrage, aufgerufene URL, HTTP-Statuscode, Browsertyp und Betriebssystem). Dies ist
+                technisch erforderlich, um die Website über das weltweite Content Delivery Network
+                (CDN) sicher und performant auszuliefern sowie DDoS-Angriffe und
+                Sicherheitsbedrohungen abzuwehren.
+              </p>
+              <p>
+                Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einer
+                sicheren, stabilen und schnellen Bereitstellung unseres Online-Angebots). Cloudflare
+                ist unter dem <em>EU-US Data Privacy Framework</em> zertifiziert und nutzt
+                EU-Standardvertragsklauseln (SCC).
+              </p>
+            </div>
+
+            <div class="legal-block">
+              <h4>7. Ihre Rechte als betroffene Person</h4>
+              <p>Nach der DSGVO stehen Ihnen folgende Rechte zu:</p>
+              <ul class="legal-ul">
+                <li>Recht auf Auskunft (Art. 15 DSGVO)</li>
+                <li>Recht auf Berichtigung (Art. 16 DSGVO)</li>
+                <li>Recht auf Löschung (Art. 17 DSGVO)</li>
+                <li>Recht auf Einschränkung der Verarbeitung (Art. 18 DSGVO)</li>
+                <li>Recht auf Datenübertragbarkeit (Art. 20 DSGVO)</li>
+              </ul>
+            </div>
+
+            <div class="legal-block">
+              <h4>7. Deine Rechte</h4>
+              <p>
+                Da wir keinerlei personenbezogene Daten speichern, weiterleiten oder analysieren,
+                liegen uns keine Daten vor, die wir berichtigen, sperren oder löschen könnten. Du
+                hast jederzeit die vollständige Kontrolle über deine Daten.
+              </p>
+            </div>
+
+            <div class="legal-block highlight-disclaimer">
+              <h4>8. Unterhaltungs-Haftungsausschluss</h4>
+              <p>
+                Alle astrologischen Berechnungen dienen ausschließlich Unterhaltungszwecken und
+                stellen keine verbindliche Lebens- oder Partnerschaftsberatung dar.
+              </p>
+            </div>
+          </div>
+        }
+      </div>
+
+      <button type="button" class="modal-action-btn" (click)="closeLegal()">Schließen</button>
+    </app-bottom-sheet>
   }
 
   <!-- Modal: Instagram Story Card Preview & Download -->
   @if (showStoryModal()) {
-    <div class="modal-backdrop fade-in" (click)="closeStoryModal()">
-      <div
-        class="modal-sheet story-sheet animate-slide-up"
-        role="dialog"
-        aria-modal="true"
-        aria-label="Instagram Story Card"
-        tabindex="-1"
-        (click)="$event.stopPropagation()"
-      >
-        <div class="modal-header">
-          <div class="modal-tag">Instagram Story Card</div>
-          <button
-            type="button"
-            class="modal-close-btn"
-            data-modal-initial-focus
-            (click)="closeStoryModal()"
-          >
-            ✕
-          </button>
-        </div>
-
-        @if (storyModalType() === 'personal') {
-          @if (sazuService.userSazuResult(); as res) {
-            <div class="story-variant-picker" aria-label="Story-Motiv wählen">
-              <span class="variant-picker-label">WÄHLE DEINEN POST</span>
-              <div class="variant-buttons">
-                <button
-                  type="button"
-                  [class.selected]="storyVariant() === 'delulu'"
-                  (click)="setStoryVariant('delulu')"
-                >
-                  Delulu-Score
-                </button>
-                <button
-                  type="button"
-                  [class.selected]="storyVariant() === 'redflag'"
-                  (click)="setStoryVariant('redflag')"
-                >
-                  Meine Red Flag
-                </button>
-                <button
-                  type="button"
-                  [class.selected]="storyVariant() === 'celebrity'"
-                  (click)="setStoryVariant('celebrity')"
-                >
-                  Celebrity Match
-                </button>
-              </div>
-            </div>
-            <div class="story-preview-wrapper">
-              <!-- 9:16 Personal Sazu Character Profile Preview Card -->
-              <div class="story-card-916 personal-story-card">
-                <div class="story-top">
-                  <span class="story-kr-badge">KOREAN DESTINY ROAST • 사주</span>
-                  <h4 class="story-headline">SAZU PALZA</h4>
-                </div>
-
-                <div class="story-personal-profile">
-                  <div class="personal-seal">
-                    <span>{{ res.dayMaster.hanja }}</span>
-                  </div>
-                  <div class="personal-info">
-                    <strong class="personal-name">{{ res.input.name }}</strong>
-                    <span class="personal-element-tag">
-                      {{ res.dayMaster.polarity }}-{{ res.dayMaster.element }} •
-                      {{ res.dayMaster.name }}
-                    </span>
-                  </div>
-                </div>
-
-                <div class="story-viral-score" [class.text-hero]="storyVariant() !== 'delulu'">
-                  @if (storyVariant() === 'redflag') {
-                    <strong>RED FLAG</strong>
-                    <span>OFFIZIELL ENTLARVT</span>
-                  } @else if (storyVariant() === 'celebrity') {
-                    <strong>{{ res.celebrities[0]?.name || 'K-POP TWIN' }}</strong>
-                    <span>DEIN CELEBRITY ENERGY MATCH</span>
-                  } @else {
-                    <strong>{{ res.dayMaster.deluluScore }}%</strong>
-                    <span>DELULU</span>
-                  }
-                </div>
-
-                <div class="personal-archetype-box">
-                  <span class="s-label">DEIN MAIN-CHARACTER-TYP</span>
-                  <div class="personal-archetype-title">{{ res.dayMaster.germanArchetype }}</div>
-                </div>
-
-                <div class="story-flags">
-                  <div class="s-flag red">
-                    <span class="s-flag-tag">DEINE RED FLAG</span>
-                    <p>{{ res.dayMaster.toxicTrait }}</p>
-                  </div>
-                  @if (res.celebrities && res.celebrities.length > 0) {
-                    <div class="s-flag soulmate">
-                      <span class="s-flag-tag">SAME ENERGY</span>
-                      <p>
-                        {{ res.celebrities[0].name }}
-                        @if (res.celebrities[1]) {
-                          • {{ res.celebrities[1].name }}
-                        }
-                      </p>
-                    </div>
-                  }
-                </div>
-
-                <div class="story-interaction-box">
-                  @if (storyVariant() === 'redflag') {
-                    <span class="story-prompt-text">WER KENNT DIESE RED FLAG?</span>
-                    <span class="story-prompt-sub">Markiere die Freundin mit den Beweisen.</span>
-                  } @else if (storyVariant() === 'celebrity') {
-                    <span class="story-prompt-text">WER TEILT MEINE ENERGY?</span>
-                    <span class="story-prompt-sub">Schick das deinem K-Pop Gruppenchat.</span>
-                  } @else {
-                    <span class="story-prompt-text">WER IST NOCH SO DELULU?</span>
-                    <span class="story-prompt-sub"
-                      >Markiere die Freundin, die jetzt lachen muss.</span
-                    >
-                  }
-                </div>
-
-                <div class="story-watermark">
-                  <span>sazu.usogi.org</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="story-actions">
-              <button
-                type="button"
-                class="download-story-btn"
-                [disabled]="isGeneratingStory()"
-                (click)="downloadStoryCard()"
-              >
-                @if (isGeneratingStory()) {
-                  <span>Generiere HD-Story-Bild...</span>
-                } @else {
-                  <span>Bild speichern & in Story posten</span>
-                }
-              </button>
-              <p class="story-hint">
-                Tipp: Tippe auf den Button oder mache einfach einen Screenshot für deine
-                Insta-Story!
-              </p>
-            </div>
-          }
-        } @else {
-          @if (sazuService.partnerResult(); as c) {
-            @let storyContext = getPartnerContextCopy(c);
-            <div class="story-variant-picker" aria-label="Story-Motiv wählen">
-              <span class="variant-picker-label">WÄHLE EUREN POST</span>
-              <div class="variant-buttons two-up">
-                <button
-                  type="button"
-                  [class.selected]="storyVariant() === 'chemistry'"
-                  (click)="setStoryVariant('chemistry')"
-                >
-                  Toxische Chemie
-                </button>
-                <button
-                  type="button"
-                  [class.selected]="storyVariant() === 'drama'"
-                  (click)="setStoryVariant('drama')"
-                >
-                  Unser Drama
-                </button>
-              </div>
-            </div>
-            <div class="story-preview-wrapper">
-              <!-- 9:16 Partner Sazu Compatibility Preview Card -->
-              <div class="story-card-916 partner-story-card">
-                <div class="story-top">
-                  <span class="story-kr-badge">KOREAN CHEMISTRY CHECK • 궁합</span>
-                  <h4 class="story-headline">SAZU PALZA</h4>
-                </div>
-
-                <div class="story-duo-names">
-                  <div class="s-person">
-                    <strong class="s-name">{{ c.person1.name }}</strong>
-                    <span class="s-dm">{{ c.person1.dayMaster.name }}</span>
-                  </div>
-                  <span class="s-heart">結</span>
-                  <div class="s-person">
-                    <strong class="s-name">{{ c.person2.name }}</strong>
-                    <span class="s-dm">{{ c.person2.dayMaster.name }}</span>
-                  </div>
-                </div>
-
-                <div class="story-viral-score">
-                  @if (storyVariant() === 'drama') {
-                    <strong>{{ c.toxicScore }}%</strong>
-                    <span>DRAMA</span>
-                  } @else {
-                    <strong>{{ c.score }}%</strong>
-                    <span>MATCH</span>
-                  }
-                </div>
-
-                <div class="story-verdict-box">
-                  <div class="s-badge">{{ c.badge }}</div>
-                  <p class="s-verdict">{{ storyContext.verdict }}</p>
-                  <div class="story-spicy-pills">
-                    <span class="story-pill">{{ c.flirtScore }}% Anziehung</span>
-                    <span class="story-pill">{{ c.stabilityScore }}% Alltag</span>
-                    <span class="story-pill">{{ c.toxicScore }}% Drama</span>
-                  </div>
-                </div>
-
-                <div class="story-flags">
-                  <div class="s-flag red">
-                    <span class="s-flag-tag">{{ storyContext.redFlagLabel }}</span>
-                    <p>{{ c.redFlag }}</p>
-                  </div>
-                </div>
-
-                <div class="story-interaction-box">
-                  <span class="story-prompt-text">{{ storyContext.sharePrompt }}</span>
-                  <span class="story-prompt-sub">{{ storyContext.shareAnswer }}</span>
-                </div>
-
-                <div class="story-watermark">
-                  <span>sazu.usogi.org</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="story-actions">
-              <button
-                type="button"
-                class="download-story-btn"
-                [disabled]="isGeneratingStory()"
-                (click)="downloadStoryCard()"
-              >
-                @if (isGeneratingStory()) {
-                  <span>Generiere HD-Story-Bild...</span>
-                } @else {
-                  <span>Bild speichern & in Story posten</span>
-                }
-              </button>
-              <p class="story-hint">
-                Tipp: Tippe auf den Button oder mache einfach einen Screenshot für deine
-                Insta-Story!
-              </p>
-            </div>
-          }
-        }
+    <app-bottom-sheet
+      ariaLabel="Instagram Story Card"
+      sheetClass="story"
+      (dismiss)="closeStoryModal()"
+    >
+      <div class="modal-header">
+        <div class="modal-tag">Instagram Story Card</div>
+        <button
+          type="button"
+          class="modal-close-btn"
+          data-modal-initial-focus
+          (click)="closeStoryModal()"
+        >
+          ✕
+        </button>
       </div>
-    </div>
+
+      @if (storyModalType() === 'personal') {
+        @if (sazuService.userSazuResult(); as res) {
+          <div class="story-variant-picker" aria-label="Story-Motiv wählen">
+            <span class="variant-picker-label">WÄHLE DEINEN POST</span>
+            <div class="variant-buttons">
+              <button
+                type="button"
+                [class.selected]="storyVariant() === 'delulu'"
+                (click)="setStoryVariant('delulu')"
+              >
+                Delulu-Score
+              </button>
+              <button
+                type="button"
+                [class.selected]="storyVariant() === 'redflag'"
+                (click)="setStoryVariant('redflag')"
+              >
+                Meine Red Flag
+              </button>
+              <button
+                type="button"
+                [class.selected]="storyVariant() === 'celebrity'"
+                (click)="setStoryVariant('celebrity')"
+              >
+                Celebrity Match
+              </button>
+            </div>
+          </div>
+          <div class="story-preview-wrapper">
+            <!-- 9:16 Personal Sazu Character Profile Preview Card -->
+            <div class="story-card-916 personal-story-card">
+              <div class="story-top">
+                <span class="story-kr-badge">KOREAN DESTINY ROAST • 사주</span>
+                <h4 class="story-headline">
+                  <span class="story-mode-badge">{{ roastModeLabel(res.roastMode) }}</span>
+                  SAZU PALZA
+                </h4>
+              </div>
+
+              <div class="story-personal-profile">
+                <div class="personal-seal">
+                  <span>{{ res.dayMaster.hanja }}</span>
+                </div>
+                <div class="personal-info">
+                  <strong class="personal-name">{{ res.input.name }}</strong>
+                  <span class="personal-element-tag">
+                    {{ res.dayMaster.polarity }}-{{ res.dayMaster.element }} •
+                    {{ res.dayMaster.name }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="story-viral-score" [class.text-hero]="storyVariant() !== 'delulu'">
+                @if (storyVariant() === 'redflag') {
+                  <strong>RED FLAG</strong>
+                  <span>OFFIZIELL ENTLARVT</span>
+                } @else if (storyVariant() === 'celebrity') {
+                  <strong>{{ res.celebrities[0]?.name || 'K-POP TWIN' }}</strong>
+                  <span>DEIN CELEBRITY ENERGY MATCH</span>
+                } @else {
+                  <strong>{{ res.dayMaster.deluluScore }}%</strong>
+                  <span>DELULU</span>
+                }
+              </div>
+
+              <div class="personal-archetype-box">
+                <span class="s-label">DEIN MAIN-CHARACTER-TYP</span>
+                <div class="personal-archetype-title">{{ res.dayMaster.germanArchetype }}</div>
+              </div>
+
+              <div class="story-flags">
+                <div class="s-flag red">
+                  <span class="s-flag-tag">DEINE RED FLAG</span>
+                  <p>{{ res.viralCopy.redFlag }}</p>
+                </div>
+                @if (res.celebrities && res.celebrities.length > 0) {
+                  <div class="s-flag soulmate">
+                    <span class="s-flag-tag">SAME ENERGY</span>
+                    <p>
+                      {{ res.celebrities[0].name }}
+                      @if (res.celebrities[1]) {
+                        • {{ res.celebrities[1].name }}
+                      }
+                    </p>
+                  </div>
+                }
+              </div>
+
+              <div class="story-interaction-box">
+                @if (storyVariant() === 'redflag') {
+                  <span class="story-prompt-text">WER KENNT DIESE RED FLAG?</span>
+                  <span class="story-prompt-sub">Markiere die Freundin mit den Beweisen.</span>
+                } @else if (storyVariant() === 'celebrity') {
+                  <span class="story-prompt-text">WER TEILT MEINE ENERGY?</span>
+                  <span class="story-prompt-sub">Schick das deinem K-Pop Gruppenchat.</span>
+                } @else {
+                  <span class="story-prompt-text">WER IST NOCH SO DELULU?</span>
+                  <span class="story-prompt-sub">{{ res.viralCopy.shareCta }}</span>
+                }
+              </div>
+
+              <div class="story-watermark">
+                <span>sazu.usogi.org</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="story-actions">
+            <button
+              type="button"
+              class="download-story-btn"
+              [disabled]="isGeneratingStory()"
+              (click)="downloadStoryCard()"
+            >
+              @if (isGeneratingStory()) {
+                <span>Generiere HD-Story-Bild...</span>
+              } @else {
+                <span>Bild speichern & in Story posten</span>
+              }
+            </button>
+            <p class="story-hint">
+              Tipp: Tippe auf den Button oder mache einfach einen Screenshot für deine Insta-Story!
+            </p>
+          </div>
+        }
+      } @else {
+        @if (sazuService.partnerResult(); as c) {
+          @let storyContext = getPartnerContextCopy(c);
+          <div class="story-variant-picker" aria-label="Story-Motiv wählen">
+            <span class="variant-picker-label">WÄHLE EUREN POST</span>
+            <div class="variant-buttons two-up">
+              <button
+                type="button"
+                [class.selected]="storyVariant() === 'chemistry'"
+                (click)="setStoryVariant('chemistry')"
+              >
+                Toxische Chemie
+              </button>
+              <button
+                type="button"
+                [class.selected]="storyVariant() === 'drama'"
+                (click)="setStoryVariant('drama')"
+              >
+                Unser Drama
+              </button>
+            </div>
+          </div>
+          <div class="story-preview-wrapper">
+            <!-- 9:16 Partner Sazu Compatibility Preview Card -->
+            <div class="story-card-916 partner-story-card">
+              <div class="story-top">
+                <span class="story-kr-badge">KOREAN CHEMISTRY CHECK • 궁합</span>
+                <h4 class="story-headline">
+                  <span class="story-mode-badge">{{ roastModeLabel(c.roastMode) }}</span>
+                  SAZU PALZA
+                </h4>
+              </div>
+
+              <div class="story-duo-names">
+                <div class="s-person">
+                  <strong class="s-name">{{ c.person1.name }}</strong>
+                  <span class="s-dm">{{ c.person1.dayMaster.name }}</span>
+                </div>
+                <span class="s-heart">結</span>
+                <div class="s-person">
+                  <strong class="s-name">{{ c.person2.name }}</strong>
+                  <span class="s-dm">{{ c.person2.dayMaster.name }}</span>
+                </div>
+              </div>
+
+              <div class="story-viral-score">
+                @if (storyVariant() === 'drama') {
+                  <strong>{{ c.toxicScore }}%</strong>
+                  <span>DRAMA</span>
+                } @else {
+                  <strong>{{ c.score }}%</strong>
+                  <span>MATCH</span>
+                }
+              </div>
+
+              <div class="story-verdict-box">
+                <div class="s-badge">{{ c.badge }}</div>
+                <p class="s-verdict">{{ storyContext.verdict }}</p>
+                <div class="story-spicy-pills">
+                  <span class="story-pill">{{ c.flirtScore }}% Anziehung</span>
+                  <span class="story-pill">{{ c.stabilityScore }}% Alltag</span>
+                  <span class="story-pill">{{ c.toxicScore }}% Drama</span>
+                </div>
+              </div>
+
+              <div class="story-flags">
+                <div class="s-flag red">
+                  <span class="s-flag-tag">{{ storyContext.redFlagLabel }}</span>
+                  <p>{{ c.viralCopy.redFlag }}</p>
+                </div>
+                <div class="s-flag receipt">
+                  <span class="s-flag-tag">GRUPPENCHAT-BEWEIS</span>
+                  <p>{{ c.viralCopy.groupChatEvidence }}</p>
+                </div>
+              </div>
+
+              <div class="story-interaction-box">
+                <span class="story-prompt-text">{{ storyContext.sharePrompt }}</span>
+                <span class="story-prompt-sub">{{ storyContext.shareAnswer }}</span>
+              </div>
+
+              <div class="story-watermark">
+                <span>sazu.usogi.org</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="story-actions">
+            <button
+              type="button"
+              class="download-story-btn"
+              [disabled]="isGeneratingStory()"
+              (click)="downloadStoryCard()"
+            >
+              @if (isGeneratingStory()) {
+                <span>Generiere HD-Story-Bild...</span>
+              } @else {
+                <span>Bild speichern & in Story posten</span>
+              }
+            </button>
+            <p class="story-hint">
+              Tipp: Tippe auf den Button oder mache einfach einen Screenshot für deine Insta-Story!
+            </p>
+          </div>
+        }
+      }
+    </app-bottom-sheet>
   }
 
   <!-- Toast Notification Popover -->

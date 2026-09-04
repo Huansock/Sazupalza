@@ -99,6 +99,42 @@ describe('MainViewComponent with DateSplitInput', () => {
     expect(fixture.nativeElement.querySelector('.reveal-overlay')).toBeFalsy();
   });
 
+  it('should default to Ehrlich and keep the selected personal roast mode in the result', () => {
+    const buttons = Array.from(
+      fixture.nativeElement.querySelectorAll('.roast-mode-segmented button'),
+    ) as HTMLButtonElement[];
+    expect(
+      buttons
+        .find((button) => button.textContent?.trim() === 'Ehrlich')
+        ?.getAttribute('aria-pressed'),
+    ).toBe('true');
+
+    component['setSazuRoastMode']('savage');
+    component.loadSazuPreset('creative');
+    component.submitSazu();
+    fixture.detectChanges();
+
+    expect(component['sazuService'].userSazuResult()?.roastMode).toBe('savage');
+    expect(fixture.nativeElement.querySelector('.roast-mode-badge')?.textContent).toContain(
+      'KEINE GNADE',
+    );
+  });
+
+  it('should apply a selected partner roast mode without changing its context', () => {
+    component['sazuService'].activeTab.set('partner');
+    component['setPartnerRoastMode']('soft');
+    component.loadPartnerPreset('clash');
+    component.submitPartner();
+    fixture.detectChanges();
+
+    const result = component['sazuService'].partnerResult();
+    expect(result?.roastMode).toBe('soft');
+    expect(result?.context).toBe('relationship');
+    expect(fixture.nativeElement.querySelector('.roast-mode-badge')?.textContent).toContain(
+      'SANFT',
+    );
+  });
+
   it('should restore the input form when browser history goes back from a result', () => {
     const inputState = window.history.state;
     component.loadSazuPreset('creative');
@@ -122,6 +158,7 @@ describe('MainViewComponent with DateSplitInput', () => {
     component.submitSazu();
     const stageOneState = window.history.state;
     (component as any).advancePersonalReveal();
+    const stageTwoState = window.history.state;
     fixture.detectChanges();
 
     expect((component as any).personalRevealStage()).toBe(2);
@@ -130,6 +167,11 @@ describe('MainViewComponent with DateSplitInput', () => {
 
     expect((component as any).personalRevealStage()).toBe(1);
     expect(fixture.nativeElement.textContent).toContain('Meine Red Flag entsperren');
+
+    window.dispatchEvent(new PopStateEvent('popstate', { state: stageTwoState }));
+    fixture.detectChanges();
+    expect((component as any).personalRevealStage()).toBe(2);
+    expect(fixture.nativeElement.textContent).toContain('Mein Dating-Muster enthüllen');
   });
 
   it('should preserve the current scroll position in the history entry before a result opens', () => {

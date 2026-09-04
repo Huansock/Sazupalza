@@ -4,6 +4,7 @@ export type DayMasterId =
 export type FiveElement = 'Holz' | 'Feuer' | 'Erde' | 'Metall' | 'Wasser';
 export type YinYang = 'Yang' | 'Yin';
 export type DatingContext = 'crush' | 'relationship' | 'bestie' | 'ex';
+export type RoastMode = 'soft' | 'honest' | 'savage';
 
 export type AuraId = 'DOHWA' | 'YEOKMA' | 'HWAGAE';
 
@@ -75,6 +76,22 @@ export interface UserSazuInput {
   birthDate: string; // YYYY-MM-DD
   birthTime?: string; // HH:mm
   gender: 'm' | 'w' | 'd';
+  roastMode?: RoastMode;
+}
+
+export interface ViralCopyMetadata {
+  roastMode: RoastMode;
+  stableId: string;
+  dailyId: string;
+}
+
+export interface PersonalViralCopy extends ViralCopyMetadata {
+  redFlag: string;
+  claim: string;
+  actualBehavior: string;
+  datingEvidence: string;
+  groupChatEvidence: string;
+  shareCta: string;
 }
 
 export interface UserSazuResult {
@@ -85,6 +102,8 @@ export interface UserSazuResult {
   dailyEnergy: DailySazuEnergy;
   birthDateFormatted: string;
   calculatedAt: Date;
+  roastMode: RoastMode;
+  viralCopy: PersonalViralCopy;
 }
 
 export interface PartnerCheckInput {
@@ -93,6 +112,21 @@ export interface PartnerCheckInput {
   person2Name: string;
   person2BirthDate: string;
   context?: DatingContext;
+  roastMode?: RoastMode;
+}
+
+export interface PartnerViralCopy extends ViralCopyMetadata {
+  redFlag: string;
+  claim: string;
+  actualBehavior: string;
+  datingEvidence: string;
+  groupChatEvidence: string;
+  shareCta: string;
+  contextHeadline: string;
+  contextVerdict: string;
+  redFlagLabel: string;
+  sharePrompt: string;
+  shareAnswer: string;
 }
 
 export interface CompatibilityResult {
@@ -118,4 +152,6 @@ export interface CompatibilityResult {
   toxicScore: number;
   memeVerdict: string;
   context?: DatingContext;
+  roastMode: RoastMode;
+  viralCopy: PartnerViralCopy;
 }

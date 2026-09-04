@@ -50,6 +50,25 @@ describe('SazuService', () => {
     expect(service.userSazuResult()).toBe(result);
   });
 
+  it('should default roast mode to honest without changing core calculations', () => {
+    const base = {
+      name: 'Lea',
+      birthDate: '1995-10-24',
+      birthTime: '14:15',
+      gender: 'w' as const,
+    };
+    const defaultResult = service.calculateSazu(base);
+    const softResult = service.calculateSazu({ ...base, roastMode: 'soft' });
+    const savageResult = service.calculateSazu({ ...base, roastMode: 'savage' });
+
+    expect(defaultResult.roastMode).toBe('honest');
+    expect(defaultResult.input.roastMode).toBe('honest');
+    expect(softResult.dayMaster.id).toBe(defaultResult.dayMaster.id);
+    expect(savageResult.dayMaster.deluluScore).toBe(defaultResult.dayMaster.deluluScore);
+    expect(softResult.dailyEnergy.energyScore).toBe(defaultResult.dailyEnergy.energyScore);
+    expect(savageResult.viralCopy.redFlag).not.toBe(softResult.viralCopy.redFlag);
+  });
+
   it('should correctly calculate Saju Aura Star (신살)', () => {
     // 2024-01-01 is 甲子 (Rat / 자 day) -> DOHWA
     const aura2024 = service.calculateAuraStar('2024-01-01');
@@ -99,6 +118,27 @@ describe('SazuService', () => {
     expect(result.person1.dayMaster.id).toBe('GAP');
     expect(result.person2.dayMaster.id).toBe('GI');
     expect(service.partnerResult()).toBe(result);
+  });
+
+  it('should keep every compatibility score identical across roast modes', () => {
+    const base = {
+      person1Name: 'Lea',
+      person1BirthDate: '2024-01-01',
+      person2Name: 'Marie',
+      person2BirthDate: '2024-01-06',
+      context: 'relationship' as const,
+    };
+    const soft = service.calculateCompatibility({ ...base, roastMode: 'soft' });
+    const honest = service.calculateCompatibility({ ...base, roastMode: 'honest' });
+    const savage = service.calculateCompatibility({ ...base, roastMode: 'savage' });
+
+    for (const result of [honest, savage]) {
+      expect(result.score).toBe(soft.score);
+      expect(result.flirtScore).toBe(soft.flirtScore);
+      expect(result.stabilityScore).toBe(soft.stabilityScore);
+      expect(result.toxicScore).toBe(soft.toxicScore);
+    }
+    expect(savage.viralCopy.actualBehavior).not.toBe(soft.viralCopy.actualBehavior);
   });
 
   it('should resolve gender-specific title, archetype, toxicTrait and whatsAppSignature', () => {

@@ -1,0 +1,57 @@
+:host {
+  position: relative;
+  z-index: 999;
+}
+
+.backdrop {
+  position: fixed;
+  z-index: 999;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  animation: sheet-fade-in 0.18s ease-out;
+}
+
+.sheet {
+  width: 100%;
+  max-width: 430px;
+  max-height: 85vh;
+  padding: 24px 20px 30px;
+  overflow-y: auto;
+  border-top: 2px solid #8c6239;
+  border-radius: 16px 16px 0 0;
+  background: #fff;
+  animation: sheet-slide-up 0.24s ease-out;
+  overscroll-behavior: contain;
+}
+
+.legal-sheet {
+  max-height: 90vh;
+}
+
+.story-sheet {
+  max-height: 94vh;
+}
+
+@keyframes sheet-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes sheet-slide-up {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop,
+  .sheet {
+    animation: none;
+  }
+}
