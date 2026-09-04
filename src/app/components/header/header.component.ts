@@ -26,12 +26,12 @@ import { Component } from '@angular/core';
           </div>
           <div class="seal-text-group">
             <span class="kr-calligraphy">사주명리</span>
-            <span class="pill-badge">Koreas Schicksalslehre</span>
+            <span class="pill-badge">Korean Destiny Check</span>
           </div>
         </div>
 
         <h1 class="logo-title">SAZU PALZA</h1>
-        <p class="tagline">Authentische koreanische Schicksalsanalyse</p>
+        <p class="tagline">Geburtsdatum rein. Red Flag raus.</p>
       </div>
 
       <!-- Five Elements Hanja Bar (오행: 木 火 土 金 水) -->
@@ -54,9 +54,10 @@ import { Component } from '@angular/core';
   styles: [
     `
       .app-header {
-        background: #221c18;
+        background:
+          radial-gradient(circle at 90% 10%, rgba(168, 50, 50, 0.28), transparent 32%), #1c1715;
         color: #faf6ee;
-        padding: 20px 20px 22px;
+        padding: 14px 20px 16px;
         text-align: center;
         position: relative;
         overflow: hidden;
@@ -87,8 +88,8 @@ import { Component } from '@angular/core';
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 6px;
-        margin-top: 6px;
+        gap: 3px;
+        margin-top: 4px;
       }
 
       .seal-brand-row {
@@ -145,17 +146,17 @@ import { Component } from '@angular/core';
       }
 
       .logo-title {
-        font-size: 26px;
-        font-weight: 600;
-        letter-spacing: 2px;
-        margin: 6px 0 2px;
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: 2.6px;
+        margin: 4px 0 0;
         color: #faf6ee;
       }
 
       .tagline {
-        font-size: 13px;
-        color: #a89e92;
-        font-weight: 400;
+        font-size: 14px;
+        color: #e6d8ca;
+        font-weight: 600;
         margin: 0;
         line-height: 1.3;
       }
@@ -166,12 +167,12 @@ import { Component } from '@angular/core';
         align-items: center;
         justify-content: center;
         gap: 8px;
-        margin-top: 14px;
-        font-size: 13px;
+        margin-top: 10px;
+        font-size: 12px;
         color: #d6ccbe;
         background: rgba(255, 255, 255, 0.05);
         border: 1px solid rgba(230, 223, 211, 0.15);
-        padding: 5px 14px;
+        padding: 4px 12px;
         border-radius: 999px;
       }
 

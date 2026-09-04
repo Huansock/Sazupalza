@@ -20,6 +20,10 @@ describe('MainViewComponent with DateSplitInput', () => {
 
   it('should create MainViewComponent and include app-date-split-input in active tab', () => {
     expect(component).toBeTruthy();
+    expect(fixture.nativeElement.textContent).toContain(
+      'Dein Geburtstag kennt deine größte Red Flag.',
+    );
+    expect(fixture.nativeElement.textContent).toContain('Nichts gespeichert');
     const dateSplitDebugElements = fixture.debugElement.queryAll(
       By.directive(DateSplitInputComponent),
     );
@@ -87,6 +91,12 @@ describe('MainViewComponent with DateSplitInput', () => {
     const result = component['sazuService'].userSazuResult();
     expect(result).toBeTruthy();
     expect(result?.birthDateFormatted).toBe('24.10.1995');
+    expect(fixture.nativeElement.querySelector('.reveal-overlay')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('.personal-viral-card')).toBeTruthy();
+
+    (component as any).skipReveal();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.reveal-overlay')).toBeFalsy();
   });
 });
 
@@ -145,7 +155,29 @@ describe('MainViewComponent - Instagram Story Modal', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     const storyBtn = compiled.querySelector('#sazu-result .story-cta-btn');
     expect(storyBtn).toBeTruthy();
-    expect(storyBtn?.textContent).toContain('Als Instagram Story teilen');
+    expect(storyBtn?.textContent).toContain('Meine Red Flag in der Story posten');
+  });
+
+  it('should render a viral summary card for a partner result', async () => {
+    sazuService.calculateCompatibility({
+      person1Name: 'Alex',
+      person1BirthDate: '1992-03-15',
+      person2Name: 'Sam',
+      person2BirthDate: '1994-07-20',
+      context: 'crush',
+    });
+    sazuService.activeTab.set('partner');
+
+    const fixture = TestBed.createComponent(MainViewComponent);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('.partner-viral-card')).toBeTruthy();
+    expect(compiled.querySelector('.viral-metrics')?.textContent).toContain('Drama');
+    expect(compiled.querySelector('.partner-viral-card')?.textContent).toContain(
+      'Beweise es im Gruppenchat',
+    );
   });
 
   it('should render Heutige Tagesenergie card and K-Pop & Promi match card when Sazu is calculated', async () => {

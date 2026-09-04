@@ -1,4 +1,32 @@
 <div class="main-container">
+  @if (revealType(); as reveal) {
+    <div class="reveal-overlay" role="status" aria-live="polite" aria-atomic="true">
+      <div class="reveal-orbit" aria-hidden="true">
+        <span>木</span><span>火</span><span>土</span><span>金</span><span>水</span>
+      </div>
+      <div class="reveal-seal" aria-hidden="true">
+        <span>{{ reveal === 'personal' ? '命' : '合' }}</span>
+      </div>
+      <p class="reveal-kicker">
+        {{ reveal === 'personal' ? 'DEIN SAZU STEHT FEST' : 'EURE CHEMIE IST BERECHNET' }}
+      </p>
+      <h2 class="reveal-title">
+        {{ reveal === 'personal' ? 'Die Wahrheit kommt jetzt.' : 'Diese Zahl könnte wehtun.' }}
+      </h2>
+      <p class="reveal-status">
+        {{
+          reveal === 'personal'
+            ? 'Elemente gelesen. Red Flag gefunden.'
+            : 'Anziehung geprüft. Drama entdeckt.'
+        }}
+      </p>
+      <div class="reveal-progress" aria-hidden="true"><span></span></div>
+      <button type="button" class="reveal-skip" (click)="skipReveal()">
+        Ergebnis jetzt zeigen
+      </button>
+    </div>
+  }
+
   <!-- Top Segmented Navigation Tabs with Hanok Style -->
   <nav class="nav-tabs" aria-label="Hauptnavigation">
     <button
@@ -23,14 +51,6 @@
     </button>
   </nav>
 
-  <!-- Asian Culture Explain Button -->
-  <div class="culture-pill-wrapper">
-    <button type="button" class="culture-info-pill" (click)="showCultureModal.set(true)">
-      <span class="seal-mini">사주</span>
-      <span>Was ist koreanisches Sazu?</span>
-    </button>
-  </div>
-
   <!-- ============================================================= -->
   <!-- TAB 1: MEIN SAZU                                              -->
   <!-- ============================================================= -->
@@ -40,27 +60,12 @@
         <!-- INPUT FORM -->
         <div class="form-card">
           <div class="form-header">
-            <h2 class="form-title">Entdecke deinen Tagesmeister</h2>
+            <span class="form-eyebrow">15-SEKUNDEN-TEST • OHNE LOGIN</span>
+            <h2 class="form-title">Dein Geburtstag kennt deine größte Red Flag.</h2>
             <p class="form-desc">
-              Im koreanischen Sazu bestimmt der <strong>Tagesmeister (일간)</strong> deinen wahren
-              Wesenskern – nicht der Monat wie im westlichen Horoskop.
+              Koreanische Schicksalsanalyse – brutal ehrlich, überraschend persönlich und deutlich
+              schonungsloser als dein Sternzeichen.
             </p>
-          </div>
-
-          <!-- Quick presets for rapid testing -->
-          <div class="preset-box">
-            <span class="preset-label">Schnelltest:</span>
-            <div class="preset-pills">
-              <button type="button" class="preset-btn" (click)="loadSazuPreset('leader')">
-                Maximilian
-              </button>
-              <button type="button" class="preset-btn" (click)="loadSazuPreset('creative')">
-                Sophie
-              </button>
-              <button type="button" class="preset-btn" (click)="loadSazuPreset('strategist')">
-                Alexander
-              </button>
-            </div>
           </div>
 
           <form (ngSubmit)="submitSazu()" class="sazu-input-form">
@@ -92,20 +97,23 @@
             </div>
 
             <!-- Birth Time (Optional) -->
-            <div class="form-group">
-              <label for="birthTime" class="field-label">
-                Geburtszeit
+            <details class="optional-details">
+              <summary>
+                Geburtszeit hinzufügen
                 <span class="badge-optional">Optional</span>
-              </label>
-              <input
-                id="birthTime"
-                type="time"
-                class="text-input"
-                [(ngModel)]="sazuForm().birthTime"
-                name="birthTime"
-              />
-              <span class="field-hint">Ermittelt deine Doppelstunde (시주)</span>
-            </div>
+              </summary>
+              <div class="optional-details-content">
+                <label for="birthTime" class="field-label">Geburtszeit</label>
+                <input
+                  id="birthTime"
+                  type="time"
+                  class="text-input"
+                  [(ngModel)]="sazuForm().birthTime"
+                  name="birthTime"
+                />
+                <span class="field-hint">Enthüllt zusätzlich deine Doppelstunde (시주)</span>
+              </div>
+            </details>
 
             <!-- Gender -->
             <div class="form-group">
@@ -146,7 +154,16 @@
             }
 
             <button type="submit" class="submit-btn primary-cta">
-              <span>Mein K-Schicksal enthüllen</span>
+              <span>Roaste mein Schicksal</span>
+            </button>
+
+            <div class="trust-row" aria-label="Datenschutz-Vorteile">
+              <span>Kein Login</span><span>Keine Cookies</span><span>Nichts gespeichert</span>
+            </div>
+
+            <button type="button" class="culture-inline-link" (click)="showCultureModal.set(true)">
+              <span class="seal-mini">사주</span>
+              <span>Warum ist Sazu anders als dein Sternzeichen?</span>
             </button>
           </form>
         </div>
@@ -154,6 +171,25 @@
         <!-- RESULT CARD: MEIN SAZU -->
         @let res = sazuService.userSazuResult()!;
         <div id="sazu-result" class="result-container fade-in">
+          <section class="viral-result-card personal-viral-card" aria-labelledby="personal-verdict">
+            <div class="viral-topline">
+              <span>DEIN UNGESCHÖNTES ERGEBNIS</span>
+              <span class="viral-stamp">판정</span>
+            </div>
+            <div class="viral-score-lockup">
+              <strong class="viral-score">{{ res.dayMaster.deluluScore }}%</strong>
+              <span class="viral-score-label">DELULU</span>
+            </div>
+            <h2 id="personal-verdict" class="viral-title">{{ res.dayMaster.germanArchetype }}</h2>
+            <div class="viral-red-flag">
+              <span>DEINE RED FLAG</span>
+              <p>{{ res.dayMaster.toxicTrait }}</p>
+            </div>
+            <button type="button" class="viral-share-btn" (click)="openStoryModal('personal')">
+              Von meiner besten Freundin bestätigen lassen
+            </button>
+          </section>
+
           <!-- Main Archetype Card with Hanok Frame -->
           <div class="sazu-hero-card">
             <!-- Hanok Corner Brackets (한옥 귀퉁이 장식) -->
@@ -461,7 +497,7 @@
               class="btn-share story-cta-btn"
               (click)="openStoryModal('personal')"
             >
-              <span>Als Instagram Story teilen</span>
+              <span>Meine Red Flag in der Story posten</span>
             </button>
             <button type="button" class="btn-share" (click)="shareSazu()">
               @if (res.input.gender === 'm') {
@@ -511,27 +547,12 @@
         <!-- PARTNER INPUT FORM -->
         <div class="form-card">
           <div class="form-header">
-            <h2 class="form-title">Koreanischer Liebes- & Chemie-Check</h2>
+            <span class="form-eyebrow">DATING- & CRUSH-RADAR • 궁합</span>
+            <h2 class="form-title">Soulmates oder nur toxische Chemie?</h2>
             <p class="form-desc">
-              Im Sazu basiert <strong>Gunghap (궁합)</strong> auf der elementaren Wechselwirkung der
-              beiden Tagesmeister: Harmonieren eure Elemente oder herrscht Zündstoff?
+              Seine Green Flag. Eure Red Flag. Eine koreanische Chemie-Zahl, die ein bisschen wehtun
+              könnte.
             </p>
-          </div>
-
-          <!-- Quick Partner Presets -->
-          <div class="preset-box">
-            <span class="preset-label">Test-Paare:</span>
-            <div class="preset-pills">
-              <button type="button" class="preset-btn" (click)="loadPartnerPreset('dream')">
-                Traumpaar (97%)
-              </button>
-              <button type="button" class="preset-btn" (click)="loadPartnerPreset('clash')">
-                Reibung (52%)
-              </button>
-              <button type="button" class="preset-btn" (click)="loadPartnerPreset('symbiosis')">
-                Symbiose (91%)
-              </button>
-            </div>
           </div>
 
           <form (ngSubmit)="submitPartner()" class="partner-input-form">
@@ -635,7 +656,16 @@
             }
 
             <button type="submit" class="submit-btn partner-cta">
-              <span>Liebes-Chemie prüfen (Gunghap)</span>
+              <span>Unsere Chemie entlarven</span>
+            </button>
+
+            <div class="trust-row" aria-label="Datenschutz-Vorteile">
+              <span>Kein Login</span><span>Keine Cookies</span><span>Nichts gespeichert</span>
+            </div>
+
+            <button type="button" class="culture-inline-link" (click)="showCultureModal.set(true)">
+              <span class="seal-mini">궁합</span>
+              <span>Was berechnet koreanisches Gunghap?</span>
             </button>
           </form>
         </div>
@@ -643,6 +673,35 @@
         <!-- PARTNER RESULT CARD WITH HANOK FRAME -->
         @let c = sazuService.partnerResult()!;
         <div id="partner-result" class="result-container fade-in">
+          <section class="viral-result-card partner-viral-card" aria-labelledby="partner-verdict">
+            <div class="viral-topline">
+              <span>DAS URTEIL IST DA</span>
+              <span class="viral-stamp">궁합</span>
+            </div>
+            <div class="partner-viral-names">
+              {{ c.person1.name }} <span>×</span> {{ c.person2.name }}
+            </div>
+            <div class="viral-score-lockup">
+              <strong class="viral-score">{{ c.score }}%</strong>
+              <span class="viral-score-label">MATCH</span>
+            </div>
+            <div class="viral-metrics" aria-label="Chemie-Zusammenfassung">
+              <div>
+                <strong>{{ c.flirtScore }}%</strong><span>Anziehung</span>
+              </div>
+              <div>
+                <strong>{{ c.stabilityScore }}%</strong><span>Alltag</span>
+              </div>
+              <div>
+                <strong>{{ c.toxicScore }}%</strong><span>Drama</span>
+              </div>
+            </div>
+            <p id="partner-verdict" class="partner-viral-verdict">{{ c.memeVerdict }}</p>
+            <button type="button" class="viral-share-btn" (click)="openStoryModal('partner')">
+              Beweise es im Gruppenchat
+            </button>
+          </section>
+
           <!-- Duo Matchup Header -->
           <div class="duo-header-card">
             <!-- Hanok Corner Brackets -->
@@ -801,7 +860,7 @@
               class="btn-share story-cta-btn"
               (click)="openStoryModal('partner')"
             >
-              <span>Als Instagram Story teilen</span>
+              <span>Unser Drama in der Story posten</span>
             </button>
             <button type="button" class="btn-share partner-share" (click)="sharePartner()">
               <span>Liebes-Check als Text teilen</span>
@@ -1173,8 +1232,8 @@
               <!-- 9:16 Personal Sazu Character Profile Preview Card -->
               <div class="story-card-916 personal-story-card">
                 <div class="story-top">
-                  <span class="story-kr-badge">KOREANISCHES SAZU • 사주</span>
-                  <h4 class="story-headline">WESENS-ARCHETYP</h4>
+                  <span class="story-kr-badge">KOREAN DESTINY ROAST • 사주</span>
+                  <h4 class="story-headline">SAZU PALZA</h4>
                 </div>
 
                 <div class="story-personal-profile">
@@ -1190,35 +1249,26 @@
                   </div>
                 </div>
 
-                <div class="personal-archetype-box">
-                  <span class="s-label">ARCHETYP</span>
-                  <div class="personal-archetype-title">{{ res.dayMaster.germanArchetype }}</div>
-                  <p class="personal-quote">„{{ res.dayMaster.whatsAppSignature }}“</p>
+                <div class="story-viral-score">
+                  <strong>{{ res.dayMaster.deluluScore }}%</strong>
+                  <span>DELULU</span>
                 </div>
 
-                <div class="personal-delulu-box">
-                  <div class="delulu-row">
-                    <span class="delulu-label">Delulu-Score</span>
-                    <span class="delulu-val">{{ res.dayMaster.deluluScore }}%</span>
-                  </div>
-                  <div class="story-delulu-bar">
-                    <div
-                      class="story-delulu-fill"
-                      [style.width.%]="res.dayMaster.deluluScore"
-                    ></div>
-                  </div>
+                <div class="personal-archetype-box">
+                  <span class="s-label">DEIN MAIN-CHARACTER-TYP</span>
+                  <div class="personal-archetype-title">{{ res.dayMaster.germanArchetype }}</div>
                 </div>
 
                 <div class="story-flags">
                   <div class="s-flag red">
-                    <span class="s-flag-tag">Toxic Trait:</span>
+                    <span class="s-flag-tag">DEINE RED FLAG</span>
                     <p>{{ res.dayMaster.toxicTrait }}</p>
                   </div>
                   @if (res.celebrities && res.celebrities.length > 0) {
                     <div class="s-flag soulmate">
-                      <span class="s-flag-tag">Soulmate Match:</span>
+                      <span class="s-flag-tag">SAME ENERGY</span>
                       <p>
-                        {{ res.celebrities[0].name }} ({{ res.celebrities[0].groupOrRole }})
+                        {{ res.celebrities[0].name }}
                         @if (res.celebrities[1]) {
                           • {{ res.celebrities[1].name }}
                         }
@@ -1228,8 +1278,10 @@
                 </div>
 
                 <div class="story-interaction-box">
-                  <span class="story-prompt-text">Stimmt das zu 100%? 👇</span>
-                  <span class="story-prompt-sub">(Hier Sticker platzieren)</span>
+                  <span class="story-prompt-text">WER KENNT MICH ZU GUT?</span>
+                  <span class="story-prompt-sub"
+                    >Markiere die Freundin, die jetzt lachen muss.</span
+                  >
                 </div>
 
                 <div class="story-watermark">
@@ -1263,8 +1315,8 @@
               <!-- 9:16 Partner Sazu Compatibility Preview Card -->
               <div class="story-card-916 partner-story-card">
                 <div class="story-top">
-                  <span class="story-kr-badge">KOREANISCHES GUNGHAP • 궁합</span>
-                  <h4 class="story-headline">DATING- & CRUSH-RADAR</h4>
+                  <span class="story-kr-badge">KOREAN CHEMISTRY CHECK • 궁합</span>
+                  <h4 class="story-headline">SAZU PALZA</h4>
                 </div>
 
                 <div class="story-duo-names">
@@ -1279,31 +1331,31 @@
                   </div>
                 </div>
 
-                <div class="story-score-ring">
-                  <span class="s-score">{{ c.score }}%</span>
-                  <span class="s-label">CHEMIE</span>
+                <div class="story-viral-score">
+                  <strong>{{ c.score }}%</strong>
+                  <span>MATCH</span>
                 </div>
 
                 <div class="story-verdict-box">
                   <div class="s-badge">{{ c.badge }}</div>
-                  <p class="s-verdict">„{{ c.verdict }}“</p>
+                  <p class="s-verdict">{{ c.memeVerdict }}</p>
                   <div class="story-spicy-pills">
-                    <span class="story-pill">Flirt: {{ c.flirtScore }}%</span>
-                    <span class="story-pill">WG: {{ c.stabilityScore }}%</span>
-                    <span class="story-pill">Toxic: {{ c.toxicScore }}%</span>
+                    <span class="story-pill">{{ c.flirtScore }}% Anziehung</span>
+                    <span class="story-pill">{{ c.stabilityScore }}% Alltag</span>
+                    <span class="story-pill">{{ c.toxicScore }}% Drama</span>
                   </div>
                 </div>
 
                 <div class="story-flags">
                   <div class="s-flag red">
-                    <span class="s-flag-tag">Red Flag Trigger:</span>
+                    <span class="s-flag-tag">EURE RED FLAG</span>
                     <p>{{ c.redFlag }}</p>
                   </div>
                 </div>
 
                 <div class="story-interaction-box">
-                  <span class="story-prompt-text">Passt das zu uns? 👇</span>
-                  <span class="story-prompt-sub">(Markiere Partner / Crush)</span>
+                  <span class="story-prompt-text">WÜRDET IHR ES TROTZDEM TUN?</span>
+                  <span class="story-prompt-sub">JA, LEIDER / NATÜRLICH</span>
                 </div>
 
                 <div class="story-watermark">
